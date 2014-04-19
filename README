@@ -1,0 +1,58 @@
+
+Introduction
+------------
+Music Bucket is a Windows 8 WPF (Windows Presentation Foundation)
+Tool for thing that have to do with music. It should be as playful
+and the least nerdy possible. However i'm quite a nerd so the second goal
+is probably reached that well. 
+
+History
+-------
+Unfortunately some time ago my IPod broke. Lacking money to buy a new one
+i was left with a Samsung phone for listening to music while being outside. I realized
+that the Samsung phone is actually pretty good at playing mp3's. But what is was missing
+was a simple software that allowed me to import CD's and automatically import the content onto my mobile phone.
+Also, i'm quite picky when it comes to describing music correctly. Unfortunately my mp3 collection has quite a 
+few bad tags, such as missing front cover pictures and so on.. A tool allowing me to organize my mp3's would be great.
+Since i didn't find a comparable solution i decided to try to write my own software. The last few years i learned 
+how to program windows computers so i thought i could possibly succeed with this enterprise. Last but not least i had 
+to learn WPF as a on-the-job training.
+So i made up my mind with what i wanted.
+First, as a music lover still buying CD's i wanted a simple tool
+that allowed me to import CD and convert them to MP3's with the least
+amount of clicks necessary. 
+Also i wanted to be able to organize my music in structures/container. Within the
+software they are name "Bucket". Within these structures one should have an in-depth view onto the mp3 metadata.
+Next i wanted to have a simple play capability with a queue which allows me to add music on-the-go.
+
+Getting the solution to compile
+-------------------------------
+For the large part importing is straightforward. Just open the main solution in Visual studio 2013 and you're (almost) ready to gone.
+Two more thing to come
+1) Copy MP3Compressor\lame_enc.dll to somewhere onto your system and add the folder location to the PATH environment variable.
+   If not already there add ".dll" to the PATHEXT environment variable. If you already have a copy of lame_enc.dll on your
+   system (with linkage in PATH) make sure that the PATH entry of the newly added lame_enc.dll is left of the existing one.
+
+2) Unfortunately the guys at Microsoft smoked too much weed or so when creating the wrapper for the portable device COM api.
+   Due to this i added a disassembled version of "Interop.PortableDeviceApiLib.dll" to the project PTCAccess. Each time PTCAccess
+   is built Interop.PortableDeviceApiLib.dll is reassembled using the file "link_PortableDeviceApiLib.bat". This file 
+   uses an absolute path to ilasm.exe for .NET4. Make sure this path is correct.
+   
+ Technical things
+ ----------------
+ * Encoding is done using lame v3.99 using the wrapper of Idael Cardoso (http://www.codeproject.com/Articles/5901/C-MP-Compressor)
+
+Project Overview
+----------------
+
+1) AudioCompress: Gui for the yeti stuff of Idael Cardoso, not really needed for MusicBucket.
+2) CDDBAccess: Library for accessing the free CDDB database. Done.
+3) CDRipperLib: Library handling the CD Ripping. Also done. 
+4) CDRipperLibTest: UnitTest for the CD-Ripper.
+5) MP3Tapper: Library for handling ID3v1 and ID3v23 tags. Generaly architecture is done. More frame descriptions could be added for ID3v23 tags.
+6) MusicBucket: The main application, player and settings dialog for importing no there yet, fancy graphic effects however are.
+7) MusicBucketTester: Project for testing GUI components of MusicBucket.
+8) PTCAccess: Library for accessing Portable Devices (such as my beloved Samsung phone ;-)), pretty much work in Progress.
+9) PTCAccessTest: UnitTest for PTCAccess.
+10) yeti.mmedia: WaveFile Writer classes of Idael Cardoso.
+11) yeti.mp3: Lame Wrapper of Idael Cardoso.
