@@ -18,7 +18,7 @@ namespace PTCAccessTest
             devices = wrapper.GetDevices();
             Assert.IsNotNull(devices);
             var portableDevice = wrapper.OpenDevice(devices[0]);
-            folders = wrapper.GetFolders("s10001", devices[0]);
+            folders = wrapper.GetFolders("RenderingInformation", devices[0]);
             int end = 1;
         }
     }

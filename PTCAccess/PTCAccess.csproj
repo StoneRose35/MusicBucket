@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="PTCAccessException.cs" />
+    <Compile Include="PTCFolder.cs" />
     <Compile Include="PTCWrapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

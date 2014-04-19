@@ -12,6 +12,7 @@ namespace PTCAccess
     public class PTCWrapper
     {
         private PortableDeviceManager _manager;
+        private string _currentDevice;
         private const uint NUMBER_OBJECTS = 10;
         public PTCWrapper()
         {
@@ -47,18 +48,19 @@ namespace PTCAccess
             return res;
         }
 
-        public List<string> GetFolders(string parentFolder,string deviceID)
+        public List<PTCFolder> GetFolders(string parentFolder,string deviceID)
         {
             IPortableDevice dev;
             IPortableDeviceContent cnt;
             IEnumPortableDeviceObjectIDs oids;
             IPortableDeviceProperties props;
             IPortableDeviceValues propVals;
+            IPortableDeviceKeyCollection keyColl;
             Guid contentType;
             uint fetched=NUMBER_OBJECTS;
             string[] bfr;
-            string folderName;
-            List<string> res = new List<string>();
+            string fname, fuid;
+            List<PTCFolder> res = new List<PTCFolder>();
             dev = this.OpenDevice(deviceID);
             dev.Content(out cnt);
             if(parentFolder==null)
@@ -66,22 +68,33 @@ namespace PTCAccess
                 parentFolder="DEVICE";
             }
             cnt.EnumObjects(0, parentFolder, null, out oids);
+            cnt.Properties(out props);
             bfr = new string[NUMBER_OBJECTS];
+            keyColl = (IPortableDeviceKeyCollection)(new PortableDeviceTypesLib.PortableDeviceKeyCollection());
+            keyColl.Add(GetApiPropertyKey("WPD_OBJECT_NAME"));
+            keyColl.Add(GetApiPropertyKey("WPD_OBJECT_PERSISTENT_UNIQUE_ID"));
+            keyColl.Add(GetApiPropertyKey("WPD_OBJECT_CONTENT_TYPE"));
             while (fetched == NUMBER_OBJECTS)
             {
                 oids.Next(NUMBER_OBJECTS, bfr, ref fetched);
                 for (int K = 0; K < fetched; K++)
                 {
-                    res.Add(bfr[K]);
+                    props.GetValues(bfr[K], keyColl, out propVals);
+                    propVals.GetGuidValue(GetApiPropertyKey("WPD_OBJECT_CONTENT_TYPE"), out contentType);
+                    propVals.GetStringValue(GetApiPropertyKey("WPD_OBJECT_NAME"), out fname);
+                    propVals.GetStringValue(GetApiPropertyKey("WPD_OBJECT_PERSISTENT_UNIQUE_ID"), out fuid);
+                    if (contentType == GetContentTypeGuid("WPD_CONTENT_TYPE_FOLDER"))
+                    {
+                        res.Add(new PTCFolder() { Id=bfr[K],Name=fname,Uid=fuid});
+                    }
+                    else if (contentType == GetContentTypeGuid("WPD_CONTENT_TYPE_FUNCTIONAL_OBJECT"))
+                    {
+                        if(GetFolders(bfr[K],deviceID).Count>0)
+                        {
+                            res.Add(new PTCFolder() { Id = bfr[K], Name = fname, Uid = fuid });
+                        }
+                    }
                 }
-            }
-            cnt.Properties(out props);
-            foreach(string devID in res)
-            {
-                props.GetValues(devID, null, out propVals);
-                propVals.GetStringValue(GetApiPropertyKey("WPD_OBJECT_NAME"), out folderName);
-                propVals.GetGuidValue(GetApiPropertyKey("WPD_OBJECT_CONTENT_TYPE"), out contentType);
-                string ctype = GetContentType(contentType);
             }
             
             return res;
@@ -97,7 +110,6 @@ namespace PTCAccess
             PortableDeviceTypesLib._tagpropertykey res = new PortableDeviceTypesLib._tagpropertykey();
             try
             {
-                string ptest = System.Reflection.Assembly.GetExecutingAssembly().Location.Replace(System.Reflection.Assembly.GetExecutingAssembly().GetName().Name + ".dll","") + "PortableDevice.h";
                 rdr = File.OpenText( System.Reflection.Assembly.GetExecutingAssembly().Location.Replace(System.Reflection.Assembly.GetExecutingAssembly().GetName().Name + ".dll","") + "PortableDevice.h");
             }
             catch
@@ -113,7 +125,6 @@ namespace PTCAccess
             }
             if (m != null)
             {
-                string tstr = "{" + m.Groups["fmtidpre"].Value + "{" + m.Groups["fmtidgrp"].Value + "}}";
                 gd = new Guid("{" + m.Groups["fmtidpre"].Value + "{" + m.Groups["fmtidgrp"].Value + "}}");
                 res.fmtid = gd;
                 res.pid = Convert.ToUInt32(m.Groups["pid"].Value);
@@ -136,7 +147,6 @@ namespace PTCAccess
             PortableDeviceApiLib._tagpropertykey res = new PortableDeviceApiLib._tagpropertykey();
             try
             {
-                string ptest = System.Reflection.Assembly.GetExecutingAssembly().Location.Replace(System.Reflection.Assembly.GetExecutingAssembly().GetName().Name + ".dll", "") + "PortableDevice.h";
                 rdr = File.OpenText(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace(System.Reflection.Assembly.GetExecutingAssembly().GetName().Name + ".dll", "") + "PortableDevice.h");
             }
             catch
@@ -152,7 +162,6 @@ namespace PTCAccess
             }
             if (m != null)
             {
-                string tstr = "{" + m.Groups["fmtidpre"].Value + "{" + m.Groups["fmtidgrp"].Value + "}}";
                 gd = new Guid("{" + m.Groups["fmtidpre"].Value + "{" + m.Groups["fmtidgrp"].Value + "}}");
                 res.fmtid = gd;
                 res.pid = Convert.ToUInt32(m.Groups["pid"].Value);
@@ -175,7 +184,6 @@ namespace PTCAccess
             Regex rg = new Regex("DEFINE_GUID\\s*\\(\\s*(?<cntdescr>[A-Za-z0-9_]+)\\s*,\\s*(?<fmtidpre>0x[a-fA-F0-9]{8}\\s*,\\s*(0x[a-fA-F0-9]{4}\\s*,\\s*){2})(?<fmtidgrp>(0x[a-fA-F0-9]{2}\\s*,\\s*){7}0x[a-fA-F0-9]{2})");
             try
             {
-                string ptest = System.Reflection.Assembly.GetExecutingAssembly().Location.Replace(System.Reflection.Assembly.GetExecutingAssembly().GetName().Name + ".dll", "") + "PortableDevice.h";
                 rdr = File.OpenText(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace(System.Reflection.Assembly.GetExecutingAssembly().GetName().Name + ".dll", "") + "PortableDevice.h");
             }
             catch
@@ -196,6 +204,42 @@ namespace PTCAccess
             }
             rdr.Close();
             return res;
+        }
+
+        private Guid GetContentTypeGuid(string contentType)
+        {
+            StreamReader rdr;
+            string line;
+            Guid gd;
+            Match m = null;
+            Regex rg = new Regex("DEFINE_GUID\\s*\\(\\s*" + contentType + "\\s*,\\s*(?<fmtidpre>0x[a-fA-F0-9]{8}\\s*,\\s*(0x[a-fA-F0-9]{4}\\s*,\\s*){2})(?<fmtidgrp>(0x[a-fA-F0-9]{2}\\s*,\\s*){7}0x[a-fA-F0-9]{2})");
+            try
+            {
+                string ptest = System.Reflection.Assembly.GetExecutingAssembly().Location.Replace(System.Reflection.Assembly.GetExecutingAssembly().GetName().Name + ".dll", "") + "PortableDevice.h";
+                rdr = File.OpenText(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace(System.Reflection.Assembly.GetExecutingAssembly().GetName().Name + ".dll", "") + "PortableDevice.h");
+            }
+            catch
+            {
+                throw new PTCAccessException("PortableDevice.h could not be found");
+            }
+            while ((line = rdr.ReadLine()) != null)
+            {
+                if ((m = rg.Match(line)).Success)
+                {
+                    break;
+                }
+            }
+            if (m != null)
+            {
+                gd = new Guid("{" + m.Groups["fmtidpre"].Value + "{" + m.Groups["fmtidgrp"].Value + "}}");
+
+            }
+            else
+            {
+                throw new PTCAccessException("the identifier \"" + contentType + "\" could not be found");
+            }
+            rdr.Close();
+            return gd;
         }
     }
 }
