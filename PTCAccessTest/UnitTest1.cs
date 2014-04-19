@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PTCAccess;
-
+using System.Collections.Generic;
 namespace PTCAccessTest
 {
     [TestClass]
@@ -13,20 +13,12 @@ namespace PTCAccessTest
         {
             string[] devices;
             PTCWrapper wrapper;
-            string objectsstr;
-            uint fetched=0;
-            PortableDeviceApiLib.IPortableDeviceContent content;
-            PortableDeviceApiLib.IEnumPortableDeviceObjectIDs oids;
+            List<string> folders;
             wrapper = new PTCWrapper();
             devices = wrapper.GetDevices();
             Assert.IsNotNull(devices);
             var portableDevice = wrapper.OpenDevice(devices[0]);
-            portableDevice.Content(out content);
-            content.EnumObjects(0, "DEVICE", null, out oids);
-            oids.Next(1, out objectsstr, ref fetched);
-            oids.Next(1, out objectsstr, ref fetched);
-            oids.Next(1, out objectsstr, ref fetched);
-            oids.Next(1, out objectsstr, ref fetched);
+            folders = wrapper.GetFolders("s10001", devices[0]);
             int end = 1;
         }
     }
