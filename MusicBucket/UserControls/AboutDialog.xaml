@@ -1,0 +1,10 @@
+﻿<Window x:Class="MusicBucket.UserControls.AboutDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:myProps="clr-namespace:MusicBucket.Properties"
+        Title="{x:Static myProps:Resources.HelpAbout}" Height="300" Width="502.349">
+    <Grid>
+        <TextBox x:Name="txtbxContent"  Margin="10" TextWrapping="Wrap" Text="TextBox" FontFamily="Urdu Typesetting" FontSize="16"/>
+
+    </Grid>
+</Window>

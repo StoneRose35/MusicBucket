@@ -1,0 +1,23 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:myProps="clr-namespace:MusicBucket.Properties"
+        xmlns:MusicBucket="clr-namespace:MusicBucket" x:Class="MusicBucket.UserControls.VisualsSettings"
+        Title="{x:Static myProps:Resources.VisualsSettingsDialogTitle}" Height="300" Width="300" IsVisibleChanged="Window_IsVisibleChanged">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="127"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <TextBox x:Name="txtSharpness" HorizontalAlignment="Left" Height="22" Margin="76,10,0,0" TextWrapping="Wrap" Text="0,3" VerticalAlignment="Top" Width="30" TextChanged="txtBounceFunction_TextChanged"/>
+        <TextBox x:Name="txtBouncyness" HorizontalAlignment="Left" Height="22" Margin="76,64,0,0" TextWrapping="Wrap" Text="0,2" VerticalAlignment="Top" Width="30" TextChanged="txtBounceFunction_TextChanged"/>
+        <TextBlock HorizontalAlignment="Left" Margin="5,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="70" LineHeight="28" Text="{x:Static myProps:Resources.VisualsSettingsLabels}" Height="84"/>
+        <TextBox x:Name="txtFrequency" HorizontalAlignment="Left" Height="22" Margin="76,37,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="30" TextChanged="txtBounceFunction_TextChanged"/>
+        <Canvas Margin="4" Grid.Row="1" x:Name="graphicCanvas" SizeChanged="graphicCanvas_SizeChanged"/>
+        <Button x:Name="buttonOk" Content="{x:Static myProps:Resources.OK}" HorizontalAlignment="Right" Height="22" Margin="0,10,10,0" VerticalAlignment="Top" Width="97" Click="buttonOk_Click"/>
+        <Button x:Name="buttonCancel" Content="{x:Static myProps:Resources.Cancel}" HorizontalAlignment="Right" Height="22" Margin="0,37,10,0" VerticalAlignment="Top" Width="97" Click="buttonCancel_Click"/>
+
+        <MusicBucket:MessageDisplay x:Name="mdisp" Height="53" Margin="130,64,10,0" BorderBrush="#FFFFA70E" BorderThickness="2" VerticalAlignment="Top"/>
+
+    </Grid>
+</Window>
