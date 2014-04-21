@@ -5,6 +5,7 @@
         xmlns:list="clr-namespace:System.Collections.ObjectModel;assembly=System"
         xmlns:s="clr-namespace:System.Collections;assembly=mscorlib"
         xmlns:p="clr-namespace:System;assembly=mscorlib"
+        xmlns:md="clr-namespace:PTCAccess;assembly=PTCAccess"
         Title="MainWindow" Height="350" Width="525">
     <Window.Resources>
 
@@ -56,6 +57,12 @@
                         </s:ArrayList>
                     </ListView.ItemsSource>
                 </ListView>
+            </Grid>
+        </TabItem>
+        <TabItem Header="Folder Browser">
+            <Grid>
+                <md:PTCFolderBrowser x:Name="fbrowser" Margin="0,0,0,50"></md:PTCFolderBrowser>
+                <Button x:Name="getMp3Files" VerticalAlignment="Bottom" Height="30" HorizontalAlignment="Right" Width="160" Margin="0,0,10,10" Content="Get MP3 Files" Click="getMp3Files_Click"></Button>
             </Grid>
         </TabItem>
     </TabControl>

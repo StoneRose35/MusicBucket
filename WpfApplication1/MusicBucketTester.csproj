@@ -98,6 +98,10 @@
       <Project>{2d900378-23a5-40fc-bb10-0259f68177ba}</Project>
       <Name>MusicBucket</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PTCAccess\PTCAccess.csproj">
+      <Project>{f6348eb8-27be-4980-b327-c42b5babd311}</Project>
+      <Name>PTCAccess</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

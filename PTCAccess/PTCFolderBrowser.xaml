@@ -6,14 +6,8 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <ListView>
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="IsRootFolder" DisplayMemberBinding="{Binding IsRootFolder}"/>
-                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}"/>
-                    <GridViewColumn Header="DeviceName" DisplayMemberBinding="{Binding DeviceName}" />
-                </GridView>
-            </ListView.View>
-        </ListView>
+        <TextBox x:Name="txtbxPath" Margin="60,10,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top"/>
+        <ListBox x:Name="lbFolders" Margin="0,40,0,0" MouseDoubleClick="lbFolders_MouseDoubleClick" SelectionChanged="lbFolders_SelectionChanged"/>
+        <Button x:Name="btnBack" Content="Back" HorizontalAlignment="Left" Height="24" Margin="3,7,0,0" VerticalAlignment="Top" Width="50" Click="btnBack_Click"/>
     </Grid>
 </UserControl>

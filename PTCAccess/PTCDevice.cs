@@ -46,7 +46,7 @@ namespace PTCAccess
 
         public override string ToString()
         {
-            return _name;
+            return  "[" + _name + "]:\\";
         }
     }
 }

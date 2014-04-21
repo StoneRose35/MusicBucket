@@ -13,7 +13,7 @@ namespace PTCAccess
     {
         private string _name,_uid,_id,_deviceName,_deviceID;
         private bool _isRootFolder;
-
+        private PTCFolder _parent;
         /// <summary>
         /// The clear-text name of the Folder (this should be displayed in the UI)
         /// </summary>
@@ -95,6 +95,18 @@ namespace PTCAccess
             set
             {
                 _deviceID = value;
+            }
+        }
+
+        public PTCFolder Parent
+        {
+            get
+            {
+                return _parent;
+            }
+            set
+            {
+                _parent = value;
             }
         }
         /// <summary>

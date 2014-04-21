@@ -33,7 +33,7 @@ namespace PTCAccess
                 foreach (string dev in devicesStr) // get clear text name of each device
                 {
                     _manager.GetDeviceFriendlyName(dev, null, ref nbytes);
-                    friendlyName = new string((char)0, (int)nbytes);
+                    friendlyName = new string((char)0, (int)(nbytes-1));
                     _manager.GetDeviceFriendlyName(dev, friendlyName, ref nbytes);
                     devices.Add(new PTCDevice() { ID = dev, Name = friendlyName });
                 }
@@ -65,6 +65,7 @@ namespace PTCAccess
             IPortableDeviceProperties props;
             IPortableDeviceValues propVals;
             IPortableDeviceKeyCollection keyColl;
+            PTCFolder parent=null;
             Guid contentType;
             uint fetched=NUMBER_OBJECTS;
             string[] bfr;
@@ -83,6 +84,15 @@ namespace PTCAccess
             keyColl.Add(GetApiPropertyKey("WPD_OBJECT_NAME"));
             keyColl.Add(GetApiPropertyKey("WPD_OBJECT_PERSISTENT_UNIQUE_ID"));
             keyColl.Add(GetApiPropertyKey("WPD_OBJECT_CONTENT_TYPE"));
+
+            // get current (parent) folder info
+            props.GetValues(parentFolder, keyColl, out propVals);
+            propVals.GetGuidValue(GetApiPropertyKey("WPD_OBJECT_CONTENT_TYPE"), out contentType);
+            propVals.GetStringValue(GetApiPropertyKey("WPD_OBJECT_NAME"), out fname);
+            propVals.GetStringValue(GetApiPropertyKey("WPD_OBJECT_PERSISTENT_UNIQUE_ID"), out fuid);
+            parent = new PTCFolder() { Id = parentFolder, Name = fname, Uid = fuid, IsRootFolder = false, DeviceID = deviceID };
+
+
             while (fetched == NUMBER_OBJECTS)
             {
                 oids.Next(NUMBER_OBJECTS, bfr, ref fetched);
@@ -94,13 +104,13 @@ namespace PTCAccess
                     propVals.GetStringValue(GetApiPropertyKey("WPD_OBJECT_PERSISTENT_UNIQUE_ID"), out fuid);
                     if (contentType == GetContentTypeGuid("WPD_CONTENT_TYPE_FOLDER"))
                     {
-                        res.Add(new PTCFolder() { Id=bfr[K],Name=fname,Uid=fuid,IsRootFolder=false,DeviceID=deviceID});
+                        res.Add(new PTCFolder() { Id=bfr[K],Name=fname,Uid=fuid,IsRootFolder=false,DeviceID=deviceID,Parent=parent});
                     }
                     else if (contentType == GetContentTypeGuid("WPD_CONTENT_TYPE_FUNCTIONAL_OBJECT"))
                     {
                         if(GetFolders(bfr[K],deviceID).Count>0)
                         {
-                            res.Add(new PTCFolder() { Id = bfr[K], Name = fname, Uid = fuid,IsRootFolder=true,DeviceID=deviceID });
+                            res.Add(new PTCFolder() { Id = bfr[K], Name = fname, Uid = fuid,IsRootFolder=true,DeviceID=deviceID,Parent=parent });
                         }
                     }
                 }
@@ -109,7 +119,7 @@ namespace PTCAccess
             return res;
         }
 
-        private List<string> GetMp3Files(string folderID, string deviceID)
+        public List<string> GetMp3Files(string folderID, string deviceID)
         {
             IPortableDevice dev;
             IPortableDeviceContent content;
@@ -117,24 +127,43 @@ namespace PTCAccess
             IPortableDeviceProperties props;
             IPortableDeviceKeyCollection keyColl;
             IPortableDeviceValues vals;
-            IStream stream;
+            IEnumPortableDeviceObjectIDs oids;
+            Guid contentType;
             string filename;
+            
+            IStream stream;
             uint optimalbuffersize=0;
             byte[] bytearray;
             uint bytesread;
             byte testb;
+            string[] bfr;
+            uint fetched = NUMBER_OBJECTS;
             keyColl=(new PortableDeviceTypesLib.PortableDeviceKeyCollection()) as IPortableDeviceKeyCollection;
+            bfr = new string[NUMBER_OBJECTS];
             List<string> res = new List<string>();
             dev = this.OpenDevice(deviceID);
             dev.Content(out content);
-            content.Transfer(out resources);
-            resources.GetStream(folderID, GetApiPropertyKey("WPD_RESOURCE_DEFAULT"), 0, ref optimalbuffersize, out stream);
             content.Properties(out props);
             keyColl.Add(GetApiPropertyKey("WPD_OBJECT_ORIGINAL_FILE_NAME"));
-            props.GetValues(folderID, keyColl, out vals);
-            vals.GetStringValue(GetApiPropertyKey("WPD_OBJECT_ORIGINAL_FILE_NAME"), out filename);
-            bytearray=new byte[optimalbuffersize];
-            stream.RemoteRead(out testb, optimalbuffersize, out bytesread);
+            keyColl.Add(GetApiPropertyKey("WPD_OBJECT_CONTENT_TYPE"));
+            content.EnumObjects(0, folderID, null, out oids);
+            content.Transfer(out resources);
+            while (fetched == NUMBER_OBJECTS)
+            {
+                oids.Next(NUMBER_OBJECTS, bfr, ref fetched);
+                for (int K = 0; K < fetched; K++)
+                {
+                    props.GetValues(bfr[K], keyColl, out vals);
+                    vals.GetStringValue(GetApiPropertyKey("WPD_OBJECT_ORIGINAL_FILE_NAME"), out filename);
+                    vals.GetGuidValue(GetApiPropertyKey("WPD_OBJECT_CONTENT_TYPE"), out contentType);
+                    if (contentType == GetContentTypeGuid("WPD_CONTENT_TYPE_AUDIO"))
+                    {
+                        res.Add(filename);
+                        resources.GetStream(bfr[K], GetApiPropertyKey("WPD_RESOURCE_DEFAULT"), 0, ref optimalbuffersize, out stream);
+                        stream.RemoteRead(out testb, optimalbuffersize, out bytesread);
+                    }
+                }
+            }
             return res;
         }
 

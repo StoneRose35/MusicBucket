@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+using PTCAccess;
 namespace WpfApplication1
 {
     /// <summary>
@@ -98,6 +99,15 @@ namespace WpfApplication1
             SortDescription sd = new SortDescription(sortBy, direction);
             dataView.SortDescriptions.Add(sd);
             dataView.Refresh();
+        }
+
+        private void getMp3Files_Click(object sender, RoutedEventArgs e)
+        {
+            PTCWrapper wrp = new PTCWrapper();
+            if (fbrowser.SelectedElement is PTCFolder)
+            {
+                wrp.GetMp3Files((fbrowser.SelectedElement as PTCFolder).Id,(fbrowser.SelectedElement as PTCFolder).DeviceID);
+            }
         }
     }
 }
