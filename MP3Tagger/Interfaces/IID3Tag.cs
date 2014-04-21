@@ -46,7 +46,7 @@ namespace MP3Tagger.Interfaces
         /// the stream position to the value prior to the writing operation.
         /// </summary>
         ///<param name="stream">a file stream ready to be written into</param>
-        int Write(FileStream stream);
+        int Write(Stream stream);
 
         /// <summary>
         /// Reads the Tag from the given FileStream. Overwrites the current properties. 
@@ -54,6 +54,6 @@ namespace MP3Tagger.Interfaces
         /// the stream position to the value prior to the writing operation.
         /// </summary>
         /// <param name="stream">a file stream ready to be read from</param>
-        bool Read(FileStream stream);
+        bool Read(Stream stream);
     }
 }

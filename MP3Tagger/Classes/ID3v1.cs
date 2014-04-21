@@ -117,7 +117,7 @@ namespace MP3Tagger.Classes
             }
         }
 
-        public override int Write(FileStream stream)
+        public override int Write(Stream stream)
         {
             long streampos = stream.Position;
             byte[] bytearray;
@@ -156,7 +156,7 @@ namespace MP3Tagger.Classes
             return 1;
         }
 
-        public override bool Read(System.IO.FileStream stream)
+        public override bool Read(System.IO.Stream stream)
         {
             bool res = true;
             byte[] readbfr;

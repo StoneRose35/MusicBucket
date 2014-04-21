@@ -342,7 +342,7 @@ namespace MP3Tagger.Classes
             }
         }
 
-        public override int Write(System.IO.FileStream stream)
+        public override int Write(System.IO.Stream stream)
         {
             long currpos;
             currpos = stream.Position;
@@ -426,7 +426,7 @@ namespace MP3Tagger.Classes
             return 0;
         }
 
-        public override bool Read(System.IO.FileStream stream)
+        public override bool Read(System.IO.Stream stream)
         {
             bool res = false;
             byte[] bbfr;

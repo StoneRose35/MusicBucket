@@ -92,12 +92,12 @@ namespace MP3Tagger.Classes
             }
         }
 
-        public virtual int Write(System.IO.FileStream stream)
+        public virtual int Write(System.IO.Stream stream)
         {
             throw new NotImplementedException();
         }
 
-        public virtual bool Read(System.IO.FileStream stream)
+        public virtual bool Read(System.IO.Stream stream)
         {
             throw new NotImplementedException();
         }
