@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 using System.IO;
 using System.Threading.Tasks;
 using PortableDeviceApiLib;
-
+using System.Runtime.InteropServices;
 namespace PTCAccess
 {
     public class PTCWrapper
@@ -128,6 +128,8 @@ namespace PTCAccess
             IPortableDeviceKeyCollection keyColl;
             IPortableDeviceValues vals;
             IEnumPortableDeviceObjectIDs oids;
+            MemoryStream fstream;
+            IntPtr bread;
             Guid contentType;
             string filename;
             
@@ -135,7 +137,6 @@ namespace PTCAccess
             uint optimalbuffersize=0;
             byte[] bytearray;
             uint bytesread;
-            byte testb;
             string[] bfr;
             uint fetched = NUMBER_OBJECTS;
             keyColl=(new PortableDeviceTypesLib.PortableDeviceKeyCollection()) as IPortableDeviceKeyCollection;
@@ -160,7 +161,22 @@ namespace PTCAccess
                     {
                         res.Add(filename);
                         resources.GetStream(bfr[K], GetApiPropertyKey("WPD_RESOURCE_DEFAULT"), 0, ref optimalbuffersize, out stream);
-                        stream.RemoteRead(out testb, optimalbuffersize, out bytesread);
+                        bytearray = new byte[optimalbuffersize];
+                        bytesread = optimalbuffersize;
+                        fstream = new MemoryStream(); //FileStream("C:\\Users\\fuerh_000\\Music\\" + filename,FileMode.Create);
+                        bread = Marshal.AllocHGlobal(sizeof(ulong));
+                        while (bytesread == optimalbuffersize)
+                        {
+                            ((System.Runtime.InteropServices.ComTypes.IStream)stream).Read(bytearray, (int)optimalbuffersize, bread);
+                            bytesread=(uint)Marshal.ReadInt64(bread);
+                            fstream.Write(bytearray,0,(int)bytesread);
+                        }
+                        Marshal.FreeHGlobal(bread);
+                        fstream.Write(bytearray,0,(int)bytesread);
+                        Marshal.ReleaseComObject(stream);
+                        fstream.Close();
+                        
+                        stream = null;
                     }
                 }
             }

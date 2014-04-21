@@ -524,7 +524,7 @@
                                                                                                   2D 30 30 30 30 2D 43 30 30 30 2D 30 30 30 30 30   // -0000-C000-00000
                                                                                                   30 30 30 30 30 34 36 00 00 )                      // 0000046..
   .method public hidebysig newslot abstract virtual 
-          instance void  RemoteRead([out] uint8& pv,
+          instance void  RemoteRead(uint8[] pv,
                                     [in] uint32 cb,
                                     [out] uint32& pcbRead) runtime managed internalcall
   {
