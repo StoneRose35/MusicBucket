@@ -11,15 +11,14 @@ namespace PTCAccessTest
         [TestMethod]
         public void GetDevicesTest()
         {
-            string[] devices;
+            List<PTCDevice> devices;
             PTCWrapper wrapper;
-            List<string> folders;
+            List<PTCFolder> folders;
             wrapper = new PTCWrapper();
             devices = wrapper.GetDevices();
             Assert.IsNotNull(devices);
-            var portableDevice = wrapper.OpenDevice(devices[0]);
-            folders = wrapper.GetFolders("RenderingInformation", devices[0]);
-            int end = 1;
+            //var portableDevice = wrapper.OpenDevice(devices[0].ID);
+            folders = wrapper.GetFolders(null, devices[0].ID);
         }
     }
 }

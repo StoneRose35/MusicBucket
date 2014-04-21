@@ -6,10 +6,17 @@ using System.Threading.Tasks;
 using System.IO;
 namespace PTCAccess
 {
+    /// <summary>
+    /// Class describing a multimedia device folder, only holds properties
+    /// </summary>
     public class PTCFolder
     {
-        private string _name,_uid,_id;
+        private string _name,_uid,_id,_deviceName,_deviceID;
+        private bool _isRootFolder;
 
+        /// <summary>
+        /// The clear-text name of the Folder (this should be displayed in the UI)
+        /// </summary>
         public string Name
         {
             get
@@ -22,6 +29,9 @@ namespace PTCAccess
             }
         }
 
+        /// <summary>
+        /// A persistent unique ID, use thhis to retrieve properties or content of the folder
+        /// </summary>
         public string Uid
         {
             get
@@ -34,6 +44,9 @@ namespace PTCAccess
             }
         }
 
+        /// <summary>
+        /// a non-persistent ID, valid only within the scope of a session
+        /// </summary>
         public string Id
         {
             get
@@ -45,6 +58,49 @@ namespace PTCAccess
                 _id = value;
             }
         }
+
+        /// <summary>
+        /// If true then the folder is a virtual drive, if not it is a normal folder
+        /// </summary>
+        public bool IsRootFolder
+        {
+            get
+            {
+                return _isRootFolder;
+            }
+            set
+            {
+                _isRootFolder = value;
+            }
+        }
+
+        public string DeviceName
+        {
+            get
+            {
+                return _deviceName;
+            }
+            set
+            {
+                _deviceName = value;
+            }
+        }
+
+        public string DeviceID
+        {
+            get
+            {
+                return _deviceID;
+            }
+            set
+            {
+                _deviceID = value;
+            }
+        }
+        /// <summary>
+        /// Return a string representation of the object.
+        /// </summary>
+        /// <returns>The name of the folder</returns>
         public override string ToString()
         {
             return _name;

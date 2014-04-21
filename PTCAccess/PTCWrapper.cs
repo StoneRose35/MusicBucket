@@ -12,22 +12,31 @@ namespace PTCAccess
     public class PTCWrapper
     {
         private PortableDeviceManager _manager;
-        private string _currentDevice;
         private const uint NUMBER_OBJECTS = 10;
         public PTCWrapper()
         {
             _manager = new PortableDeviceManager();
         }
 
-        public string[] GetDevices()
+        public List<PTCDevice> GetDevices()
         { 
-            string[] devices=null;
+            List<PTCDevice> devices=new List<PTCDevice>();
             uint ndevices=0;
+            string[] devicesStr;
+            string friendlyName=null;
+            uint nbytes=0;
             _manager.GetDevices(null,ref ndevices);
             if (ndevices > 0)
             {
-                devices=new string[ndevices];
-                _manager.GetDevices(devices, ref ndevices);
+                devicesStr = new string[ndevices];
+                _manager.GetDevices(devicesStr, ref ndevices);
+                foreach (string dev in devicesStr) // get clear text name of each device
+                {
+                    _manager.GetDeviceFriendlyName(dev, null, ref nbytes);
+                    friendlyName = new string((char)0, (int)nbytes);
+                    _manager.GetDeviceFriendlyName(dev, friendlyName, ref nbytes);
+                    devices.Add(new PTCDevice() { ID = dev, Name = friendlyName });
+                }
             }
             return devices;
         }
@@ -85,18 +94,47 @@ namespace PTCAccess
                     propVals.GetStringValue(GetApiPropertyKey("WPD_OBJECT_PERSISTENT_UNIQUE_ID"), out fuid);
                     if (contentType == GetContentTypeGuid("WPD_CONTENT_TYPE_FOLDER"))
                     {
-                        res.Add(new PTCFolder() { Id=bfr[K],Name=fname,Uid=fuid});
+                        res.Add(new PTCFolder() { Id=bfr[K],Name=fname,Uid=fuid,IsRootFolder=false,DeviceID=deviceID});
                     }
                     else if (contentType == GetContentTypeGuid("WPD_CONTENT_TYPE_FUNCTIONAL_OBJECT"))
                     {
                         if(GetFolders(bfr[K],deviceID).Count>0)
                         {
-                            res.Add(new PTCFolder() { Id = bfr[K], Name = fname, Uid = fuid });
+                            res.Add(new PTCFolder() { Id = bfr[K], Name = fname, Uid = fuid,IsRootFolder=true,DeviceID=deviceID });
                         }
                     }
                 }
             }
             
+            return res;
+        }
+
+        private List<string> GetMp3Files(string folderID, string deviceID)
+        {
+            IPortableDevice dev;
+            IPortableDeviceContent content;
+            IPortableDeviceResources resources;
+            IPortableDeviceProperties props;
+            IPortableDeviceKeyCollection keyColl;
+            IPortableDeviceValues vals;
+            IStream stream;
+            string filename;
+            uint optimalbuffersize=0;
+            byte[] bytearray;
+            uint bytesread;
+            byte testb;
+            keyColl=(new PortableDeviceTypesLib.PortableDeviceKeyCollection()) as IPortableDeviceKeyCollection;
+            List<string> res = new List<string>();
+            dev = this.OpenDevice(deviceID);
+            dev.Content(out content);
+            content.Transfer(out resources);
+            resources.GetStream(folderID, GetApiPropertyKey("WPD_RESOURCE_DEFAULT"), 0, ref optimalbuffersize, out stream);
+            content.Properties(out props);
+            keyColl.Add(GetApiPropertyKey("WPD_OBJECT_ORIGINAL_FILE_NAME"));
+            props.GetValues(folderID, keyColl, out vals);
+            vals.GetStringValue(GetApiPropertyKey("WPD_OBJECT_ORIGINAL_FILE_NAME"), out filename);
+            bytearray=new byte[optimalbuffersize];
+            stream.RemoteRead(out testb, optimalbuffersize, out bytesread);
             return res;
         }
 

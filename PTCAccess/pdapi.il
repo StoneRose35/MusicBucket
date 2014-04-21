@@ -2304,7 +2304,7 @@
 
   .method public hidebysig newslot virtual 
           instance void  GetDeviceFriendlyName([in] string  marshal( lpwstr) pszPnPDeviceID,
-                                               [in][out] uint16& pDeviceFriendlyName,
+                                               [out] string marshal(lpwstr) pDeviceFriendlyName,
                                                [in][out] uint32& pcchDeviceFriendlyName) runtime managed internalcall
   {
     .override PortableDeviceApiLib.IPortableDeviceManager::GetDeviceFriendlyName
@@ -2376,7 +2376,7 @@
 
   .method public hidebysig newslot abstract virtual 
           instance void  GetDeviceFriendlyName([in] string  marshal( lpwstr) pszPnPDeviceID,
-                                               [in][out] uint16& pDeviceFriendlyName,
+                                               [out] string marshal(lpwstr) pDeviceFriendlyName,
                                                [in][out] uint32& pcchDeviceFriendlyName) runtime managed internalcall
   {
   } // end of method IPortableDeviceManager::GetDeviceFriendlyName
