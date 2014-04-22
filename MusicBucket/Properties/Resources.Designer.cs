@@ -261,6 +261,15 @@ namespace MusicBucket.Properties {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Select Folder ähnelt.
+        /// </summary>
+        public static string FolderBrowserDialogTitle {
+            get {
+                return ResourceManager.GetString("FolderBrowserDialogTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Content of Frame ähnelt.
         /// </summary>
         public static string frameContent {
