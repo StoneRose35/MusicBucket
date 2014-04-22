@@ -86,6 +86,7 @@ namespace MusicBucket
             set
             {
                 _mp3s = value;
+                PropertyChanged(this, new PropertyChangedEventArgs("CurrentMp3s"));
             }
         }
 
@@ -456,6 +457,7 @@ namespace MusicBucket
         {
             Bucket b;
             UserControls.NewBucketDialog nbDlg = new UserControls.NewBucketDialog();
+            nbDlg.Owner = this;
             nbDlg.ShowDialog();
             if(nbDlg.Path!=null)
             {
@@ -641,12 +643,10 @@ namespace MusicBucket
             {
                 mp3s = b.GetMp3Files();
                 (bucketDisp.SelectedItem as Bucket).IsAttached = true;
-                lvFiles.ItemsSource = mp3s;
                 this.CurrentMp3s = mp3s;
             }
             else
             {
-                lvFiles.ItemsSource = null;
                 this.CurrentMp3s = null;
             }
         }

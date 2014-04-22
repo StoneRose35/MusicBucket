@@ -252,12 +252,19 @@ namespace PTCAccess
             string[] folders;
             string folderID=null;
             lastFolder = null;
-            dev = Regex.Match(path, "\\[(.+)\\]").Groups[0].Value;
+            dev = Regex.Match(path, "\\[([a-zA-Z0-9-_\\+\\*%&/\\(\\)~]+)\\]").Groups[1].Value;
             PTCDevice dev2;
-            dev2 = GetDevices().Single(s => s.Name == dev);
+            try
+            {
+                dev2 = GetDevices().Single(s => s.Name == dev);
+            }
+            catch
+            {
+                dev2 = null;
+            }
             if (dev2 != null) // found a device with the same name
             {
-                path = path.Replace("[" + dev2 + "]:\\", "");
+                path = path.Replace(dev2.ToString(), "").TrimEnd('\\');
                 folders = path.Split('\\');
                 for (int cnt = 0; cnt < folders.Length; cnt++)
                 {
