@@ -32,6 +32,14 @@ namespace PTCAccess
         }
 
 
+        public string Path
+        {
+            get
+            {
+                return txtbxPath.Text;
+            }
+        }
+
         public object SelectedElement
         {
             get
@@ -83,19 +91,28 @@ namespace PTCAccess
                 }
                 else if (_selectedElement is PTCDevice)
                 {
-                    mdfolders = PTCWrapper.GetFolders(null, (_selectedElement as PTCDevice).ID);
-                    if (sender != null) // "real" click, is also called artificially
+                    try
                     {
-                        txtbxPath.Text = "[" + (_selectedElement as PTCDevice).Name + "]:\\";
+                        mdfolders = PTCWrapper.GetFolders(null, (_selectedElement as PTCDevice).ID);
+                        if (sender != null) // "real" click, is also called artificially
+                        {
+                            txtbxPath.Text = "[" + (_selectedElement as PTCDevice).Name + "]:\\";
+                        }
                     }
+                    catch { }
                 }
                 else if (_selectedElement is PTCFolder)
                 {
-                    mdfolders = PTCWrapper.GetFolders((_selectedElement as PTCFolder).Id, (_selectedElement as PTCFolder).DeviceID);
-                    if (sender != null) // "real" click, is also called artificially
+                    try
                     {
-                        txtbxPath.Text += (_selectedElement as PTCFolder).Name + "\\";
+                        mdfolders = PTCWrapper.GetFolders((_selectedElement as PTCFolder).Id, (_selectedElement as PTCFolder).DeviceID);
+                        if (sender != null) // "real" click, is also called artificially
+                        {
+                            txtbxPath.Text += (_selectedElement as PTCFolder).Name + "\\";
+                        }
                     }
+                    catch
+                    { }
                 }
 
                 if(dirs!=null || mdfolders!=null)

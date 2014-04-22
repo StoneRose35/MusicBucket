@@ -54,7 +54,8 @@ namespace MusicBucket.UserControls
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             FolderBrowserDialog fbDlg = new FolderBrowserDialog();
-            if (fbDlg.ShowDialog(new OldWindow((System.Windows.PresentationSource.FromVisual(this) as System.Windows.Interop.HwndSource).Handle)) == System.Windows.Forms.DialogResult.OK)
+            fbDlg.Owner = this;
+            if (fbDlg.ShowDialog().Value)
             {
                 _Path = fbDlg.SelectedPath;
                 textBoxPath.Text = _Path;

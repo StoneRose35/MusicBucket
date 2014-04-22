@@ -1,0 +1,12 @@
+﻿<Window x:Class="MusicBucket.UserControls.FolderBrowserDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:props="clr-namespace:MusicBucket.Properties"
+        xmlns:pd="clr-namespace:PTCAccess;assembly=PTCAccess"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="{x:Static props:Resources.FolderBrowserDialogTitle}" Height="300" Width="300" IsVisibleChanged="Window_IsVisibleChanged">
+    <Grid>
+        <pd:PTCFolderBrowser x:Name="fbrowser"  Margin="0,0,0,40" />
+        <Button x:Name="buttonOK" Content="{x:Static props:Resources.OK}" HorizontalAlignment="Left" Height="25" Margin="10,0,0,7" VerticalAlignment="Bottom" Width="78" Click="buttonOK_Click"/>
+        <Button x:Name="buttonCancel" Content="{x:Static props:Resources.Cancel}" HorizontalAlignment="Left" Height="25" Margin="110,0,0,7" VerticalAlignment="Bottom" Width="78" Click="buttonCancel_Click"/>
+    </Grid>
+</Window>

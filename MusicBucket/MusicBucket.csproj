@@ -79,6 +79,9 @@
     <Compile Include="UserControls\ColumnSelector.xaml.cs">
       <DependentUpon>ColumnSelector.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\FolderBrowserDialog.xaml.cs">
+      <DependentUpon>FolderBrowserDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\FrameDisplayDialog.xaml.cs">
       <DependentUpon>FrameDisplayDialog.xaml</DependentUpon>
     </Compile>
@@ -125,6 +128,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="UserControls\ColumnSelector.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\FolderBrowserDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -210,6 +217,10 @@
     <ProjectReference Include="..\MusicBucketLib\MusicBucketLib.csproj">
       <Project>{811b3a3b-243c-4801-8d0e-2ac08c196ce1}</Project>
       <Name>MusicBucketLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PTCAccess\PTCAccess.csproj">
+      <Project>{f6348eb8-27be-4980-b327-c42b5babd311}</Project>
+      <Name>PTCAccess</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
