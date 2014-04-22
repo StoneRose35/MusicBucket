@@ -24,6 +24,9 @@ namespace MusicBucketLib
         private bool _isAttached;
         private bool _isDirty;
         private bool _includeSubfolders;
+
+        public delegate void Mp3FileReadHandler(Mp3File file);
+        public event Mp3FileReadHandler Mp3FileRead;
         /// <summary>
         /// Initalizes a new instance of <see cref="Bucket"/>.
         public Bucket()
@@ -235,17 +238,27 @@ namespace MusicBucketLib
                                 {
                                     mp3.Tags.Add(tagv23);
                                 }
-                                fstream.Close();
 
                             }
-                            catch
+                            catch (Exception exc)
                             {
-
+                                string test = exc.Message;
+                            }
+                            finally
+                            {
+                                fstream.Close();
                             }
                         }
                         catch
                         {
- 
+
+                        }
+                        mp3.FullPath =  _bucketPath + file.Name;
+                        mp3.Filename = file.Name;
+                        res.Add(mp3);
+                        if (Mp3FileRead != null)
+                        {
+                            Mp3FileRead(mp3);
                         }
                     }
                 }
@@ -280,6 +293,10 @@ namespace MusicBucketLib
                             {
 
                             }
+                            finally
+                            {
+                                fstream.Close();
+                            }
                         }
                         catch
                         {
@@ -289,6 +306,10 @@ namespace MusicBucketLib
                         mp3.FullPath = finfo.FullName;
                         mp3.Filename = finfo.FullName.Split('\\').Last<string>();
                         res.Add(mp3);
+                        if (Mp3FileRead != null)
+                        {
+                            Mp3FileRead(mp3);
+                        }
                     }
                 }
             }
