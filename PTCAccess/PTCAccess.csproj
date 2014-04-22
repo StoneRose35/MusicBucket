@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="PTCAccessException.cs" />
     <Compile Include="PTCDevice.cs" />
+    <Compile Include="PTCFile.cs" />
     <Compile Include="PTCFolder.cs" />
     <Compile Include="PTCFolderBrowser.xaml.cs">
       <DependentUpon>PTCFolderBrowser.xaml</DependentUpon>

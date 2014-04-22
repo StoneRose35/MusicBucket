@@ -13,6 +13,27 @@ namespace PTCAccess
     public class PTCWrapper
     {
         private const uint NUMBER_OBJECTS = 10;
+
+        // STGM constants
+        const long STGM_READ = 0x00000000L;
+        const long STGM_WRITE = 0x00000001L;
+        const long STGM_READWRITE = 0x00000002L;
+        const long STGM_SHARE_DENY_NONE = 0x00000040L;
+        const long STGM_SHARE_DENY_READ = 0x00000030L;
+ 	    const long STGM_SHARE_DENY_WRITE = 0x00000020L;
+ 	    const long STGM_SHARE_EXCLUSIVE	= 0x00000010L;
+ 	    const long STGM_PRIORITY = 0x00040000L;
+        const long STGM_CREATE = 0x00001000L;
+ 	    const long STGM_CONVERT = 0x00020000L;
+ 	    const long STGM_FAILIFTHERE = 0x00000000L;
+        const long STGM_DIRECT = 0x00000000L;
+ 	    const long STGM_TRANSACTED = 0x00010000L;
+        const long STGM_NOSCRATCH = 0x00100000L;
+ 	    const long STGM_NOSNAPSHOT = 0x00200000L;
+        const long STGM_SIMPLE = 0x08000000L;
+ 	    const long STGM_DIRECT_SWMR = 0x00400000L;
+        const long STGM_DELETEONRELEASE = 0x04000000L;
+
         public PTCWrapper()
         {
         }
@@ -175,6 +196,13 @@ namespace PTCAccess
             return res;
         }
 
+        public static Stream CreateMp3File(PTCFolder parentFolder)
+        {
+            throw new NotImplementedException();
+            Stream res = null;
+            return res;
+        }
+
         public static Stream GetMp3Stream(PTCFile mp3file)
         {
             Stream res = null;
@@ -194,7 +222,7 @@ namespace PTCAccess
             content.Properties(out props);
             content.Transfer(out resources);
 
-            resources.GetStream(mp3file.Id, GetApiPropertyKey("WPD_RESOURCE_DEFAULT"), 0, ref optimalbuffersize, out stream);
+            resources.GetStream(mp3file.Id, GetApiPropertyKey("WPD_RESOURCE_DEFAULT"), (uint)STGM_READ, ref optimalbuffersize, out stream);
             bytearray = new byte[optimalbuffersize];
             bytesread = optimalbuffersize;
             res = new MemoryStream(); 
