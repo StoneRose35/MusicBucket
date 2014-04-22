@@ -9,6 +9,7 @@ using System.Drawing;
 using System.Threading.Tasks;
 using MP3Tagger.Interfaces;
 using MP3Tagger.Exceptions;
+using System.Globalization;
 namespace MP3Tagger.Classes
 {
     /// <summary>
@@ -501,12 +502,12 @@ namespace MP3Tagger.Classes
                         case YEAR:
                             enc = GetEncoding(frame.Content[0]);
                             _yearIndex = framecnt;
-                            _year = Convert.ToInt32( enc.GetString(frame.Content.Skip(1).ToArray()));
+                            int.TryParse( enc.GetString(frame.Content.Skip(1).ToArray()).Replace((char)65534, ' ').Replace((char)65279, ' '),out _year);
                             break;
                         case TRACK:
                             enc = GetEncoding(frame.Content[0]);
                             _tracknumberIndex = framecnt;
-                            _tracknumber = Convert.ToInt32( enc.GetString(frame.Content.Skip(1).ToArray()).Split('/')[0]);
+                            int.TryParse(enc.GetString(frame.Content.Skip(1).ToArray()).Split('/')[0].Replace((char)65534, ' ').Replace((char)65279, ' '),out _tracknumber);
                             break;
                         case GENRE:
                             enc = GetEncoding(frame.Content[0]);
