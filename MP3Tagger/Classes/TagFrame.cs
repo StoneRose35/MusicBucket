@@ -114,7 +114,8 @@ namespace MP3Tagger.Classes
                 else
                 {
                     string outstring="";
-                    for (int k = 0; k < Content.Length; k++)
+                    int flength = Content.Length > 256 ? 256 : Content.Length;
+                    for (int k = 0; k < flength; k++)
                     {
                         if (Content[k] > 31)
                         {
