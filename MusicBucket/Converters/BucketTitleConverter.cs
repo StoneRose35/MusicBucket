@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
+using MusicBucketLib;
 namespace MusicBucket.Converters
 {
     public class BucketTitleConverter : IValueConverter

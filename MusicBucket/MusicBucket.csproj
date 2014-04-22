@@ -111,9 +111,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Objects\Bucket.cs" />
-    <Compile Include="Objects\BucketCollection.cs" />
-    <Compile Include="Objects\Mp3File.cs" />
     <Compile Include="UserControls\BucketListDisplay.xaml.cs">
       <DependentUpon>BucketListDisplay.xaml</DependentUpon>
     </Compile>
@@ -209,6 +206,10 @@
     <ProjectReference Include="..\MP3Tagger\MP3Tagger.csproj">
       <Project>{b08ae9ea-229b-4d56-be6b-344a6070c155}</Project>
       <Name>MP3Tagger</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MusicBucketLib\MusicBucketLib.csproj">
+      <Project>{811b3a3b-243c-4801-8d0e-2ac08c196ce1}</Project>
+      <Name>MusicBucketLib</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

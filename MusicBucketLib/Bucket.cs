@@ -6,10 +6,11 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using MusicBucket.Objects;
+
 using System.ComponentModel;
 using MP3Tagger.Classes;
-namespace MusicBucket
+using PTCAccess;
+namespace MusicBucketLib
 {
     /// <summary>
     /// Defines as bucket, a storage location for mp3s.
@@ -80,21 +81,38 @@ namespace MusicBucket
                 DirectoryInfo dirInfo;
                 if(_nfiles==null) // count files if not already set
                 {
-                    this.IsAttached = Directory.Exists(_bucketPath);
-                    if (this.IsAttached)
+                    if (PathIsPortableDevice(_bucketPath))
                     {
-                        dirInfo = new DirectoryInfo(_bucketPath);
-                        _nfiles = dirInfo.GetFiles("*.mp3",_includeSubfolders ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly).Length;
-                        try
+                        PTCFolder fld;
+                        this.IsAttached = PTCWrapper.Exists(_bucketPath,out fld);
+                        if (this.IsAttached)
                         {
-                            PropertyChanged(this, new PropertyChangedEventArgs("NumberFiles"));
+                            _nfiles = PTCWrapper.GetMp3FileNames(fld).Count;
+                            try
+                            {
+                                PropertyChanged(this, new PropertyChangedEventArgs("NumberFiles"));
+                            }
+                            catch { }
                         }
-                        catch { }
-                        
                     }
                     else
-                    {
-                        _nfiles = null;
+                    { 
+                        this.IsAttached = Directory.Exists(_bucketPath);
+                        if (this.IsAttached)
+                        {
+                            dirInfo = new DirectoryInfo(_bucketPath);
+                            _nfiles = dirInfo.GetFiles("*.mp3",_includeSubfolders ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly).Length;
+                            try
+                            {
+                                PropertyChanged(this, new PropertyChangedEventArgs("NumberFiles"));
+                            }
+                            catch { }
+                        
+                        }
+                        else
+                        {
+                            _nfiles = null;
+                        }
                     }
                 }
                     return _nfiles;
@@ -179,56 +197,99 @@ namespace MusicBucket
             }
         }
 
-        public ObservableCollection<Objects.Mp3File> GetMp3Files()
+        public ObservableCollection<Mp3File> GetMp3Files()
         {
             DirectoryInfo dirInfo;
             FileInfo[] files;
-            FileStream fstream;
+            Stream fstream;
             ID3v1 tagv1;
             ID3v23 tagv23;
-            Objects.Mp3File mp3 = new Objects.Mp3File();
-            ObservableCollection<Objects.Mp3File> res = new ObservableCollection<Objects.Mp3File>();
+            Mp3File mp3 = new Mp3File();
+            ObservableCollection<Mp3File> res = new ObservableCollection<Mp3File>();
             this.Update(true);
             if(IsAttached)
             {
-                dirInfo = new DirectoryInfo(_bucketPath);
-                files = dirInfo.GetFiles("*.mp3", _includeSubfolders ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
-                foreach (FileInfo finfo in files)
+                if (PathIsPortableDevice(_bucketPath))
                 {
-                    mp3 = new Objects.Mp3File();
-                    mp3.Tags = new List<MP3Tagger.Classes.ID3Tag>(); // new MP3Tagger.Classes.ID3v1();
-                    try
+                    PTCFolder fld;
+                    List<PTCFile> mp3s;
+                    PTCWrapper.Exists(_bucketPath, out fld);
+                    mp3s = PTCWrapper.GetMp3FileNames(fld);
+                    foreach (PTCFile file in mp3s)
                     {
-                        fstream = new FileStream(finfo.FullName, FileMode.Open,FileAccess.Read);
+                        mp3 = new Mp3File();
+                        mp3.Tags = new List<MP3Tagger.Classes.ID3Tag>();
                         try
                         {
-                            tagv1 = new ID3v1();
-                            tagv23 = new ID3v23();
-                            if (tagv1.Read(fstream))
+                            fstream = PTCWrapper.GetMp3Stream(file);
+                            try
                             {
-                                mp3.Tags.Add(tagv1);
+                                tagv1 = new ID3v1();
+                                tagv23 = new ID3v23();
+                                if (tagv1.Read(fstream))
+                                {
+                                    mp3.Tags.Add(tagv1);
+
+                                }
+                                if (tagv23.Read(fstream))
+                                {
+                                    mp3.Tags.Add(tagv23);
+                                }
+                                fstream.Close();
 
                             }
-                            if (tagv23.Read(fstream))
+                            catch
                             {
-                                 mp3.Tags.Add(tagv23);
-                            }
-                            fstream.Close();
 
+                            }
+                        }
+                        catch
+                        {
+ 
+                        }
+                    }
+                }
+                else
+                {
+                    dirInfo = new DirectoryInfo(_bucketPath);
+                    files = dirInfo.GetFiles("*.mp3", _includeSubfolders ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
+                    foreach (FileInfo finfo in files)
+                    {
+                        mp3 = new Mp3File();
+                        mp3.Tags = new List<MP3Tagger.Classes.ID3Tag>(); // new MP3Tagger.Classes.ID3v1();
+                        try
+                        {
+                            fstream = new FileStream(finfo.FullName, FileMode.Open, FileAccess.Read);
+                            try
+                            {
+                                tagv1 = new ID3v1();
+                                tagv23 = new ID3v23();
+                                if (tagv1.Read(fstream))
+                                {
+                                    mp3.Tags.Add(tagv1);
+
+                                }
+                                if (tagv23.Read(fstream))
+                                {
+                                    mp3.Tags.Add(tagv23);
+                                }
+                                fstream.Close();
+
+                            }
+                            catch
+                            {
+
+                            }
                         }
                         catch
                         {
 
                         }
-                    }
-                    catch
-                    {
 
+                        mp3.FullPath = finfo.FullName;
+                        mp3.Filename = finfo.FullName.Split('\\').Last<string>();
+                        res.Add(mp3);
                     }
-
-                    mp3.FullPath = finfo.FullName;
-                    mp3.Filename = finfo.FullName.Split('\\').Last<string>();
-                    res.Add(mp3);
                 }
             }
             return res;
@@ -242,6 +303,11 @@ namespace MusicBucket
             info.AddValue("Title", this.Title);
         }
 
+
+        private bool PathIsPortableDevice(string path)
+        {
+            return path.StartsWith("[");
+        }
         public event PropertyChangedEventHandler PropertyChanged;
     }
 }

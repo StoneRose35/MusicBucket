@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Collections.Specialized;
 
-namespace MusicBucket
+namespace MusicBucketLib
 {
     /// <summary>
     /// A list of Buckets, used to feed <see cref="BucketListDisplay"/>.

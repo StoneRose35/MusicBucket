@@ -27,6 +27,7 @@ using Yeti.MMedia.Mp3;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using MusicBucket.UserControls;
+using MusicBucketLib;
 namespace MusicBucket
 {
     /// <summary>
@@ -46,7 +47,7 @@ namespace MusicBucket
         private ObservableCollection<ID3Tag> _otags;
         private ObservableCollection<Bucket> _buckets;
         private Bucket _currentBucket;
-        private ObservableCollection<Objects.Mp3File> _mp3s;
+        private ObservableCollection<Mp3File> _mp3s;
         private GridLength _iWidth, _bWidth, _pWidth;
         private Storyboard _stbd;
         private int _importStage;
@@ -72,13 +73,13 @@ namespace MusicBucket
             }
         }
 
-        public ObservableCollection<Objects.Mp3File> CurrentMp3s
+        public ObservableCollection<Mp3File> CurrentMp3s
         {
             get
             {
                 if (_mp3s == null)
                 {
-                    _mp3s = new ObservableCollection<Objects.Mp3File>();
+                    _mp3s = new ObservableCollection<Mp3File>();
                 }
                 return _mp3s;
             }
@@ -632,7 +633,7 @@ namespace MusicBucket
 
         private void bucketDisp_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            ObservableCollection<Objects.Mp3File> mp3s;
+            ObservableCollection<Mp3File> mp3s;
             Bucket b;
             b = (bucketDisp.SelectedItem as Bucket);
             CurrentBucket = b;
@@ -694,9 +695,9 @@ namespace MusicBucket
             if (lvFiles.SelectedItem != null)
             {
                 buttonShowFrameList.IsEnabled = false;
-                if ((lvFiles.SelectedItem as Objects.Mp3File).Tags != null)
+                if ((lvFiles.SelectedItem as Mp3File).Tags != null)
                 {
-                    List<ID3Tag> ts = (lvFiles.SelectedItem as Objects.Mp3File).Tags;
+                    List<ID3Tag> ts = (lvFiles.SelectedItem as Mp3File).Tags;
                     foreach (ID3Tag tg in ts)
                     {
                         if(tg is ID3v23)
@@ -719,7 +720,7 @@ namespace MusicBucket
         private void buttonShowFrameList_Click(object sender, RoutedEventArgs e)
         {
             UserControls.FrameDisplayDialog fddlg;
-            List<ID3Tag> ts = (lvFiles.SelectedItem as Objects.Mp3File).Tags;
+            List<ID3Tag> ts = (lvFiles.SelectedItem as Mp3File).Tags;
             foreach (ID3Tag tg in ts)
             {
                 if (tg is ID3v23)
