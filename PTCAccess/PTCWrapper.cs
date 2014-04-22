@@ -7,41 +7,41 @@ using System.IO;
 using System.Threading.Tasks;
 using PortableDeviceApiLib;
 using System.Runtime.InteropServices;
+
 namespace PTCAccess
 {
     public class PTCWrapper
     {
-        private PortableDeviceManager _manager;
         private const uint NUMBER_OBJECTS = 10;
         public PTCWrapper()
         {
-            _manager = new PortableDeviceManager();
         }
 
-        public List<PTCDevice> GetDevices()
+        public static List<PTCDevice> GetDevices()
         { 
             List<PTCDevice> devices=new List<PTCDevice>();
+            PortableDeviceManager mgr = new PortableDeviceManager();
             uint ndevices=0;
             string[] devicesStr;
             string friendlyName=null;
             uint nbytes=0;
-            _manager.GetDevices(null,ref ndevices);
+            mgr.GetDevices(null,ref ndevices);
             if (ndevices > 0)
             {
                 devicesStr = new string[ndevices];
-                _manager.GetDevices(devicesStr, ref ndevices);
+                mgr.GetDevices(devicesStr, ref ndevices);
                 foreach (string dev in devicesStr) // get clear text name of each device
                 {
-                    _manager.GetDeviceFriendlyName(dev, null, ref nbytes);
+                    mgr.GetDeviceFriendlyName(dev, null, ref nbytes);
                     friendlyName = new string((char)0, (int)(nbytes-1));
-                    _manager.GetDeviceFriendlyName(dev, friendlyName, ref nbytes);
+                    mgr.GetDeviceFriendlyName(dev, friendlyName, ref nbytes);
                     devices.Add(new PTCDevice() { ID = dev, Name = friendlyName });
                 }
             }
             return devices;
         }
 
-        public IPortableDevice OpenDevice(string deviceID)
+        public static IPortableDevice OpenDevice(string deviceID)
         {
             IPortableDevice res;
             PortableDeviceTypesLib._tagpropertykey test;
@@ -57,7 +57,7 @@ namespace PTCAccess
             return res;
         }
 
-        public List<PTCFolder> GetFolders(string parentFolder,string deviceID)
+        public static List<PTCFolder> GetFolders(string parentFolder,string deviceID)
         {
             IPortableDevice dev;
             IPortableDeviceContent cnt;
@@ -71,7 +71,7 @@ namespace PTCAccess
             string[] bfr;
             string fname, fuid;
             List<PTCFolder> res = new List<PTCFolder>();
-            dev = this.OpenDevice(deviceID);
+            dev = OpenDevice(deviceID);
             dev.Content(out cnt);
             if(parentFolder==null)
             {
@@ -119,7 +119,19 @@ namespace PTCAccess
             return res;
         }
 
-        public List<string> GetMp3Files(string folderID, string deviceID)
+        public static List<PTCFile> GetMp3FileNames(PTCFolder fld)
+        {
+            if (fld != null)
+            {
+                return GetMp3FileNames(fld.Id, fld.DeviceID);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public static List<PTCFile> GetMp3FileNames(string folderID, string deviceID)
         {
             IPortableDevice dev;
             IPortableDeviceContent content;
@@ -128,21 +140,15 @@ namespace PTCAccess
             IPortableDeviceKeyCollection keyColl;
             IPortableDeviceValues vals;
             IEnumPortableDeviceObjectIDs oids;
-            MemoryStream fstream;
-            IntPtr bread;
             Guid contentType;
             string filename;
-            
-            IStream stream;
-            uint optimalbuffersize=0;
-            byte[] bytearray;
-            uint bytesread;
+
             string[] bfr;
             uint fetched = NUMBER_OBJECTS;
             keyColl=(new PortableDeviceTypesLib.PortableDeviceKeyCollection()) as IPortableDeviceKeyCollection;
             bfr = new string[NUMBER_OBJECTS];
-            List<string> res = new List<string>();
-            dev = this.OpenDevice(deviceID);
+            List<PTCFile> res = new List<PTCFile>();
+            dev = OpenDevice(deviceID);
             dev.Content(out content);
             content.Properties(out props);
             keyColl.Add(GetApiPropertyKey("WPD_OBJECT_ORIGINAL_FILE_NAME"));
@@ -159,31 +165,112 @@ namespace PTCAccess
                     vals.GetGuidValue(GetApiPropertyKey("WPD_OBJECT_CONTENT_TYPE"), out contentType);
                     if (contentType == GetContentTypeGuid("WPD_CONTENT_TYPE_AUDIO"))
                     {
-                        res.Add(filename);
-                        resources.GetStream(bfr[K], GetApiPropertyKey("WPD_RESOURCE_DEFAULT"), 0, ref optimalbuffersize, out stream);
-                        bytearray = new byte[optimalbuffersize];
-                        bytesread = optimalbuffersize;
-                        fstream = new MemoryStream(); //FileStream("C:\\Users\\fuerh_000\\Music\\" + filename,FileMode.Create);
-                        bread = Marshal.AllocHGlobal(sizeof(ulong));
-                        while (bytesread == optimalbuffersize)
+                        if(filename.EndsWith(".mp3"))
                         {
-                            ((System.Runtime.InteropServices.ComTypes.IStream)stream).Read(bytearray, (int)optimalbuffersize, bread);
-                            bytesread=(uint)Marshal.ReadInt64(bread);
-                            fstream.Write(bytearray,0,(int)bytesread);
+                            res.Add(new PTCFile() { Name=filename,Id=bfr[K], DeviceID=deviceID});
                         }
-                        Marshal.FreeHGlobal(bread);
-                        fstream.Write(bytearray,0,(int)bytesread);
-                        Marshal.ReleaseComObject(stream);
-                        fstream.Close();
-                        
-                        stream = null;
                     }
                 }
             }
             return res;
         }
 
-        private PortableDeviceTypesLib._tagpropertykey GetPropertyKey(string identifier)
+        public static Stream GetMp3Stream(PTCFile mp3file)
+        {
+            Stream res = null;
+            IPortableDevice dev;
+            IPortableDeviceContent content;
+            IPortableDeviceResources resources;
+            IPortableDeviceProperties props;
+
+            IntPtr bread;
+            IStream stream;
+            uint optimalbuffersize = 0;
+            byte[] bytearray;
+            uint bytesread;
+
+            dev = OpenDevice(mp3file.DeviceID);
+            dev.Content(out content);
+            content.Properties(out props);
+            content.Transfer(out resources);
+
+            resources.GetStream(mp3file.Id, GetApiPropertyKey("WPD_RESOURCE_DEFAULT"), 0, ref optimalbuffersize, out stream);
+            bytearray = new byte[optimalbuffersize];
+            bytesread = optimalbuffersize;
+            res = new MemoryStream(); 
+            bread = Marshal.AllocHGlobal(sizeof(ulong));
+            while (bytesread == optimalbuffersize)
+            {
+                ((System.Runtime.InteropServices.ComTypes.IStream)stream).Read(bytearray, (int)optimalbuffersize, bread);
+                bytesread = (uint)Marshal.ReadInt64(bread);
+                res.Write(bytearray, 0, (int)bytesread);
+            }
+            Marshal.FreeHGlobal(bread);
+            res.Write(bytearray, 0, (int)bytesread);
+            Marshal.ReleaseComObject(stream);
+            return res;
+        }
+
+        /// <summary>
+        /// Checks of a path on a PTC device exists The path has the following structure:
+        /// [deviceFriendyName]:\Folder1\SubFolder1\SubFolder2 ...
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns>true of the path exists, false otherwise</returns>
+        public static bool Exists(string path,out PTCFolder lastFolder)
+        {
+            bool res = true;
+            string dev;
+            string[] folders;
+            string folderID=null;
+            lastFolder = null;
+            dev = Regex.Match(path, "\\[(.+)\\]").Groups[0].Value;
+            PTCDevice dev2;
+            dev2 = GetDevices().Single(s => s.Name == dev);
+            if (dev2 != null) // found a device with the same name
+            {
+                path = path.Replace("[" + dev2 + "]:\\", "");
+                folders = path.Split('\\');
+                for (int cnt = 0; cnt < folders.Length; cnt++)
+                {
+                    if (cnt == 0)
+                    {
+                        PTCFolder fld = GetFolders(null, dev2.ID).Single(s => s.Equals(new PTCFolder() { Name = folders[cnt], DeviceID = dev2.ID }));
+                        if (fld != null)
+                        {
+                            folderID = fld.Id;
+                            lastFolder = fld;
+                        }
+                        else
+                        {
+                            res = false;
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        PTCFolder fld = GetFolders(folderID, dev2.ID).Single(s => s.Equals(new PTCFolder() { Name = folders[cnt], DeviceID = dev2.ID }));
+                        if (fld != null)
+                        {
+                            folderID = fld.Id;
+                            lastFolder = fld;
+                        }
+                        else
+                        {
+                            res = false;
+                            break;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                res = false;
+            }
+            return res;
+        }
+
+        private static PortableDeviceTypesLib._tagpropertykey GetPropertyKey(string identifier)
         {
             StreamReader rdr;
             string line;
@@ -220,7 +307,7 @@ namespace PTCAccess
             return res;
         }
 
-        private PortableDeviceApiLib._tagpropertykey GetApiPropertyKey(string identifier)
+        private static PortableDeviceApiLib._tagpropertykey GetApiPropertyKey(string identifier)
         {
             StreamReader rdr;
             string line;
@@ -257,7 +344,7 @@ namespace PTCAccess
             return res;
         }
 
-        private string GetContentType(Guid uid)
+        private static string GetContentType(Guid uid)
         {
             string res = null;
             StreamReader rdr;
@@ -289,7 +376,7 @@ namespace PTCAccess
             return res;
         }
 
-        private Guid GetContentTypeGuid(string contentType)
+        private static Guid GetContentTypeGuid(string contentType)
         {
             StreamReader rdr;
             string line;

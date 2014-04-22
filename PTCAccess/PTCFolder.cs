@@ -117,5 +117,17 @@ namespace PTCAccess
         {
             return _name;
         }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is PTCFolder)
+            {
+                return ((PTCFolder)obj).Name == this.Name;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }

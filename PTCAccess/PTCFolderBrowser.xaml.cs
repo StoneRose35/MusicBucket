@@ -83,7 +83,7 @@ namespace PTCAccess
                 }
                 else if (_selectedElement is PTCDevice)
                 {
-                    mdfolders = _wrapper.GetFolders(null, (_selectedElement as PTCDevice).ID);
+                    mdfolders = PTCWrapper.GetFolders(null, (_selectedElement as PTCDevice).ID);
                     if (sender != null) // "real" click, is also called artificially
                     {
                         txtbxPath.Text = "[" + (_selectedElement as PTCDevice).Name + "]:\\";
@@ -91,7 +91,7 @@ namespace PTCAccess
                 }
                 else if (_selectedElement is PTCFolder)
                 {
-                    mdfolders = _wrapper.GetFolders((_selectedElement as PTCFolder).Id, (_selectedElement as PTCFolder).DeviceID);
+                    mdfolders = PTCWrapper.GetFolders((_selectedElement as PTCFolder).Id, (_selectedElement as PTCFolder).DeviceID);
                     if (sender != null) // "real" click, is also called artificially
                     {
                         txtbxPath.Text += (_selectedElement as PTCFolder).Name + "\\";
@@ -133,7 +133,7 @@ namespace PTCAccess
             }
 
             //get mobile devices
-            devices = _wrapper.GetDevices();
+            devices = PTCWrapper.GetDevices();
             foreach (PTCDevice dev in devices)
             {
                 lbFolders.Items.Add(dev);
