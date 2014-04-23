@@ -12,13 +12,11 @@ namespace PTCAccessTest
         public void GetDevicesTest()
         {
             List<PTCDevice> devices;
-            PTCWrapper wrapper;
             List<PTCFolder> folders;
-            wrapper = new PTCWrapper();
-            devices = wrapper.GetDevices();
+            devices = PTCWrapper.GetDevices();
             Assert.IsNotNull(devices);
             //var portableDevice = wrapper.OpenDevice(devices[0].ID);
-            folders = wrapper.GetFolders(null, devices[0].ID);
+            folders = PTCWrapper.GetFolders(null, devices[0].ID);
         }
     }
 }

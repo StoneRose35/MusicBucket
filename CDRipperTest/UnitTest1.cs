@@ -165,7 +165,6 @@ namespace CDRipperTest
             byte a = 97;
             smiley = Encoding.Unicode.GetString(new byte[] { 38, 59 });
             smiley += (char)a;
-            int z = 0;
         }
     }
 }

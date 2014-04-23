@@ -199,8 +199,8 @@ namespace PTCAccess
         public static Stream CreateMp3File(PTCFolder parentFolder)
         {
             throw new NotImplementedException();
-            Stream res = null;
-            return res;
+            //Stream res = null;
+            //return res;
         }
 
         public static Stream GetMp3Stream(PTCFile mp3file)

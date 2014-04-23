@@ -122,11 +122,13 @@ namespace MusicBucketLib
 
         public bool Remove(Bucket item)
         {
-            return _internalList.Remove(item);
+            bool res;
+            res = _internalList.Remove(item);
             if (CollectionChanged != null)
             {
                 CollectionChanged(this, new NotifyCollectionChangedEventArgs(new NotifyCollectionChangedAction()));
             }
+            return res;
         }
 
         IEnumerator<Bucket> IEnumerable<Bucket>.GetEnumerator()
