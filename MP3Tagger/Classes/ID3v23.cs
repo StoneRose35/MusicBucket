@@ -625,16 +625,27 @@ namespace MP3Tagger.Classes
             return outstr;
         }
 
-        public static Encoding GetEncoding(byte encbyte)
+        public static Encoding GetEncoding(byte[] content)
         {
             Encoding enc;
-            if (encbyte == 0)
+            if (content[0] == 0)
             {
                 enc = Encoding.GetEncoding("ISO-8859-1");
             }
             else
             {
-                enc = Encoding.Unicode;
+                if(content[0]==1 && content[1]==255 && content[2]==254)
+                {
+                    enc = Encoding.Unicode;
+                }
+                else if(content[0]==1 && content[1]==254 && content[2]==255)
+                {
+                    enc = new UnicodeEncoding(true,true);                    
+                }
+                else
+                {
+                    enc = Encoding.Unicode;
+                }
             }
             return enc;
         }
