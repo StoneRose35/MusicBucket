@@ -129,7 +129,7 @@ namespace PTCAccess
                     }
                     else if (contentType == GetContentTypeGuid("WPD_CONTENT_TYPE_FUNCTIONAL_OBJECT"))
                     {
-                        if(GetFolders(bfr[K],deviceID).Count>0)
+                        if(parentFolder=="DEVICE" && GetFolders(bfr[K],deviceID).Count>0)
                         {
                             res.Add(new PTCFolder() { Id = bfr[K], Name = fname, Uid = fuid,IsRootFolder=true,DeviceID=deviceID,Parent=parent });
                         }

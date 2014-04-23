@@ -129,42 +129,44 @@ namespace MP3Tagger.Classes
             bytesread++;
             current = tf.Content[bytesread];
             bytesread++;
-            if (tf.Content[0] == 1)
-            {
-                current2 = tf.Content[bytesread];
-                bytesread++;
-            }
-            else
-            {
-                current2 = 0;
-            }
+
             mimetypebyte = new List<byte>();
-            while (current != 0 || current2!=0)
+            while (current != 0)
             {
                 mimetypebyte.Add(current);
                 current = tf.Content[bytesread];
                 bytesread++;
-                if (tf.Content[0] == 1)
-                {
-                    current2 = tf.Content[bytesread];
-                    bytesread++;
-                }
-                else
-                {
-                    current2 = 0;
-                }
             }
-            this.MimeType = enc.GetString(mimetypebyte.ToArray());
+            this.MimeType = System.Text.Encoding.ASCII.GetString(mimetypebyte.ToArray()); //mime type encoding is always ascii
             this.PictureType = tf.Content[bytesread];
             bytesread++;
             descriptionbyte = new List<byte>();
-            current = tf.Content[bytesread];
-            bytesread++;
-            while (current != 0)
+            if (_enc[0] == 0) // Latin1 encoding (singlebyte)
             {
-                descriptionbyte.Add(current);
                 current = tf.Content[bytesread];
                 bytesread++;
+                while (current != 0)
+                {
+                    descriptionbyte.Add(current);
+                    current = tf.Content[bytesread];
+                    bytesread++;
+                }
+            }
+            else // Unicode Encoding (2 bytes)
+            {
+                current = tf.Content[bytesread];
+                bytesread++;
+                current2 = tf.Content[bytesread];
+                bytesread++;
+                while (current != 0 && current2 != 0)
+                {
+                    descriptionbyte.Add(current);
+                    descriptionbyte.Add(current2);
+                    current = tf.Content[bytesread];
+                    bytesread++;
+                    current2 = tf.Content[bytesread];
+                    bytesread++;
+                }
             }
             this.Description = enc.GetString(descriptionbyte.ToArray());
             bbfr = tf.Content.Skip(bytesread).ToArray();
