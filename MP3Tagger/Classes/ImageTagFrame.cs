@@ -11,7 +11,8 @@ namespace MP3Tagger.Classes
     {
         private string _mimetype="image/jpeg"; // jpeg as default
         private string _descr = "";
-        private byte _pictype = 3,_enc; // front cover as default
+        private byte _pictype = 3; // front cover as default
+        private byte[] _enc;
         private Image _img;
         public string MimeType
         {
@@ -25,7 +26,7 @@ namespace MP3Tagger.Classes
             }
         }
 
-        public byte Encoding
+        public byte[] Encoding
         {
             set { _enc = value; }
         }
@@ -94,7 +95,7 @@ namespace MP3Tagger.Classes
             outstream.Write(bbfr, 0, 4);
             outstream.Write(BitConverter.GetBytes(framesize).Reverse().ToArray(), 0, 4);
             outstream.Write(Flags, 0, 2);
-            outstream.WriteByte(_enc);
+            outstream.WriteByte(_enc[0]);
             outstream.Write(mime, 0, mime.Length);
             outstream.WriteByte(0);
             outstream.WriteByte(PictureType);
@@ -107,7 +108,7 @@ namespace MP3Tagger.Classes
 
         public ImageTagFrame()
         {
-            _enc = 0;
+            _enc = new byte[]{0};
             _mimetype = "image/jpeg";
             _pictype = 3;
         }
@@ -123,8 +124,8 @@ namespace MP3Tagger.Classes
             this.Content = tf.Content;
             this.Flags = tf.Flags;
             this.FrameHeader = tf.FrameHeader;
-            this.Encoding = tf.Content[0];
-            enc = ID3v23.GetEncoding(tf.Content[0]);
+            this.Encoding = tf.Content.Take(3).ToArray();
+            enc = ID3v23.GetEncoding(tf.Content);
             bytesread++;
             current = tf.Content[bytesread];
             bytesread++;

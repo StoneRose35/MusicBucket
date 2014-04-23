@@ -56,7 +56,7 @@ namespace MP3Tagger.Classes
                 if (_artistIndex >= 0)
                 {
                     frame = _frames[_artistIndex];
-                    enc=GetEncoding(frame.Content[0]);
+                    enc=GetEncoding(frame.Content);
                     _content = enc.GetBytes(value);
                     _content = (frame.Content.Take(1)).Concat(_content).ToArray(); // take encoding defined previously
                 }
@@ -65,7 +65,8 @@ namespace MP3Tagger.Classes
                     frame = new TagFrame();
                     frame.FrameHeader = ARTIST2;
                     frame.Flags = new byte[] { 0, 0 };
-                    _content = Encoding.Unicode.GetBytes(value);
+                    enc = new UnicodeBOM();
+                    _content = enc.GetBytes(value);
                     _content = (new byte[] { 1 }).Concat(_content).ToArray(); // encode in unicode for new text tags
                     _artistIndex = _frames.Count;
                     _frames.Add(frame);
@@ -75,7 +76,7 @@ namespace MP3Tagger.Classes
                 if (_artist2Index >= 0)
                 {
                     frame = _frames[_artist2Index];
-                    enc = GetEncoding(frame.Content[0]);
+                    enc = GetEncoding(frame.Content);
                     _content = enc.GetBytes(value);
                     _content = (frame.Content.Take(1)).Concat(_content).ToArray(); // take encoding defined previously
                 }
@@ -84,7 +85,8 @@ namespace MP3Tagger.Classes
                     frame = new TagFrame();
                     frame.FrameHeader = ARTIST;
                     frame.Flags = new byte[] { 0, 0 };
-                    _content = Encoding.Unicode.GetBytes(value);
+                    enc = new UnicodeBOM();
+                    _content = enc.GetBytes(value);
                     _content = (new byte[] { 1 }).Concat(_content).ToArray(); // encode in unicode for new text tags
                     _artist2Index = _frames.Count;
                     _frames.Add(frame);
@@ -109,7 +111,7 @@ namespace MP3Tagger.Classes
                 if (_albumIndex >= 0)
                 {
                     frame = _frames[_albumIndex];
-                    enc = GetEncoding(frame.Content[0]);
+                    enc = GetEncoding(frame.Content);
                     _content = enc.GetBytes(value);
                     _content = (frame.Content.Take(1)).Concat(_content).ToArray(); // take encoding defined previously
                 }
@@ -118,7 +120,8 @@ namespace MP3Tagger.Classes
                     frame = new TagFrame();
                     frame.FrameHeader = ALBUM;
                     frame.Flags = new byte[] { 0, 0 };
-                    _content = Encoding.Unicode.GetBytes(value);
+                    enc = new UnicodeBOM();
+                    _content = enc.GetBytes(value);
                     _content = (new byte[] { 1 }).Concat(_content).ToArray(); // encode in unicode for new text tags
                     _albumIndex = _frames.Count;
                     _frames.Add(frame);
@@ -144,7 +147,7 @@ namespace MP3Tagger.Classes
                 if (_titleIndex >= 0)
                 {
                     frame = _frames[_titleIndex];
-                    enc = GetEncoding(frame.Content[0]);
+                    enc = GetEncoding(frame.Content);
                     _content = enc.GetBytes(value);
                     _content = (frame.Content.Take(1)).Concat(_content).ToArray(); // take encoding defined previously
                 }
@@ -153,7 +156,8 @@ namespace MP3Tagger.Classes
                     frame = new TagFrame();
                     frame.FrameHeader = TITLE;
                     frame.Flags = new byte[] { 0, 0 };
-                    _content = Encoding.Unicode.GetBytes(value);
+                    enc = new UnicodeBOM();
+                    _content = enc.GetBytes(value);
                     _content = (new byte[] { 1 }).Concat(_content).ToArray(); // encode in unicode for new text tags
                     _titleIndex = _frames.Count;
                     _frames.Add(frame);
@@ -182,7 +186,7 @@ namespace MP3Tagger.Classes
                     if (_yearIndex >= 0)
                     {
                         frame = _frames[_yearIndex];
-                        enc = GetEncoding(frame.Content[0]);
+                        enc = GetEncoding(frame.Content);
                         _content = enc.GetBytes(strvalue);
                         _content = (frame.Content.Take(1)).Concat(_content).ToArray(); // take encoding defined previously
                     }
@@ -191,7 +195,8 @@ namespace MP3Tagger.Classes
                         frame = new TagFrame();
                         frame.FrameHeader = YEAR;
                         frame.Flags = new byte[] { 0, 0 };
-                        _content = Encoding.Unicode.GetBytes(strvalue);
+                        enc = new UnicodeBOM();
+                        _content = enc.GetBytes(strvalue);
                         _content = (new byte[] { 1 }).Concat(_content).ToArray(); // encode in unicode for new text tags
                         _yearIndex = _frames.Count;
                         _frames.Add(frame);
@@ -221,7 +226,7 @@ namespace MP3Tagger.Classes
                 if (_commmentsIndex >= 0)
                 {
                     frame = _frames[_commmentsIndex];
-                    enc = GetEncoding(frame.Content[0]);
+                    enc = GetEncoding(frame.Content);
                     _content = enc.GetBytes(value);
                     _content = (frame.Content.Take(1)).Concat(_content).ToArray(); // take encoding defined previously
                 }
@@ -230,7 +235,8 @@ namespace MP3Tagger.Classes
                     frame = new TagFrame();
                     frame.FrameHeader = COMMENTS;
                     frame.Flags = new byte[] { 0, 0 };
-                    _content = Encoding.Unicode.GetBytes(value);
+                    enc = new UnicodeBOM();
+                    _content = enc.GetBytes(value);
                     _content = (new byte[] { 1 }).Concat(_content).ToArray(); // encode in unicode for new text tags
                     _commmentsIndex = _frames.Count;
                     _frames.Add(frame);
@@ -255,7 +261,7 @@ namespace MP3Tagger.Classes
                 if (_genreIndex >= 0)
                 {
                     frame = _frames[_genreIndex];
-                    enc = GetEncoding(frame.Content[0]);
+                    enc = GetEncoding(frame.Content);
                     _content = enc.GetBytes(value);
                     _content = (frame.Content.Take(1)).Concat(_content).ToArray(); // take encoding defined previously
                 }
@@ -264,7 +270,8 @@ namespace MP3Tagger.Classes
                     frame = new TagFrame();
                     frame.FrameHeader = GENRE;
                     frame.Flags = new byte[] { 0, 0 };
-                    _content = Encoding.Unicode.GetBytes(value);
+                    enc = new UnicodeBOM();
+                    _content = enc.GetBytes(value);
                     _content = (new byte[] { 1 }).Concat(_content).ToArray(); // encode in unicode for new text tags
                     _genreIndex = _frames.Count;
                     _frames.Add(frame);
@@ -318,7 +325,7 @@ namespace MP3Tagger.Classes
                     if (_tracknumberIndex >= 0)
                     {
                         frame = _frames[_tracknumberIndex];
-                        enc = GetEncoding(frame.Content[0]);
+                        enc = GetEncoding(frame.Content);
                         _content = enc.GetBytes(strvalue);
                         _content = (frame.Content.Take(1)).Concat(_content).ToArray(); // take encoding defined previously
                     }
@@ -327,7 +334,8 @@ namespace MP3Tagger.Classes
                         frame = new TagFrame();
                         frame.FrameHeader = TRACK;
                         frame.Flags = new byte[] { 0, 0 };
-                        _content = Encoding.Unicode.GetBytes(strvalue);
+                        enc = new UnicodeBOM();
+                        _content = enc.GetBytes(strvalue);
                         _content = (new byte[] { 1 }).Concat(_content).ToArray(); // encode in unicode for new text tags
                         _tracknumberIndex = _frames.Count;
                         _frames.Add(frame);
@@ -485,32 +493,32 @@ namespace MP3Tagger.Classes
                         case "":
                             break;
                         case ARTIST:
-                            enc = GetEncoding(frame.Content[0]);
+                            enc = GetEncoding(frame.Content);
                             _artistIndex = framecnt;
                             _artist = enc.GetString(frame.Content.Skip(1).ToArray());
                             break;
                         case ALBUM:
-                            enc = GetEncoding(frame.Content[0]);
+                            enc = GetEncoding(frame.Content);
                             _albumIndex = framecnt;
                             _album = enc.GetString(frame.Content.Skip(1).ToArray());
                             break;
                         case TITLE:
-                            enc = GetEncoding(frame.Content[0]);
+                            enc = GetEncoding(frame.Content);
                             _titleIndex = framecnt;
                             _title = enc.GetString(frame.Content.Skip(1).ToArray());
                             break;
                         case YEAR:
-                            enc = GetEncoding(frame.Content[0]);
+                            enc = GetEncoding(frame.Content);
                             _yearIndex = framecnt;
-                            int.TryParse( enc.GetString(frame.Content.Skip(1).ToArray()).Replace((char)65534, ' ').Replace((char)65279, ' '),out _year);
+                            int.TryParse( enc.GetString(frame.Content.Skip(1).ToArray()),out _year);
                             break;
                         case TRACK:
-                            enc = GetEncoding(frame.Content[0]);
+                            enc = GetEncoding(frame.Content);
                             _tracknumberIndex = framecnt;
-                            int.TryParse(enc.GetString(frame.Content.Skip(1).ToArray()).Split('/')[0].Replace((char)65534, ' ').Replace((char)65279, ' '),out _tracknumber);
+                            int.TryParse(enc.GetString(frame.Content.Skip(1).ToArray()).Split('/')[0],out _tracknumber);
                             break;
                         case GENRE:
-                            enc = GetEncoding(frame.Content[0]);
+                            enc = GetEncoding(frame.Content);
                             _genreIndex = framecnt;
                             _genre = DecodeGenre( enc.GetString(frame.Content.Skip(1).ToArray()));
                             break;
@@ -636,11 +644,11 @@ namespace MP3Tagger.Classes
             {
                 if(content[0]==1 && content[1]==255 && content[2]==254)
                 {
-                    enc = Encoding.Unicode;
+                    enc = new UnicodeBOM(false);
                 }
                 else if(content[0]==1 && content[1]==254 && content[2]==255)
                 {
-                    enc = new UnicodeEncoding(true,true);                    
+                    enc = new UnicodeBOM(true);                    
                 }
                 else
                 {

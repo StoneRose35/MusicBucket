@@ -108,7 +108,7 @@ namespace MP3Tagger.Classes
                 if (FrameHeader.StartsWith("T"))
                 {
                     Encoding enc;
-                    enc = ID3v23.GetEncoding(Content[0]);
+                    enc = ID3v23.GetEncoding(Content);
                     return enc.GetString(Content.Skip(1).ToArray());
                 }
                 else

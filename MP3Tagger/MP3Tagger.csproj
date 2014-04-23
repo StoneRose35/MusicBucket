@@ -20,7 +20,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\ID3Tag.cs" />
+    <Compile Include="Classes\UnicodeBOM.cs" />
     <Compile Include="TagTypeEnum.cs" />
     <Compile Include="Classes\ID3v1.cs" />
     <Compile Include="Classes\ID3v23.cs" />
