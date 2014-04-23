@@ -53,13 +53,14 @@ namespace MusicBucket
         private int _importStage;
         private Mp3WriterConfig _mp3cfg;
         private BackgroundWorker _importWorker;
+        private BackgroundWorker _readBucketWorker;
         private List<string> _copyLocations;
         private string _selectedCDDrive;
         private System.Drawing.Image _copyImg;
         GridViewColumnHeader _lastHeaderClicked;
         ListSortDirection _lastDirection;
-        #region bound public properties
 
+        #region bound public properties
 
         public ObservableCollection<Bucket> Buckets
         {
@@ -167,8 +168,53 @@ namespace MusicBucket
             _importWorker.RunWorkerCompleted += _importWorker_RunWorkerCompleted;
             _importWorker.DoWork += _importWorker_DoWork;
             _importWorker.ProgressChanged += _importWorker_ProgressChanged;
+
+            _readBucketWorker = new BackgroundWorker();
+            _readBucketWorker.WorkerReportsProgress = true;
+            _readBucketWorker.WorkerSupportsCancellation = true;
+            _readBucketWorker.DoWork += _readBucketWorker_DoWork;
+            _readBucketWorker.ProgressChanged += _readBucketWorker_ProgressChanged;
+            _readBucketWorker.RunWorkerCompleted += _readBucketWorker_RunWorkerCompleted;
         }
 
+        void _readBucketWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (e.Cancelled)
+            {
+                CurrentMp3s = null;
+            }
+            CurrentBucket.Mp3FileRead -= b_Mp3FileRead;
+        }
+
+        void _readBucketWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            if (e.ProgressPercentage == 1)
+            {
+                msgDisp.DisplayInfoMessage("", true);
+                _mp3s.Add(e.UserState as Mp3File);
+                PropertyChanged(this, new PropertyChangedEventArgs("CurrentMp3s"));
+            }
+            else
+            {
+                msgDisp.DisplayInfoMessage((string)e.UserState,true);
+            }
+        }
+
+        void _readBucketWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            if (CurrentBucket != null)
+            {
+                CurrentBucket.Mp3FileRead += b_Mp3FileRead;
+                CurrentBucket.GetMp3Files(_readBucketWorker,e);
+            }
+        }
+
+        void b_Mp3FileRead(Mp3File file)
+        {
+            _readBucketWorker.ReportProgress(1, file);
+        }
+
+        #region import functionality
         void _importWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             if (e.ProgressPercentage == 1)
@@ -262,45 +308,9 @@ namespace MusicBucket
             }
         }
 
-        private void MenuItem_Click_1(object sender, RoutedEventArgs e)
-        {
-            this.Close();
-        }
-
-        private void ButtonImport_Click_1(object sender, RoutedEventArgs e)
-        {
-            PrepareStoryboard(0);
-            this.BeginStoryboard(_stbd);
-            
-        }
-
-        void stbd_Completed(object sender, EventArgs e)
-        {
-            colImport.Width = _iWidth;
-            colBuckets.Width = _bWidth;
-            colPlayer.Width = _pWidth;
-        }
-
-        private void ButtonBucket_Click_1(object sender, RoutedEventArgs e)
-        {
-            PrepareStoryboard(1);
-            this.BeginStoryboard(_stbd);
-
-        }
-
-        private void ButtonPlayer_Click_1(object sender, RoutedEventArgs e)
-        {
-            PrepareStoryboard(2);
-            this.BeginStoryboard(_stbd);
-        }
 
 
-        private void Window_ContentRendered_1(object sender, EventArgs e)
-        {
-            this.maingrid.ColumnDefinitions[0].Width = new GridLength(this.maingrid.ColumnDefinitions[0].ActualWidth, GridUnitType.Star);
-            this.maingrid.ColumnDefinitions[1].Width = new GridLength(this.maingrid.ColumnDefinitions[1].ActualWidth, GridUnitType.Star);
-            this.maingrid.ColumnDefinitions[2].Width = new GridLength(this.maingrid.ColumnDefinitions[2].ActualWidth, GridUnitType.Star);
-        }
+
 
         private void buttonStartImport_Click_1(object sender, RoutedEventArgs e)
         {
@@ -453,25 +463,9 @@ namespace MusicBucket
             _importWorker.ReportProgress(1, new Objects.ImportProgressInfo(progress, Properties.Resources.ProgressImport, tracknumber + 1));
         }
 
-        private void buttonAddBucket_Click(object sender, RoutedEventArgs e)
-        {
-            Bucket b;
-            UserControls.NewBucketDialog nbDlg = new UserControls.NewBucketDialog();
-            nbDlg.Owner = this;
-            nbDlg.ShowDialog();
-            if(nbDlg.Path!=null)
-            {
-                if (nbDlg.Path != "")
-                { 
-                    b = new Bucket();
-                    b.Path = nbDlg.Path;
-                    b.IncludeSubFolders = nbDlg.IncludeSubFolder;
-                    b.Title = nbDlg.Title;
-                    b.Update();
-                    _buckets.Add(b);
-                }
-            }
-        }
+        #endregion
+
+        #region state saving
 
         private void LoadBuckets()
         {
@@ -505,41 +499,17 @@ namespace MusicBucket
             }
         }
 
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        #endregion
+
+        #region visuals
+
+        void stbd_Completed(object sender, EventArgs e)
         {
-            try
-            {
-                if(!Directory.Exists(_STORAGEPATH))
-                {
-                    Directory.CreateDirectory(_STORAGEPATH);
-                }
-                FileStream fstream = new FileStream(_STORAGEPATH + "\\" + _STORAGEFILE, FileMode.OpenOrCreate, FileAccess.ReadWrite);
-                IFormatter fmtter = new BinaryFormatter();
-                fmtter.Serialize(fstream, _buckets);
-                fstream.Close();
-            }
-            catch
-            {
-                if (System.Windows.MessageBox.Show(Properties.Resources.BucketListNotSaved, Properties.Resources.BucketListNotSavedMsgBoxTitle, MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.No)
-                {
-                    e.Cancel = true;
-                }
-            }
-            try
-            {
-                if (!Directory.Exists(_STORAGEPATH))
-                {
-                    Directory.CreateDirectory(_STORAGEPATH);
-                }
-                FileStream fstream = new FileStream(_STORAGEPATH + "\\" + _MP3CONFIGFILE, FileMode.OpenOrCreate, FileAccess.ReadWrite);
-                IFormatter fmtter = new BinaryFormatter();
-                fmtter.Serialize(fstream, _mp3cfg);
-                fstream.Close();
-            }
-            catch
-            {
-            }
+            colImport.Width = _iWidth;
+            colBuckets.Width = _bWidth;
+            colPlayer.Width = _pWidth;
         }
+
 
         private void CreateStoryboard()
         {
@@ -631,23 +601,122 @@ namespace MusicBucket
             _pWidth = ((_stbd.Children[0] as ParallelTimeline).Children.First(tl => tl.Name == "gwaP") as GridWidthAnimation).To;
         }
 
+        #endregion
 
+        #region gui handlers
+
+        private void MenuItem_Click_1(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
+        private void ButtonImport_Click_1(object sender, RoutedEventArgs e)
+        {
+            PrepareStoryboard(0);
+            this.BeginStoryboard(_stbd);
+
+        }
+
+        private void ButtonBucket_Click_1(object sender, RoutedEventArgs e)
+        {
+            PrepareStoryboard(1);
+            this.BeginStoryboard(_stbd);
+
+        }
+
+        private void ButtonPlayer_Click_1(object sender, RoutedEventArgs e)
+        {
+            PrepareStoryboard(2);
+            this.BeginStoryboard(_stbd);
+        }
+
+
+        private void Window_ContentRendered_1(object sender, EventArgs e)
+        {
+            this.maingrid.ColumnDefinitions[0].Width = new GridLength(this.maingrid.ColumnDefinitions[0].ActualWidth, GridUnitType.Star);
+            this.maingrid.ColumnDefinitions[1].Width = new GridLength(this.maingrid.ColumnDefinitions[1].ActualWidth, GridUnitType.Star);
+            this.maingrid.ColumnDefinitions[2].Width = new GridLength(this.maingrid.ColumnDefinitions[2].ActualWidth, GridUnitType.Star);
+        }
+
+        private void buttonAddBucket_Click(object sender, RoutedEventArgs e)
+        {
+            Bucket b;
+            UserControls.NewBucketDialog nbDlg = new UserControls.NewBucketDialog();
+            nbDlg.Owner = this;
+            nbDlg.ShowDialog();
+            if (nbDlg.Path != null)
+            {
+                if (nbDlg.Path != "")
+                {
+                    b = new Bucket();
+                    b.Path = nbDlg.Path;
+                    b.IncludeSubFolders = nbDlg.IncludeSubFolder;
+                    b.Title = nbDlg.Title;
+                    b.Update();
+                    _buckets.Add(b);
+                }
+            }
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            try
+            {
+                if (!Directory.Exists(_STORAGEPATH))
+                {
+                    Directory.CreateDirectory(_STORAGEPATH);
+                }
+                FileStream fstream = new FileStream(_STORAGEPATH + "\\" + _STORAGEFILE, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                IFormatter fmtter = new BinaryFormatter();
+                fmtter.Serialize(fstream, _buckets);
+                fstream.Close();
+            }
+            catch
+            {
+                if (System.Windows.MessageBox.Show(Properties.Resources.BucketListNotSaved, Properties.Resources.BucketListNotSavedMsgBoxTitle, MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.No)
+                {
+                    e.Cancel = true;
+                }
+            }
+            try
+            {
+                if (!Directory.Exists(_STORAGEPATH))
+                {
+                    Directory.CreateDirectory(_STORAGEPATH);
+                }
+                FileStream fstream = new FileStream(_STORAGEPATH + "\\" + _MP3CONFIGFILE, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                IFormatter fmtter = new BinaryFormatter();
+                fmtter.Serialize(fstream, _mp3cfg);
+                fstream.Close();
+            }
+            catch
+            {
+            }
+        }
 
         private void bucketDisp_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            ObservableCollection<Mp3File> mp3s;
             Bucket b;
             b = (bucketDisp.SelectedItem as Bucket);
-            CurrentBucket = b;
-            if (b != null)
-            {
-                mp3s = b.GetMp3Files();
-                (bucketDisp.SelectedItem as Bucket).IsAttached = true;
-                this.CurrentMp3s = mp3s;
+            if(b!=null)
+            { 
+                CurrentBucket = b;
+                if (!_readBucketWorker.IsBusy)
+                {
+                    _readBucketWorker.RunWorkerAsync();
+                }
             }
             else
             {
-                this.CurrentMp3s = null;
+                if(_readBucketWorker.IsBusy)
+                {
+                    _readBucketWorker.CancelAsync();
+                }
+                else
+                {
+                    CurrentMp3s = null;
+                }
+                
             }
         }
 
@@ -902,6 +971,8 @@ namespace MusicBucket
         {
 
         }
+
+        #endregion
     }
 
     class OldWindow : System.Windows.Forms.IWin32Window

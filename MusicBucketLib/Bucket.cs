@@ -200,7 +200,7 @@ namespace MusicBucketLib
             }
         }
 
-        public ObservableCollection<Mp3File> GetMp3Files()
+        public ObservableCollection<Mp3File> GetMp3Files(BackgroundWorker worker=null,DoWorkEventArgs e=null)
         {
             DirectoryInfo dirInfo;
             FileInfo[] files;
@@ -209,7 +209,25 @@ namespace MusicBucketLib
             ID3v23 tagv23;
             Mp3File mp3 = new Mp3File();
             ObservableCollection<Mp3File> res = new ObservableCollection<Mp3File>();
+            if (worker != null)
+            {
+                worker.ReportProgress(2, Properties.Resources.ReadingBucketProgress1);
+                if (worker.CancellationPending)
+                {
+                    e.Cancel = true;
+                    return res;
+                }
+            }
             this.Update(true);
+            if (worker != null)
+            {
+                worker.ReportProgress(2, Properties.Resources.ReadingBucketProgress2);
+                if (worker.CancellationPending)
+                {
+                    e.Cancel = true;
+                    return res;
+                }
+            }
             if(IsAttached)
             {
                 if (PathIsPortableDevice(_bucketPath))
@@ -217,7 +235,23 @@ namespace MusicBucketLib
                     PTCFolder fld;
                     List<PTCFile> mp3s;
                     PTCWrapper.Exists(_bucketPath, out fld);
+                    if (worker != null)
+                    {
+                        if (worker.CancellationPending)
+                        {
+                            e.Cancel = true;
+                            return res;
+                        }
+                    }
                     mp3s = PTCWrapper.GetMp3FileNames(fld);
+                    if (worker != null)
+                    {
+                        if (worker.CancellationPending)
+                        {
+                            e.Cancel = true;
+                            return res;
+                        }
+                    }
                     foreach (PTCFile file in mp3s)
                     {
                         mp3 = new Mp3File();
@@ -259,6 +293,14 @@ namespace MusicBucketLib
                         if (Mp3FileRead != null)
                         {
                             Mp3FileRead(mp3);
+                        }
+                        if (worker != null)
+                        {
+                            if (worker.CancellationPending)
+                            {
+                                e.Cancel = true;
+                                return res;
+                            }
                         }
                     }
                 }
@@ -309,6 +351,14 @@ namespace MusicBucketLib
                         if (Mp3FileRead != null)
                         {
                             Mp3FileRead(mp3);
+                        }
+                        if (worker != null)
+                        {
+                            if (worker.CancellationPending)
+                            {
+                                e.Cancel = true;
+                                return res;
+                            }
                         }
                     }
                 }
