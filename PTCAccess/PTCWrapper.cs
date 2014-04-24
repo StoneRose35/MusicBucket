@@ -196,12 +196,17 @@ namespace PTCAccess
             return res;
         }
 
-        public static IStream CreateMp3File(string filename,ulong filesize,PTCFolder parentFolder,out uint optimalbuffersize)
+        public static void CopyMp3File(string pathToFile,string finalname,PTCFolder parentFolder)
         {
-            optimalbuffersize=0;
+            uint optimalbuffersize=0;
             string cookie = "";
+            FileStream fstream=null;
             IPortableDevice dev;
             IPortableDeviceContent cnt;
+            int bytesread;
+            IntPtr bwritten;
+            uint byteswritten;
+            byte[] bytearray;
             PortableDeviceTypesLib.IPortableDeviceValues vals;
             Guid contentType;
             IStream res = null;
@@ -209,19 +214,56 @@ namespace PTCAccess
             dev.Content(out cnt);
             contentType = GetContentTypeGuid("WPD_CONTENT_TYPE_AUDIO");
             vals = new PortableDeviceTypesLib.PortableDeviceValues();
-            // set required values
-            vals.SetStringValue(GetPropertyKey("WPD_OBJECT_PARENT_ID"), parentFolder.Id);
-            vals.SetStringValue(GetPropertyKey("WPD_OBJECT_NAME"), filename);
-            vals.SetStringValue(GetPropertyKey("WPD_OBJECT_ORIGINAL_FILE_NAME"), filename);
-            vals.SetGuidValue(GetPropertyKey("WPD_OBJECT_FORMAT"), GetContentTypeGuid("WPD_OBJECT_FORMAT_MP3"));
-            vals.SetGuidValue(GetPropertyKey("WPD_OBJECT_CONTENT_TYPE"), GetContentTypeGuid("WPD_CONTENT_TYPE_AUDIO"));
-            vals.SetBoolValue(GetPropertyKey("WPD_OBJECT_CAN_DELETE"), 1);
-            vals.SetUnsignedLargeIntegerValue(GetPropertyKey("WPD_OBJECT_SIZE"), filesize);
-            cnt.CreateObjectWithPropertiesAndData((IPortableDeviceValues)vals, out res, ref optimalbuffersize, ref cookie);
-            // for writing convert to (System.Runtime.InteropServices.ComTypes.IStream), copy from other buffer in bits of the optimal buffer size
-            // then call Commit(0) on the stream (no type conversion this time), finally free the stream with Marshal.ReleaseComObject()
 
-            return res;
+            try 
+            {
+                fstream = new FileStream(pathToFile, FileMode.Open);
+                // set required values
+                vals.SetStringValue(GetPropertyKey("WPD_OBJECT_PARENT_ID"), parentFolder.Id);
+                vals.SetStringValue(GetPropertyKey("WPD_OBJECT_NAME"), finalname);
+                vals.SetStringValue(GetPropertyKey("WPD_OBJECT_ORIGINAL_FILE_NAME"), finalname);
+                vals.SetGuidValue(GetPropertyKey("WPD_OBJECT_FORMAT"), GetContentTypeGuid("WPD_OBJECT_FORMAT_MP3"));
+                vals.SetGuidValue(GetPropertyKey("WPD_OBJECT_CONTENT_TYPE"), GetContentTypeGuid("WPD_CONTENT_TYPE_AUDIO"));
+                vals.SetBoolValue(GetPropertyKey("WPD_OBJECT_CAN_DELETE"), 1);
+                vals.SetUnsignedLargeIntegerValue(GetPropertyKey("WPD_OBJECT_SIZE"), (ulong)fstream.Length);
+                cnt.CreateObjectWithPropertiesAndData((IPortableDeviceValues)vals, out res, ref optimalbuffersize, ref cookie);
+                bytesread = (int)optimalbuffersize;
+                bytearray = new byte[optimalbuffersize];
+                bwritten = Marshal.AllocHGlobal(sizeof(ulong));
+                bytesread = fstream.Read(bytearray, 0, (int)optimalbuffersize);
+                while (bytesread == optimalbuffersize)
+                {
+                    ((System.Runtime.InteropServices.ComTypes.IStream)res).Write(bytearray, bytesread, bwritten);
+                    byteswritten = (uint)Marshal.ReadInt64(bwritten);
+                    if (bytesread != byteswritten)
+                    {
+                        throw new PTCAccessException("error writing to mobile device buffer");
+                    }
+                    bytesread = fstream.Read(bytearray, 0, (int)bytesread);
+                }
+                ((System.Runtime.InteropServices.ComTypes.IStream)res).Write(bytearray, (int)bytesread, bwritten);
+                byteswritten = (uint)Marshal.ReadInt64(bwritten);
+                if (bytesread != byteswritten)
+                {
+                    throw new PTCAccessException("error writing to mobile device buffer");
+                }
+                res.Commit(0);
+            }
+            catch (Exception exc)
+            {
+                res.Revert();
+                throw new PTCAccessException("Error during copying file to mobile device",exc);
+            }
+            finally
+            {
+                Marshal.ReleaseComObject(res);
+                if(fstream!=null)
+                {
+                    fstream.Close();
+                }   
+            }
+            
+
         }
 
         public static Stream GetMp3Stream(PTCFile mp3file)

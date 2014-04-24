@@ -189,7 +189,7 @@ namespace MusicBucket.Properties {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die CD Drives ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Drives ähnelt.
         /// </summary>
         public static string CDDriveLabel {
             get {

@@ -184,6 +184,13 @@ namespace MusicBucketLib
             }
         }
 
+        public bool IsOnPortableDevice
+        {
+            get
+            {
+                return PathIsPortableDevice(this.Path);
+            }
+        }
 
         /// <summary>
         /// Sets the parameters <see cref="NumberFiles"/> and <see cref="IsAttached"/> according to the effective values. Only does the update

@@ -146,7 +146,7 @@
     <comment>Title of the CDDB Chooser Dialog</comment>
   </data>
   <data name="CDDriveLabel" xml:space="preserve">
-    <value>CD Drives</value>
+    <value>Drives</value>
     <comment>Label text for label left of the cd drives combobox</comment>
   </data>
   <data name="continueImportText" xml:space="preserve">

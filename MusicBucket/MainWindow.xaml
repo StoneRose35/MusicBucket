@@ -73,7 +73,7 @@
                     <System:Double>3</System:Double>
                 </GridSplitter.Width>
             </GridSplitter>
-            <ComboBox x:Name="cmbCDDrives" HorizontalAlignment="Left" Margin="84,6,0,0" VerticalAlignment="Top" Width="30" Height="25" RenderTransformOrigin="1.245,0.387">
+            <ComboBox x:Name="cmbCDDrives" HorizontalAlignment="Left" Margin="71,6,0,0" VerticalAlignment="Top" Width="43" Height="25" RenderTransformOrigin="1.245,0.387">
                 <ComboBox.Background>
                     <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
                         <GradientStop Color="#FFF2FFDA" Offset="0"/>
@@ -81,7 +81,7 @@
                     </LinearGradientBrush>
                 </ComboBox.Background>
             </ComboBox>
-            <Label Content="{x:Static myProps:Resources.CDDriveLabel}" HorizontalAlignment="Left" Margin="22,6,0,0" VerticalAlignment="Top" Height="26" RenderTransformOrigin="0.5,0.5"/>
+            <Label Content="{x:Static myProps:Resources.CDDriveLabel}" HorizontalAlignment="Left" Margin="25,5,0,0" VerticalAlignment="Top" Height="26" RenderTransformOrigin="0.5,0.5"/>
             <Button x:Name="buttonStartImport" Content="{x:Static myProps:Resources.startImportText}" HorizontalAlignment="Left" Height="22" Margin="119,6,0,0" VerticalAlignment="Top" Width="72" RenderTransformOrigin="0.5,0.5" Click="buttonStartImport_Click_1" Background="#FFE4FFBD"/>
             <DataGrid x:Name="dgImport" Margin="25,45,1,94" RenderTransformOrigin="0.5,0.5" AutoGenerateColumns="False" GridViewColumnHeader.Click="dgImport_Click">
                 <!--<DataGrid.Columns>

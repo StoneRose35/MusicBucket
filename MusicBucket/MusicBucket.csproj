@@ -48,6 +48,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>MusicBucket.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -182,8 +185,6 @@
     <None Include="Images\ButtonBucket.xcf" />
     <None Include="Images\ButtonImport.xcf" />
     <None Include="Images\ButtonPlay.xcf" />
-    <None Include="Libraries\libmp3lame.exp" />
-    <None Include="Libraries\libmp3lame.lib" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -251,10 +252,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\blank.png" />
-    <Content Include="Libraries\lame.exe">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Libraries\libmp3lame.dll" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="PortableDeviceApiLib">
@@ -275,6 +272,9 @@
       <Isolated>False</Isolated>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="MusicBucket.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

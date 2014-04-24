@@ -54,12 +54,12 @@ namespace MusicBucket
         private Mp3WriterConfig _mp3cfg;
         private BackgroundWorker _importWorker;
         private BackgroundWorker _readBucketWorker;
-        private List<string> _copyLocations;
+        private List<Bucket> _selectedBucketsForImport;
         private string _selectedCDDrive;
         private System.Drawing.Image _copyImg;
         GridViewColumnHeader _lastHeaderClicked;
         ListSortDirection _lastDirection;
-
+        bool _startImportAfterCancellingReadingBucketContent=false;
         #region bound public properties
 
         public ObservableCollection<Bucket> Buckets
@@ -182,6 +182,10 @@ namespace MusicBucket
             if (e.Cancelled)
             {
                 CurrentMp3s = null;
+                if (_startImportAfterCancellingReadingBucketContent)
+                {
+                    _importWorker.RunWorkerAsync();
+                }
             }
             CurrentBucket.Mp3FileRead -= b_Mp3FileRead;
         }
@@ -293,15 +297,25 @@ namespace MusicBucket
                 (tag as ID3v23).Write(outStream as FileStream);
                 outStream.Close();
 
-                foreach (string copypath in _copyLocations)
+                foreach (Bucket b in _selectedBucketsForImport)
                 {
                     try
                     {
-                        File.Copy(_STORAGEPATH + "\\" + _TEMPMP3NAME, copypath + "\\" + filename);
+                        if(b.IsOnPortableDevice)
+                        {
+                            PTCAccess.PTCFolder outfolder;
+                            PTCAccess.PTCWrapper.Exists(b.Path,out outfolder);
+                            PTCAccess.PTCWrapper.CopyMp3File(_STORAGEPATH + "\\" + _TEMPMP3NAME,filename, outfolder);
+                        }
+                        else
+                        {
+                            File.Copy(_STORAGEPATH + "\\" + _TEMPMP3NAME, b.Path + "\\" + filename);
+                        }
+                        
                     }
-                    catch
+                    catch (Exception exc)
                     {
-                        _importWorker.ReportProgress(2, String.Format(Properties.Resources.copyToBucketError, copypath));
+                        _importWorker.ReportProgress(2, String.Format(Properties.Resources.copyToBucketError, b.Path));
                     }
                 }
                 trackcnt++;
@@ -420,13 +434,13 @@ namespace MusicBucket
                 if (cmbCDDrives.SelectedItem != null)
                 {
                     selectedBuckets = bucketDisp.SelectedItems;
-                    _copyLocations = new List<string>();
+                    _selectedBucketsForImport  = new List<Bucket>();
                     foreach (Bucket b1 in selectedBuckets)
                     {
                         if (b1.IsAttached)
                         {
                             attachedbucketsCounter++;
-                            _copyLocations.Add(b1.Path);
+                            _selectedBucketsForImport.Add(b1);
                         }
                     }
                     _selectedCDDrive = cmbCDDrives.SelectedItem.ToString().Substring(0, 1).ToLower();
@@ -435,7 +449,15 @@ namespace MusicBucket
                     {
                         if (!_importWorker.IsBusy)
                         {
-                            _importWorker.RunWorkerAsync();
+                            if (_readBucketWorker.IsBusy)
+                            {
+                                _startImportAfterCancellingReadingBucketContent = true;
+                                _readBucketWorker.CancelAsync();
+                            }
+                            else
+                            {
+                                _importWorker.RunWorkerAsync();
+                            }
                         }
                         else
                         {

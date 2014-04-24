@@ -11,5 +11,7 @@ namespace PTCAccess
         public PTCAccessException(string message)
             : base(message)
         { }
+
+        public PTCAccessException(string message, Exception innerException) : base(message, innerException) { }
     }
 }

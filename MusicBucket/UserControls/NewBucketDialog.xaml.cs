@@ -59,6 +59,15 @@ namespace MusicBucket.UserControls
             {
                 _Path = fbDlg.SelectedPath;
                 textBoxPath.Text = _Path;
+                if (_Path.StartsWith("["))
+                {
+                    checkboxIncludeSF.IsChecked = false;
+                    checkboxIncludeSF.IsEnabled = false;
+                }
+                else
+                {
+                    checkboxIncludeSF.IsEnabled = true;
+                }
             }
         }
 
