@@ -196,11 +196,32 @@ namespace PTCAccess
             return res;
         }
 
-        public static Stream CreateMp3File(PTCFolder parentFolder)
+        public static IStream CreateMp3File(string filename,ulong filesize,PTCFolder parentFolder,out uint optimalbuffersize)
         {
-            throw new NotImplementedException();
-            //Stream res = null;
-            //return res;
+            optimalbuffersize=0;
+            string cookie = "";
+            IPortableDevice dev;
+            IPortableDeviceContent cnt;
+            PortableDeviceTypesLib.IPortableDeviceValues vals;
+            Guid contentType;
+            IStream res = null;
+            dev = OpenDevice(parentFolder.DeviceID);
+            dev.Content(out cnt);
+            contentType = GetContentTypeGuid("WPD_CONTENT_TYPE_AUDIO");
+            vals = new PortableDeviceTypesLib.PortableDeviceValues();
+            // set required values
+            vals.SetStringValue(GetPropertyKey("WPD_OBJECT_PARENT_ID"), parentFolder.Id);
+            vals.SetStringValue(GetPropertyKey("WPD_OBJECT_NAME"), filename);
+            vals.SetStringValue(GetPropertyKey("WPD_OBJECT_ORIGINAL_FILE_NAME"), filename);
+            vals.SetGuidValue(GetPropertyKey("WPD_OBJECT_FORMAT"), GetContentTypeGuid("WPD_OBJECT_FORMAT_MP3"));
+            vals.SetGuidValue(GetPropertyKey("WPD_OBJECT_CONTENT_TYPE"), GetContentTypeGuid("WPD_CONTENT_TYPE_AUDIO"));
+            vals.SetBoolValue(GetPropertyKey("WPD_OBJECT_CAN_DELETE"), 1);
+            vals.SetUnsignedLargeIntegerValue(GetPropertyKey("WPD_OBJECT_SIZE"), filesize);
+            cnt.CreateObjectWithPropertiesAndData((IPortableDeviceValues)vals, out res, ref optimalbuffersize, ref cookie);
+            // for writing convert to (System.Runtime.InteropServices.ComTypes.IStream), copy from other buffer in bits of the optimal buffer size
+            // then call Commit(0) on the stream (no type conversion this time), finally free the stream with Marshal.ReleaseComObject()
+
+            return res;
         }
 
         public static Stream GetMp3Stream(PTCFile mp3file)
