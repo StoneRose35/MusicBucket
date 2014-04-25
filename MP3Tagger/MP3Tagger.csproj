@@ -41,13 +41,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\CommentTagFrameV23.cs" />
+    <Compile Include="Classes\CommentTagFrameV22.cs" />
     <Compile Include="Classes\ID3Tag.cs" />
+    <Compile Include="Classes\ID3v22.cs" />
+    <Compile Include="Classes\ImageTagFrameV22.cs" />
+    <Compile Include="Classes\TagFrameV22.cs" />
     <Compile Include="Classes\UnicodeBOM.cs" />
+    <Compile Include="Interfaces\IID3v22.cs" />
     <Compile Include="TagTypeEnum.cs" />
     <Compile Include="Classes\ID3v1.cs" />
     <Compile Include="Classes\ID3v23.cs" />
-    <Compile Include="Classes\ImageTagFrame.cs" />
-    <Compile Include="Classes\TagFrame.cs" />
+    <Compile Include="Classes\ImageTagFrameV23.cs" />
+    <Compile Include="Classes\TagFrameV23.cs" />
     <Compile Include="Exceptions\GenreIndexExceededException.cs" />
     <Compile Include="Exceptions\TagFrameFlagLengthExceeded.cs" />
     <Compile Include="Exceptions\TagLengthWrongException.cs" />

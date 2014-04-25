@@ -88,6 +88,12 @@
     <Compile Include="UserControls\FrameDisplayDialog.xaml.cs">
       <DependentUpon>FrameDisplayDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\FrameDisplayDialogV22.xaml.cs">
+      <DependentUpon>FrameDisplayDialogV22.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\FrameListDisplayV22.xaml.cs">
+      <DependentUpon>FrameListDisplayV22.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\NewBucketDialog.xaml.cs">
       <DependentUpon>NewBucketDialog.xaml</DependentUpon>
     </Compile>
@@ -139,6 +145,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\FrameDisplayDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\FrameDisplayDialogV22.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\FrameListDisplayV22.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

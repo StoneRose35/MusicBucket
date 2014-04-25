@@ -97,7 +97,7 @@ namespace MP3Tagger.Classes
             throw new NotImplementedException();
         }
 
-        public virtual bool Read(System.IO.Stream stream)
+        public virtual bool Read(System.IO.Stream stream,bool strict=false)
         {
             throw new NotImplementedException();
         }

@@ -25,6 +25,38 @@ namespace MusicBucketLib
             }
         }
 
+        public string TagsAsString
+        {
+            get
+            {
+                string res = "";
+                if (_tags != null)
+                {
+                    foreach (ID3Tag tg in _tags)
+                    {
+                        if (tg is ID3v1)
+                        {
+                            res += "ID3v1, ";
+                        }
+                        else if (tg is ID3v22)
+                        {
+                            res += "ID3v22, ";
+                        }
+                        else if (tg is ID3v23)
+                        {
+                            res += "ID3v23, ";
+                        }
+                    }
+                    res = res.TrimEnd(' ').TrimEnd(',');
+                }
+                else
+                {
+                    res = "-";
+                }
+                return res;
+            }
+        }
+
         public string Filename
         {
             get

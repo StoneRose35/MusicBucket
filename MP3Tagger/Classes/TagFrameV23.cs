@@ -11,7 +11,7 @@ namespace MP3Tagger.Classes
     /// <summary>
     /// Object representing one tag frame
     /// </summary>
-    public class TagFrame
+    public class TagFrameV23
     {
         private uint _tagsize;
         private string _tagheader;

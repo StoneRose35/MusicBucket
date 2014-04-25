@@ -338,7 +338,7 @@
   </data>
   <data name="frameListDialogTitle" xml:space="preserve">
     <value>Frame List of ID3v23 Tag</value>
-    <comment>Frame List Dialog Title</comment>
+    <comment>Frame List Dialog Title for ID3v23 tag</comment>
   </data>
   <data name="FileName" xml:space="preserve">
     <value>File Name</value>
@@ -391,5 +391,13 @@ Bouncyness</value>
   <data name="FolderBrowserDialogTitle" xml:space="preserve">
     <value>Select Folder</value>
     <comment>Dialog Title for the Select Folder Dialog</comment>
+  </data>
+  <data name="frameListDialogTitleV22" xml:space="preserve">
+    <value>Frame List of ID3v22 Tag</value>
+    <comment>Frame List Dialog Title for IDv22 tag</comment>
+  </data>
+  <data name="BucketLVTagTypes" xml:space="preserve">
+    <value>Tag Types</value>
+    <comment>Colum for tags types of the middle listview</comment>
   </data>
 </root>

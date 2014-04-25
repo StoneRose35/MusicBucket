@@ -156,7 +156,7 @@ namespace MP3Tagger.Classes
             return 1;
         }
 
-        public override bool Read(System.IO.Stream stream)
+        public override bool Read(System.IO.Stream stream,bool strict=false)
         {
             bool res = true;
             byte[] readbfr;
@@ -170,7 +170,11 @@ namespace MP3Tagger.Classes
                 tagstring = Encoding.ASCII.GetString(readbfr, 0, 3);
                 if (tagstring != "TAG")
                 {
-                    throw new TagNotFoundException();
+                    res = false;
+                    if(strict)
+                    { 
+                        throw new TagNotFoundException();
+                    }
                 }
                 readbfr = new byte[30];
                 stream.Read(readbfr, 0, 30);

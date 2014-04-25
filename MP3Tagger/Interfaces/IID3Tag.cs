@@ -54,6 +54,6 @@ namespace MP3Tagger.Interfaces
         /// the stream position to the value prior to the writing operation.
         /// </summary>
         /// <param name="stream">a file stream ready to be read from</param>
-        bool Read(Stream stream);
+        bool Read(Stream stream,bool strict=false);
     }
 }

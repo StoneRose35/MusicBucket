@@ -214,6 +214,7 @@ namespace MusicBucketLib
             Stream fstream;
             ID3v1 tagv1;
             ID3v23 tagv23;
+            ID3v22 tagv22;
             Mp3File mp3 = new Mp3File();
             ObservableCollection<Mp3File> res = new ObservableCollection<Mp3File>();
             if (worker != null)
@@ -235,7 +236,7 @@ namespace MusicBucketLib
                     return res;
                 }
             }
-            if(IsAttached)
+            if (IsAttached)
             {
                 if (PathIsPortableDevice(_bucketPath))
                 {
@@ -270,6 +271,7 @@ namespace MusicBucketLib
                             {
                                 tagv1 = new ID3v1();
                                 tagv23 = new ID3v23();
+                                tagv22 = new ID3v22();
                                 if (tagv1.Read(fstream))
                                 {
                                     mp3.Tags.Add(tagv1);
@@ -278,6 +280,10 @@ namespace MusicBucketLib
                                 if (tagv23.Read(fstream))
                                 {
                                     mp3.Tags.Add(tagv23);
+                                }
+                                if (tagv22.Read(fstream))
+                                {
+                                    mp3.Tags.Add(tagv22);
                                 }
 
                             }
@@ -294,7 +300,7 @@ namespace MusicBucketLib
                         {
 
                         }
-                        mp3.FullPath =  _bucketPath + file.Name;
+                        mp3.FullPath = _bucketPath + file.Name;
                         mp3.Filename = file.Name;
                         res.Add(mp3);
                         if (Mp3FileRead != null)
@@ -326,6 +332,7 @@ namespace MusicBucketLib
                             {
                                 tagv1 = new ID3v1();
                                 tagv23 = new ID3v23();
+                                tagv22 = new ID3v22();
                                 if (tagv1.Read(fstream))
                                 {
                                     mp3.Tags.Add(tagv1);
@@ -334,6 +341,10 @@ namespace MusicBucketLib
                                 if (tagv23.Read(fstream))
                                 {
                                     mp3.Tags.Add(tagv23);
+                                }
+                                if (tagv22.Read(fstream))
+                                {
+                                    mp3.Tags.Add(tagv22);
                                 }
                                 fstream.Close();
 
@@ -368,6 +379,13 @@ namespace MusicBucketLib
                             }
                         }
                     }
+                }
+            }
+            else
+            {
+                if (worker != null)
+                {
+                    worker.ReportProgress(3, Properties.Resources.ReadingBucketNotAttached);
                 }
             }
             return res;

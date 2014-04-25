@@ -171,6 +171,15 @@ namespace MusicBucket.Properties {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Tag Types ähnelt.
+        /// </summary>
+        public static string BucketLVTagTypes {
+            get {
+                return ResourceManager.GetString("BucketLVTagTypes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Cancel ähnelt.
         /// </summary>
         public static string Cancel {
@@ -284,6 +293,15 @@ namespace MusicBucket.Properties {
         public static string frameListDialogTitle {
             get {
                 return ResourceManager.GetString("frameListDialogTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Frame List of ID3v22 Tag ähnelt.
+        /// </summary>
+        public static string frameListDialogTitleV22 {
+            get {
+                return ResourceManager.GetString("frameListDialogTitleV22", resourceCulture);
             }
         }
         

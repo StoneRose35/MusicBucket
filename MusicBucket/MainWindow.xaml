@@ -104,6 +104,7 @@
                         <GridViewColumn Header="{x:Static myProps:Resources.ImportLVColumnTrackTitle}" DisplayMemberBinding="{Binding Tags[0].Title}"/>
                         <GridViewColumn Header="{x:Static myProps:Resources.ImportLVColumnArtist}" DisplayMemberBinding="{Binding Tags[0].Artist}"/>
                         <GridViewColumn Header="{x:Static myProps:Resources.ImportLVColumnAlbum}" DisplayMemberBinding="{Binding Tags[0].Album}"/>
+                        <GridViewColumn Header="{x:Static myProps:Resources.BucketLVTagTypes}" DisplayMemberBinding="{Binding TagsAsString}"/>
                     </GridView>
                 </ListView.View>
             </ListView>

@@ -186,6 +186,7 @@ namespace MusicBucket
                 {
                     _importWorker.RunWorkerAsync();
                 }
+                msgDisp.DisplayInfoMessage("");
             }
             CurrentBucket.Mp3FileRead -= b_Mp3FileRead;
         }
@@ -198,9 +199,13 @@ namespace MusicBucket
                 _mp3s.Add(e.UserState as Mp3File);
                 PropertyChanged(this, new PropertyChangedEventArgs("CurrentMp3s"));
             }
+            else if (e.ProgressPercentage == 2)
+            {
+                msgDisp.DisplayInfoMessage((string)e.UserState, true);
+            }
             else
             {
-                msgDisp.DisplayInfoMessage((string)e.UserState,true);
+                msgDisp.DisplayInfoMessage((string)e.UserState);
             }
         }
 
@@ -791,7 +796,7 @@ namespace MusicBucket
                     List<ID3Tag> ts = (lvFiles.SelectedItem as Mp3File).Tags;
                     foreach (ID3Tag tg in ts)
                     {
-                        if(tg is ID3v23)
+                        if(tg is ID3v23 || tg is ID3v22)
                         {
                             buttonShowFrameList.IsEnabled = true;
                         }
@@ -811,6 +816,7 @@ namespace MusicBucket
         private void buttonShowFrameList_Click(object sender, RoutedEventArgs e)
         {
             UserControls.FrameDisplayDialog fddlg;
+            UserControls.FrameDisplayDialogV22 fddlgv22;
             List<ID3Tag> ts = (lvFiles.SelectedItem as Mp3File).Tags;
             foreach (ID3Tag tg in ts)
             {
@@ -818,7 +824,11 @@ namespace MusicBucket
                 {
                     fddlg = new UserControls.FrameDisplayDialog((tg as ID3v23).Frames);
                     fddlg.Show();
-                    break;
+                }
+                if (tg is ID3v22)
+                {
+                    fddlgv22 = new UserControls.FrameDisplayDialogV22((tg as ID3v22).Frames);
+                    fddlgv22.Show();
                 }
             }
 

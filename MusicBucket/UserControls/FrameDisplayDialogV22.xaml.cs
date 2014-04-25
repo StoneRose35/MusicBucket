@@ -10,23 +10,23 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 using MP3Tagger.Classes;
 namespace MusicBucket.UserControls
 {
     /// <summary>
-    /// Interaktionslogik für FrameDisplayDialog.xaml
+    /// Interaktionslogik für FrameDisplayDialogV22.xaml
     /// </summary>
-    public partial class FrameDisplayDialog : Window
+    public partial class FrameDisplayDialogV22 : Window
     {
-        public FrameDisplayDialog()
+        public FrameDisplayDialogV22()
         {
             InitializeComponent();
         }
 
-        public FrameDisplayDialog(List<TagFrameV23> tagframes) : this()
+        public FrameDisplayDialogV22(List<TagFrameV22> tagframes)
+            : this()
         {
             fldisp.ItemsSource = tagframes;
         }

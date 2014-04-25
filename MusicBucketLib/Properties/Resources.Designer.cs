@@ -61,6 +61,15 @@ namespace MusicBucketLib.Properties {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Bucket is not attached, cannot read content ähnelt.
+        /// </summary>
+        internal static string ReadingBucketNotAttached {
+            get {
+                return ResourceManager.GetString("ReadingBucketNotAttached", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Updating Bucket Status ähnelt.
         /// </summary>
         internal static string ReadingBucketProgress1 {
