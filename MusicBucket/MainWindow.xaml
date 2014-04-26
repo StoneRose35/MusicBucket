@@ -4,6 +4,7 @@
         xmlns:myProps="clr-namespace:MusicBucket.Properties"
         xmlns:conv="clr-namespace:MusicBucket.Converters"
         xmlns:mp3tag="clr-namespace:MP3Tagger.Interfaces;assembly=MP3Tagger"
+        xmlns:media="clr-namespace:System.Windows.Media;assembly=PresentationCore"
         xmlns:System="clr-namespace:System;assembly=mscorlib" xmlns:local="clr-namespace:MusicBucket" x:Class="MusicBucket.MainWindow"
         Title="MusicBucket" Height="507" Width="759" BorderThickness="3" BorderBrush="#FFAFE2FF" ContentRendered="Window_ContentRendered_1" Closing="Window_Closing">
     <Window.Resources>
@@ -11,8 +12,13 @@
         <Image Source="Images/ButtonBucket.png" x:Key="ButtonBucketImg" />
         <Image Source="Images/ButtonPlay.png" x:Key="ButtonPlayImg" />
         <Image Source="Images/blank.png" x:Key="BlankImage" />
+        <Image Source="Images/ButtonStartPlay.png" x:Key="ButtonPlayerPlayImg" />
+        <Image Source="Images/ButtonPause.png" x:Key="ButtonPlayerPauseImg" />
+        <Image Source="Images/ButtonStop.png" x:Key="ButtonPlayerStopImg" />
         <conv:BooleanColorCoverter x:Key="iconv"></conv:BooleanColorCoverter>
         <conv:BucketTitleConverter x:Key="bucketTitleConv" />
+        <media:MediaPlayer x:Key="MPlayer" x:Name="mplayer" MediaOpened="mplayer_MediaOpened" MediaEnded="mplayer_MediaEnded" />
+        
     </Window.Resources>
     <Window.Background>
         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
@@ -96,7 +102,7 @@
                     <DataGridTextColumn Binding="{Binding Genre}" ClipboardContentBinding="{x:Null}" Header="{x:Static myProps:Resources.ImportLVColumnGenre}" x:Name="dg_genre"/>
                 </DataGrid.Columns>
             </DataGrid>
-            <ListView x:Name="lvFiles" Grid.Column="1" Margin="33,130,4,4" ItemsSource="{Binding CurrentMp3s}" SelectionChanged="lvFiles_SelectionChanged" GridViewColumnHeader.Click="lvFiles_Click">
+            <ListView x:Name="lvFiles" Grid.Column="1" Margin="33,130,4,4" ItemsSource="{Binding CurrentMp3s}" SelectionChanged="lvFiles_SelectionChanged" GridViewColumnHeader.Click="lvFiles_Click" MouseMove="lvFiles_MouseMove" PreviewMouseDown="lvFiles_MouseDown">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="{x:Static myProps:Resources.FileName}" DisplayMemberBinding="{Binding Filename}"/>
@@ -179,7 +185,20 @@
                     </LinearGradientBrush>
                 </ProgressBar.Foreground>
             </ProgressBar>
-
+            <Button x:Name="buttonPlayerPlay" Content="{Binding Source={StaticResource ButtonPlayerPlayImg}}" Grid.Column="2" HorizontalAlignment="Left" Height="55" Margin="44,0,0,0" VerticalAlignment="Bottom" Width="58" Background="{x:Null}" BorderBrush="{x:Null}" Click="buttonPlayerPlay_Click"/>
+            <Button x:Name="buttonPlayerPause" Content="{Binding Source={StaticResource ButtonPlayerPauseImg}}" Grid.Column="2" HorizontalAlignment="Left" Height="55" Margin="116,283,0,0" VerticalAlignment="Bottom" Width="58" Background="{x:Null}" BorderBrush="{x:Null}" Click="buttonPlayerPause_Click"/>
+            <Button x:Name="buttonPlayerStop" Content="{Binding Source={StaticResource ButtonPlayerStopImg}}" Grid.Column="2" HorizontalAlignment="Left" Height="55" Margin="181,283,0,0" VerticalAlignment="Bottom" Width="58" Background="{x:Null}" BorderBrush="{x:Null}" Click="buttonPlayerStop_Click"/>
+            <ListView x:Name="lvPlayer" ItemsSource="{Binding PlayerQueue}" Grid.Column="2" Margin="51,12,5,102" AllowDrop="True" Drop="lvPlayer_Drop" PreviewMouseDown="lvPlayer_PreviewMouseDown" MouseMove="lvPlayer_MouseMove">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="{x:Static myProps:Resources.ImportLVColumnTrackNr}" DisplayMemberBinding="{Binding Tags[0].TrackNumber}"/>
+                        <GridViewColumn Header="{x:Static myProps:Resources.ImportLVColumnTrackTitle}" DisplayMemberBinding="{Binding Tags[0].Title}"/>
+                        <GridViewColumn Header="{x:Static myProps:Resources.ImportLVColumnArtist}" DisplayMemberBinding="{Binding Tags[0].Artist}"/>
+                        <GridViewColumn Header="{x:Static myProps:Resources.ImportLVColumnAlbum}" DisplayMemberBinding="{Binding Tags[0].Album}"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+            <Slider x:Name="sliderPosition" Grid.Column="2" Margin="51,0,5,60" VerticalAlignment="Bottom" Maximum="1000" IsEnabled="False" Foreground="#FFA89B9B"/>
         </Grid>
 
         <local:MessageDisplay x:Name="msgDisp" Height="87" Margin="340,24,120,0" VerticalAlignment="Top" BorderBrush="#FFFFA70E" BorderThickness="2"/>

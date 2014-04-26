@@ -28,6 +28,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using MusicBucket.UserControls;
 using MusicBucketLib;
+using System.Windows.Threading;
 namespace MusicBucket
 {
     /// <summary>
@@ -43,11 +44,13 @@ namespace MusicBucket
         private const string _TEMPMP3NAME = "WhiteWash.mp3";
         private const string _MP3CONFIGFILE = "LameConfig.bin";
         private const string _FILENAMETEMPLATE = "{0} - {1}.mp3";
+        private const string _DRAGCONTENTTYPE = "MusicBucketPlayerList";
         private List<ID3Tag> _tags;
         private ObservableCollection<ID3Tag> _otags;
         private ObservableCollection<Bucket> _buckets;
         private Bucket _currentBucket;
         private ObservableCollection<Mp3File> _mp3s;
+        private ObservableCollection<Mp3File> _playerQueue;
         private GridLength _iWidth, _bWidth, _pWidth;
         private Storyboard _stbd;
         private int _importStage;
@@ -57,9 +60,12 @@ namespace MusicBucket
         private List<Bucket> _selectedBucketsForImport;
         private string _selectedCDDrive;
         private System.Drawing.Image _copyImg;
-        GridViewColumnHeader _lastHeaderClicked;
-        ListSortDirection _lastDirection;
-        bool _startImportAfterCancellingReadingBucketContent=false;
+        private GridViewColumnHeader _lastHeaderClicked;
+        private ListSortDirection _lastDirection;
+        private bool _startImportAfterCancellingReadingBucketContent=false;
+        private bool _dragdropallowed,_dragdropplayerallowed;
+        private bool _playerIsPlaying,_playerIsPaused;
+        private DispatcherTimer _timer;
         #region bound public properties
 
         public ObservableCollection<Bucket> Buckets
@@ -88,6 +94,23 @@ namespace MusicBucket
             {
                 _mp3s = value;
                 PropertyChanged(this, new PropertyChangedEventArgs("CurrentMp3s"));
+            }
+        }
+
+        public ObservableCollection<Mp3File> PlayerQueue
+        {
+            get
+            {
+                if (_playerQueue == null)
+                {
+                    _playerQueue = new ObservableCollection<Mp3File>();
+                }
+                return _playerQueue;
+            }
+            set
+            {
+                _playerQueue = value;
+                PropertyChanged(this, new PropertyChangedEventArgs("PlayerQueue"));
             }
         }
 
@@ -175,20 +198,32 @@ namespace MusicBucket
             _readBucketWorker.DoWork += _readBucketWorker_DoWork;
             _readBucketWorker.ProgressChanged += _readBucketWorker_ProgressChanged;
             _readBucketWorker.RunWorkerCompleted += _readBucketWorker_RunWorkerCompleted;
+
+            _timer = new DispatcherTimer();
+            _timer.Interval = TimeSpan.FromSeconds(1);
+            _timer.Tick += _timer_Tick;
+            _timer.Start();
         }
+
+
+        #region read buckets
 
         void _readBucketWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            if (e.Cancelled)
+            try
             {
-                CurrentMp3s = null;
-                if (_startImportAfterCancellingReadingBucketContent)
+                if (e.Cancelled)
                 {
-                    _importWorker.RunWorkerAsync();
+                    CurrentMp3s = null;
+                    if (_startImportAfterCancellingReadingBucketContent)
+                    {
+                        _importWorker.RunWorkerAsync();
+                    }
+                    msgDisp.DisplayInfoMessage("");
                 }
-                msgDisp.DisplayInfoMessage("");
+                CurrentBucket.Mp3FileRead -= b_Mp3FileRead;
             }
-            CurrentBucket.Mp3FileRead -= b_Mp3FileRead;
+            catch { }
         }
 
         void _readBucketWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -223,6 +258,8 @@ namespace MusicBucket
             _readBucketWorker.ReportProgress(1, file);
         }
 
+        #endregion
+
         #region import functionality
         void _importWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
@@ -239,10 +276,14 @@ namespace MusicBucket
 
         void _importWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            msgDisp.DisplayInfoMessage(Properties.Resources.importTerminated);
-            _importStage = 0;
-            buttonStartImport.Content = Properties.Resources.startImportText;
-            progressImport.Value = 0;
+            try
+            {
+                msgDisp.DisplayInfoMessage(Properties.Resources.importTerminated);
+                _importStage = 0;
+                buttonStartImport.Content = Properties.Resources.startImportText;
+                progressImport.Value = 0;
+            }
+            catch { }
         }
 
         void _importWorker_DoWork(object sender, DoWorkEventArgs e)
@@ -689,6 +730,22 @@ namespace MusicBucket
         {
             try
             {
+                if (_importWorker.IsBusy)
+                {
+                    System.Windows.MessageBox.Show(Properties.Resources.importRunning);
+                    e.Cancel = true;
+                    return;
+                }
+                if (_readBucketWorker.IsBusy)
+                {
+                    _readBucketWorker.CancelAsync();
+                }
+                MediaPlayer player = (MediaPlayer)Resources["MPlayer"];
+                if (_playerIsPlaying || _playerIsPaused)
+                {
+                    player.Stop();
+                    player.Close();
+                }
                 if (!Directory.Exists(_STORAGEPATH))
                 {
                     Directory.CreateDirectory(_STORAGEPATH);
@@ -719,6 +776,7 @@ namespace MusicBucket
             catch
             {
             }
+            
         }
 
         private void bucketDisp_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -1005,6 +1063,179 @@ namespace MusicBucket
         }
 
         #endregion
+
+        #region player
+
+        private void lvFiles_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.GetPosition(lvFiles).X < lvFiles.ActualWidth - 20 && e.GetPosition(lvFiles).Y < lvFiles.ActualHeight - 20)
+            {
+                _dragdropallowed = true;
+            }
+            else
+            {
+                _dragdropallowed = false;
+            }
+        }
+        /// <summary>
+        /// initializes the drag drop process from the middle list to the right (player) list
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void lvFiles_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            if(lvFiles.SelectedItems.Count>0)
+            {
+                if (e.LeftButton == MouseButtonState.Pressed && _dragdropallowed)
+                {
+                    System.Windows.DataObject dobj;
+                    dobj = new System.Windows.DataObject(_DRAGCONTENTTYPE, lvFiles.SelectedItems);
+                    System.Windows.DragDrop.DoDragDrop(lvFiles, dobj, System.Windows.DragDropEffects.All);
+                }
+            }
+            
+        }
+
+        private void lvPlayer_Drop(object sender, System.Windows.DragEventArgs e)
+        {
+
+                IList insertList;
+                object dd = e.Data.GetData(typeof(object));
+                insertList = (IList)e.Data.GetData(_DRAGCONTENTTYPE);
+                for (int k = insertList.Count - 1; k > -1;k-- )
+                {
+                        PlayerQueue.Insert(0, (Mp3File)insertList[k]);
+                }
+
+        }
+
+        private void lvPlayer_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.GetPosition(lvPlayer).X < lvFiles.ActualWidth - 20 && e.GetPosition(lvPlayer).Y < lvFiles.ActualHeight - 20)
+            {
+                _dragdropplayerallowed = true;
+            }
+            else
+            {
+                _dragdropplayerallowed = false;
+            }
+        }
+
+        private void lvPlayer_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            List<Mp3File> toRemove;
+            if (_dragdropplayerallowed && lvPlayer.SelectedItems.Count > 0 && e.LeftButton == MouseButtonState.Pressed)
+            {
+                if (e.GetPosition(lvPlayer).X > lvFiles.ActualWidth ||
+                    e.GetPosition(lvPlayer).Y > lvFiles.ActualHeight ||
+                    e.GetPosition(lvPlayer).X < 0 ||
+                    e.GetPosition(lvPlayer).Y < 0)
+                {
+                    toRemove = new List<Mp3File>();
+                    foreach (object obj in lvPlayer.SelectedItems)
+                    {
+                        toRemove.Add((Mp3File)obj);
+                    }
+                    foreach (Mp3File mf in toRemove)
+                    {
+                        PlayerQueue.Remove(mf);
+                    }
+                    _dragdropplayerallowed = false;
+                }
+
+            }
+        }
+
+        private void buttonPlayerPlay_Click(object sender, RoutedEventArgs e)
+        {
+            MediaPlayer player=(MediaPlayer)Resources["MPlayer"];
+
+            if (PlayerQueue.Count > 0 && !_playerIsPlaying)
+            {
+                string path = PlayerQueue.Last().FullPath;
+                if(path.StartsWith("["))
+                {
+                }
+                else
+                {
+                    player.Open(new Uri(path));
+                    _playerIsPlaying = true;
+                    _playerIsPaused = false;
+                }
+            }
+            else if (_playerIsPaused)
+            {
+                _playerIsPaused = false;
+                _playerIsPlaying = true;
+                player.Play();
+            }
+        }
+
+        private void buttonPlayerPause_Click(object sender, RoutedEventArgs e)
+        {
+            MediaPlayer player = (MediaPlayer)Resources["MPlayer"];
+            if (_playerIsPlaying)
+            {
+                _playerIsPlaying = false;
+                _playerIsPaused = true;
+                player.Pause();
+            }
+        }
+
+        private void mplayer_MediaOpened(object sender, EventArgs e)
+        {
+            MediaPlayer player = (MediaPlayer)Resources["MPlayer"];
+            player.Play();
+        }
+
+        private void buttonPlayerStop_Click(object sender, RoutedEventArgs e)
+        {
+            MediaPlayer player = (MediaPlayer)Resources["MPlayer"];
+            if (_playerIsPlaying || _playerIsPaused)
+            {
+                player.Stop();
+                _playerIsPlaying = false;
+                _playerIsPaused = false;
+                player.Close();
+            }
+        }
+
+        private void mplayer_MediaEnded(object sender, EventArgs e)
+        {
+            MediaPlayer player = (MediaPlayer)Resources["MPlayer"];
+            player.Close();
+            if (PlayerQueue.Count > 0)
+            {
+                PlayerQueue.RemoveAt(PlayerQueue.Count - 1);
+                string path = PlayerQueue.Last().FullPath;
+                if (path.StartsWith("["))
+                {
+                }
+                else
+                {
+                    player.Open(new Uri(path));
+                    _playerIsPlaying = true;
+                    _playerIsPaused = false;
+                }
+            }
+        }
+
+        void _timer_Tick(object sender, EventArgs e)
+        {
+            MediaPlayer player = (MediaPlayer)Resources["MPlayer"];
+            if (_playerIsPlaying || _playerIsPaused)
+            {
+                sliderPosition.Value = (player.Position.TotalSeconds / player.NaturalDuration.TimeSpan.TotalSeconds) * 1000.0;
+            }
+            else
+            {
+                sliderPosition.Value = 0;
+            }
+        }
+
+        #endregion
+
+
     }
 
     class OldWindow : System.Windows.Forms.IWin32Window

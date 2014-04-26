@@ -405,6 +405,15 @@ namespace MusicBucket.Properties {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die A CD is currently imported, MusicBucket cannot be closed ähnelt.
+        /// </summary>
+        public static string importRunning {
+            get {
+                return ResourceManager.GetString("importRunning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Import terminated ähnelt.
         /// </summary>
         public static string importTerminated {

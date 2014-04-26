@@ -290,6 +290,20 @@
   <ItemGroup>
     <Resource Include="MusicBucket.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\ButtonPause.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\ButtonStartPlay.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\ButtonStop.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Libraries\lame_enc.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

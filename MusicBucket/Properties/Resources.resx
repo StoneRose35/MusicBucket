@@ -400,4 +400,8 @@ Bouncyness</value>
     <value>Tag Types</value>
     <comment>Colum for tags types of the middle listview</comment>
   </data>
+  <data name="importRunning" xml:space="preserve">
+    <value>A CD is currently imported, MusicBucket cannot be closed</value>
+    <comment>Message to display when the user wants to close musicbucket while an import is running</comment>
+  </data>
 </root>
