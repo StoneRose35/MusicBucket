@@ -77,6 +77,7 @@
     <Compile Include="Converters\BucketTitleConverter.cs" />
     <Compile Include="Objects\ImportProgressInfo.cs" />
     <Compile Include="Objects\MusicBucketImportSettings.cs" />
+    <Compile Include="Objects\SortOrders.cs" />
     <Compile Include="Objects\UserSettings.cs" />
     <Compile Include="UserControls\AboutDialog.xaml.cs">
       <DependentUpon>AboutDialog.xaml</DependentUpon>

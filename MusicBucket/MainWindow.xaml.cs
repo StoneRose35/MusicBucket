@@ -920,11 +920,18 @@ namespace MusicBucket
         }
         private void Sort(string sortBy, ListSortDirection direction)
         {
+            SortOrders sorders;
+            string[] orderfields;
+            sorders = new SortOrders();
+            orderfields = sorders[sortBy];
             ICollectionView dataView =
               CollectionViewSource.GetDefaultView(lvFiles.ItemsSource);
             lvFiles.Items.SortDescriptions.Clear();
-            SortDescription sd = new SortDescription(sortBy, direction);
-            lvFiles.Items.SortDescriptions.Add(sd);
+            for (int l = 0; l < orderfields.Length; l++)
+            {
+                SortDescription sd = new SortDescription(orderfields[l], direction);
+                lvFiles.Items.SortDescriptions.Add(sd);
+            }
             lvFiles.Items.Refresh();
         }
 
