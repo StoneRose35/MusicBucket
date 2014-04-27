@@ -45,6 +45,7 @@ namespace MusicBucket
         private const string _MP3CONFIGFILE = "LameConfig.bin";
         private const string _FILENAMETEMPLATE = "{0} - {1}.mp3";
         private const string _DRAGCONTENTTYPE = "MusicBucketPlayerList";
+
         private List<ID3Tag> _tags;
         private ObservableCollection<ID3Tag> _otags;
         private ObservableCollection<Bucket> _buckets;
@@ -66,6 +67,7 @@ namespace MusicBucket
         private bool _dragdropallowed,_dragdropplayerallowed;
         private bool _playerIsPlaying,_playerIsPaused;
         private DispatcherTimer _timer;
+
         #region bound public properties
 
         public ObservableCollection<Bucket> Buckets
@@ -155,7 +157,6 @@ namespace MusicBucket
         }
         #endregion
 
-
         public MainWindow()
         {
             DriveInfo[] drives;
@@ -204,7 +205,6 @@ namespace MusicBucket
             _timer.Tick += _timer_Tick;
             _timer.Start();
         }
-
 
         #region read buckets
 
@@ -950,12 +950,9 @@ namespace MusicBucket
             ICollectionView dataView =
               CollectionViewSource.GetDefaultView(lvFiles.ItemsSource);
             lvFiles.Items.SortDescriptions.Clear();
-            //dataView.SortDescriptions.Clear();
             SortDescription sd = new SortDescription(sortBy, direction);
-            //dataView.SortDescriptions.Add(sd);
             lvFiles.Items.SortDescriptions.Add(sd);
             lvFiles.Items.Refresh();
-            //dataView.Refresh();
         }
 
         private void dgImport_Click(object sender, RoutedEventArgs e)
@@ -1150,7 +1147,7 @@ namespace MusicBucket
         {
             MediaPlayer player=(MediaPlayer)Resources["MPlayer"];
 
-            if (PlayerQueue.Count > 0 && !_playerIsPlaying)
+            if (PlayerQueue.Count > 0 && !_playerIsPlaying && !_playerIsPaused)
             {
                 string path = PlayerQueue.Last().FullPath;
                 if(path.StartsWith("["))
@@ -1225,7 +1222,13 @@ namespace MusicBucket
             MediaPlayer player = (MediaPlayer)Resources["MPlayer"];
             if (_playerIsPlaying || _playerIsPaused)
             {
-                sliderPosition.Value = (player.Position.TotalSeconds / player.NaturalDuration.TimeSpan.TotalSeconds) * 1000.0;
+                try
+                {
+                    sliderPosition.Value = (player.Position.TotalSeconds / player.NaturalDuration.TimeSpan.TotalSeconds) * 1000.0;
+                }
+                catch
+                { 
+                }
             }
             else
             {

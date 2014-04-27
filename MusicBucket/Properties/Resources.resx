@@ -404,4 +404,23 @@ Bouncyness</value>
     <value>A CD is currently imported, MusicBucket cannot be closed</value>
     <comment>Message to display when the user wants to close musicbucket while an import is running</comment>
   </data>
+  <data name="ImportSettingsDialogCheckBoxV1" xml:space="preserve">
+    <value>write ID3v1 Tags</value>
+  </data>
+  <data name="ImportSettingsDialogCheckBoxV2" xml:space="preserve">
+    <value>write ID3v2 Tags</value>
+  </data>
+  <data name="ImportSettingsDialogImportQuality" xml:space="preserve">
+    <value>Import Quality</value>
+  </data>
+  <data name="ImportSettingsDialogRBID3v22" xml:space="preserve">
+    <value>ID3v22</value>
+  </data>
+  <data name="ImportSettingsDialogRBID3v23" xml:space="preserve">
+    <value>ID3v23</value>
+  </data>
+  <data name="ImportSettingsDialogTitle" xml:space="preserve">
+    <value>Import Settings</value>
+    <comment>Title of the import settings dialog</comment>
+  </data>
 </root>

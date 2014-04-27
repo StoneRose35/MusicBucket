@@ -94,6 +94,9 @@
     <Compile Include="UserControls\FrameListDisplayV22.xaml.cs">
       <DependentUpon>FrameListDisplayV22.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\ImportSettingsDialog.xaml.cs">
+      <DependentUpon>ImportSettingsDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\NewBucketDialog.xaml.cs">
       <DependentUpon>NewBucketDialog.xaml</DependentUpon>
     </Compile>
@@ -153,6 +156,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\FrameListDisplayV22.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ImportSettingsDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -300,7 +307,7 @@
     <Resource Include="Images\ButtonStop.png" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Libraries\lame_enc.dll">
+    <Content Include="lame_enc.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

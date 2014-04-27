@@ -414,6 +414,60 @@ namespace MusicBucket.Properties {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die write ID3v1 Tags ähnelt.
+        /// </summary>
+        public static string ImportSettingsDialogCheckBoxV1 {
+            get {
+                return ResourceManager.GetString("ImportSettingsDialogCheckBoxV1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die write ID3v2 Tags ähnelt.
+        /// </summary>
+        public static string ImportSettingsDialogCheckBoxV2 {
+            get {
+                return ResourceManager.GetString("ImportSettingsDialogCheckBoxV2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Import Quality ähnelt.
+        /// </summary>
+        public static string ImportSettingsDialogImportQuality {
+            get {
+                return ResourceManager.GetString("ImportSettingsDialogImportQuality", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die ID3v22 ähnelt.
+        /// </summary>
+        public static string ImportSettingsDialogRBID3v22 {
+            get {
+                return ResourceManager.GetString("ImportSettingsDialogRBID3v22", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die ID3v23 ähnelt.
+        /// </summary>
+        public static string ImportSettingsDialogRBID3v23 {
+            get {
+                return ResourceManager.GetString("ImportSettingsDialogRBID3v23", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Import Settings ähnelt.
+        /// </summary>
+        public static string ImportSettingsDialogTitle {
+            get {
+                return ResourceManager.GetString("ImportSettingsDialogTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Import terminated ähnelt.
         /// </summary>
         public static string importTerminated {
