@@ -27,6 +27,7 @@ using Yeti.MMedia.Mp3;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using MusicBucket.UserControls;
+using MusicBucket.Objects;
 using MusicBucketLib;
 using System.Windows.Threading;
 namespace MusicBucket
@@ -39,7 +40,7 @@ namespace MusicBucket
         private const double _GRIDANIMDURATION = 2.34;
         private const double _MINIMALWIDTH = 20;
         private string _STORAGEPATH = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\MusicBucket";
-        private const string _STORAGEFILE = "Buckets.lst";
+        private const string _STORAGEFILE = "Settings.lst";
         private const string _TEMPWAVENAME = "Obsidian.wav";
         private const string _TEMPMP3NAME = "WhiteWash.mp3";
         private const string _MP3CONFIGFILE = "LameConfig.bin";
@@ -48,14 +49,16 @@ namespace MusicBucket
 
         private List<ID3Tag> _tags;
         private ObservableCollection<ID3Tag> _otags;
-        private ObservableCollection<Bucket> _buckets;
+
+        private UserSettings _userSettings;
+
         private Bucket _currentBucket;
         private ObservableCollection<Mp3File> _mp3s;
         private ObservableCollection<Mp3File> _playerQueue;
         private GridLength _iWidth, _bWidth, _pWidth;
         private Storyboard _stbd;
         private int _importStage;
-        private Mp3WriterConfig _mp3cfg;
+
         private BackgroundWorker _importWorker;
         private BackgroundWorker _readBucketWorker;
         private List<Bucket> _selectedBucketsForImport;
@@ -74,11 +77,11 @@ namespace MusicBucket
         {
             get
             {
-                return _buckets;
+                return _userSettings.Buckets;
             }
             set 
             {
-                _buckets = value;
+                _userSettings.Buckets = value;
             }
         }
 
@@ -179,14 +182,13 @@ namespace MusicBucket
                 buttonStartImport.IsEnabled = false;
             }
             LoadBuckets();
-            bucketDisp.ItemsSource = _buckets;
+            bucketDisp.ItemsSource = _userSettings.Buckets;
             _otags = new ObservableCollection<ID3Tag>();
             this.maingrid.DataContext = this;
             _importStage = 0;
-            //if(!LoadMp3Config())
-            //{
-                _mp3cfg = new Mp3WriterConfig(); //new Mp3WriterConfig(new WaveLib.WaveFormat(44100, 16, 2), new Yeti.Lame.BE_CONFIG(new WaveLib.WaveFormat(44100, 16, 2), 128));
-            //}
+
+            
+
             _importWorker = new BackgroundWorker();
             _importWorker.WorkerReportsProgress = true;
             _importWorker.RunWorkerCompleted += _importWorker_RunWorkerCompleted;
@@ -324,7 +326,7 @@ namespace MusicBucket
                     filename = String.Format("mp3_of_{0}_{1}_{2}_{3}_{4}-{5}.mp3", DateTime.Now.Day, DateTime.Now.Month, DateTime.Now.Year, DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
                 }
                 outStream = File.Open(_STORAGEPATH + "\\" + _TEMPMP3NAME, FileMode.CreateNew);
-                mp3writer = new Mp3Writer(outStream, _mp3cfg);
+                mp3writer = new Mp3Writer(outStream, new Mp3WriterConfig(new WaveLib.WaveFormat(44100, 16, 2), new Yeti.Lame.BE_CONFIG(new WaveLib.WaveFormat(44100, 16, 2), (uint)_userSettings.ImportSettings.BitRate)));
                 copybfr = new byte[mp3writer.OptimalBufferSize];
                 wavesize = (int)inStream.Length;
                 totalread = 0;
@@ -359,7 +361,7 @@ namespace MusicBucket
                         }
                         
                     }
-                    catch (Exception exc)
+                    catch 
                     {
                         _importWorker.ReportProgress(2, String.Format(Properties.Resources.copyToBucketError, b.Path));
                     }
@@ -541,29 +543,13 @@ namespace MusicBucket
             {
                 FileStream fstream = new FileStream(_STORAGEPATH + "\\" + _STORAGEFILE, FileMode.OpenOrCreate, FileAccess.ReadWrite);
                 IFormatter fmtter = new BinaryFormatter();
-                _buckets = (ObservableCollection<Bucket>)fmtter.Deserialize(fstream);
+                _userSettings = (UserSettings)fmtter.Deserialize(fstream);
                 fstream.Close();
             }
             catch
             {
-                _buckets = new ObservableCollection<Bucket>();
-                msgDisp.DisplayErrorMessage(Properties.Resources.BucketListNotOpened);
-            }
-        }
-
-        private bool LoadMp3Config()
-        {
-             try
-            {
-                FileStream fstream = new FileStream(_STORAGEPATH + "\\" + _MP3CONFIGFILE, FileMode.OpenOrCreate, FileAccess.ReadWrite);
-                IFormatter fmtter = new BinaryFormatter();
-                _mp3cfg = (Mp3WriterConfig)fmtter.Deserialize(fstream);
-                fstream.Close();
-                return true;
-            }
-            catch
-            {
-                return false;
+                _userSettings = new UserSettings();
+                msgDisp.DisplayErrorMessage(Properties.Resources.UserSettingsNotOpened);
             }
         }
 
@@ -630,9 +616,9 @@ namespace MusicBucket
             mgl = new GridLength(MINIMALWIDTHEXT, GridUnitType.Star);
 
 
-            bouncyness = Properties.Settings.Default.bouncyness;
-            sharpness = Properties.Settings.Default.sharpness;
-            frequency = Properties.Settings.Default.frequency;
+            bouncyness = _userSettings.Visuals.Bouncyness;
+            sharpness = _userSettings.Visuals.Sharpness;
+            frequency = _userSettings.Visuals.Frequency;
 
             ((_stbd.Children[0] as ParallelTimeline).Children.First(tl => tl.Name == "gwaI") as GridWidthAnimation).From = colImport.Width;
             ((_stbd.Children[0] as ParallelTimeline).Children.First(tl => tl.Name == "gwaI") as GridWidthAnimation).Sharpness = sharpness;
@@ -721,7 +707,7 @@ namespace MusicBucket
                     b.IncludeSubFolders = nbDlg.IncludeSubFolder;
                     b.Title = nbDlg.Title;
                     b.Update();
-                    _buckets.Add(b);
+                     _userSettings.Buckets.Add(b);
                 }
             }
         }
@@ -752,30 +738,17 @@ namespace MusicBucket
                 }
                 FileStream fstream = new FileStream(_STORAGEPATH + "\\" + _STORAGEFILE, FileMode.OpenOrCreate, FileAccess.ReadWrite);
                 IFormatter fmtter = new BinaryFormatter();
-                fmtter.Serialize(fstream, _buckets);
+                fmtter.Serialize(fstream, _userSettings);
                 fstream.Close();
             }
             catch
             {
-                if (System.Windows.MessageBox.Show(Properties.Resources.BucketListNotSaved, Properties.Resources.BucketListNotSavedMsgBoxTitle, MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.No)
+                if (System.Windows.MessageBox.Show(Properties.Resources.UserSettingsNotSaved, Properties.Resources.SettingsNotSavedMsgBoxTitle, MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.No)
                 {
                     e.Cancel = true;
                 }
             }
-            try
-            {
-                if (!Directory.Exists(_STORAGEPATH))
-                {
-                    Directory.CreateDirectory(_STORAGEPATH);
-                }
-                FileStream fstream = new FileStream(_STORAGEPATH + "\\" + _MP3CONFIGFILE, FileMode.OpenOrCreate, FileAccess.ReadWrite);
-                IFormatter fmtter = new BinaryFormatter();
-                fmtter.Serialize(fstream, _mp3cfg);
-                fstream.Close();
-            }
-            catch
-            {
-            }
+
             
         }
 
@@ -839,7 +812,7 @@ namespace MusicBucket
             {
                 if(System.Windows.MessageBox.Show(Properties.Resources.ReallyRemoveBucket,Properties.Resources.ReallyRemoveBucketTitle,System.Windows.MessageBoxButton.YesNo)==MessageBoxResult.Yes)
                 {
-                    _buckets.Remove(bucketDisp.SelectedItem as Bucket);
+                    _userSettings.Buckets.Remove(bucketDisp.SelectedItem as Bucket);
                 }
             }
         }
@@ -1050,13 +1023,17 @@ namespace MusicBucket
 
         private void visualssettings_Click(object sender, RoutedEventArgs e)
         {
-            VisualsSettings vsettings = new VisualsSettings();
+            VisualsSettings vsettings = new VisualsSettings(_userSettings.Visuals);
             vsettings.ShowDialog();
         }
 
         private void importSettings_Click(object sender, RoutedEventArgs e)
         {
-
+            ImportSettingsDialog isDlg;
+            isDlg = new ImportSettingsDialog();
+            isDlg.DataContext = _userSettings.ImportSettings;
+            isDlg.ShowDialog();
+            _userSettings.ImportSettings = (MusicBucketImportSettings)isDlg.DataContext;
         }
 
         #endregion

@@ -144,33 +144,6 @@ namespace MusicBucket.Properties {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Bucket List couldn&apos;t not be read or created. Make sure that the harddrive of the computer is not full. ähnelt.
-        /// </summary>
-        public static string BucketListNotOpened {
-            get {
-                return ResourceManager.GetString("BucketListNotOpened", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Bucket List couldn&apos;t not be saved. Make sure that the harddrive of the computer is not full. Do you still want to exit? ähnelt.
-        /// </summary>
-        public static string BucketListNotSaved {
-            get {
-                return ResourceManager.GetString("BucketListNotSaved", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Bucket List saving error ähnelt.
-        /// </summary>
-        public static string BucketListNotSavedMsgBoxTitle {
-            get {
-                return ResourceManager.GetString("BucketListNotSavedMsgBoxTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Tag Types ähnelt.
         /// </summary>
         public static string BucketLVTagTypes {
@@ -441,6 +414,15 @@ namespace MusicBucket.Properties {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Invalid Bitrate Chosen ähnelt.
+        /// </summary>
+        public static string ImportSettingsDialogInvalidBitrate {
+            get {
+                return ResourceManager.GetString("ImportSettingsDialogInvalidBitrate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die ID3v22 ähnelt.
         /// </summary>
         public static string ImportSettingsDialogRBID3v22 {
@@ -702,6 +684,15 @@ namespace MusicBucket.Properties {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Settings saving error ähnelt.
+        /// </summary>
+        public static string SettingsNotSavedMsgBoxTitle {
+            get {
+                return ResourceManager.GetString("SettingsNotSavedMsgBoxTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die The sharpness value (currently {0}) must be within 0 and 1 (1 excluded) ähnelt.
         /// </summary>
         public static string SharpnessValueOutOfRange {
@@ -725,6 +716,24 @@ namespace MusicBucket.Properties {
         public static string startImportText {
             get {
                 return ResourceManager.GetString("startImportText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Settings couldn&apos;t not be read or created. Make sure that the harddrive of the computer is not full. ähnelt.
+        /// </summary>
+        public static string UserSettingsNotOpened {
+            get {
+                return ResourceManager.GetString("UserSettingsNotOpened", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Settings couldn&apos;t not be saved. Make sure that the harddrive of the computer is not full. Do you still want to exit? ähnelt.
+        /// </summary>
+        public static string UserSettingsNotSaved {
+            get {
+                return ResourceManager.GetString("UserSettingsNotSaved", resourceCulture);
             }
         }
         

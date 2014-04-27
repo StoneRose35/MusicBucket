@@ -19,12 +19,23 @@ namespace MusicBucket.UserControls
     /// </summary>
     public partial class VisualsSettings : Window
     {
-        public VisualsSettings()
+        private GridWidthAnimation _gridWidthAnim,_backup;
+        public VisualsSettings(GridWidthAnimation gridWidthAnim)
         {
             InitializeComponent();
-            txtSharpness.Text = Properties.Settings.Default.sharpness.ToString();
-            txtFrequency.Text = Properties.Settings.Default.frequency.ToString();
-            txtBouncyness.Text = Properties.Settings.Default.bouncyness.ToString();
+            _gridWidthAnim = gridWidthAnim;
+            _backup = gridWidthAnim.Clone();
+            txtSharpness.Text = _gridWidthAnim.Sharpness.ToString();
+            txtFrequency.Text = _gridWidthAnim.Frequency.ToString();
+            txtBouncyness.Text = _gridWidthAnim.Bouncyness.ToString();
+        }
+
+        public new GridWidthAnimation DialogResult
+        {
+            get
+            {
+                return _gridWidthAnim;
+            }
         }
 
         private void txtBounceFunction_TextChanged(object sender, TextChangedEventArgs e)
@@ -113,6 +124,7 @@ namespace MusicBucket.UserControls
 
         private void buttonCancel_Click(object sender, RoutedEventArgs e)
         {
+            _gridWidthAnim = _backup.Clone();
             this.Close();
         }
 
@@ -120,18 +132,14 @@ namespace MusicBucket.UserControls
         {
             double sharpness, bouncyness;
             int frequency;
-            GridWidthAnimation gwa = new GridWidthAnimation();
             if ((Double.TryParse(txtSharpness.Text, out sharpness) && Int32.TryParse(txtFrequency.Text, out frequency) && Double.TryParse(txtBouncyness.Text, out bouncyness)))
             {
                 try
                 {
-                    gwa.Bouncyness = bouncyness;
-                    gwa.Sharpness = sharpness;
-                    gwa.Frequency = frequency;
-                    Properties.Settings.Default.sharpness = sharpness;
-                    Properties.Settings.Default.frequency = frequency;
-                    Properties.Settings.Default.bouncyness = bouncyness;
-                    Properties.Settings.Default.Save();
+                    _gridWidthAnim.Bouncyness = bouncyness;
+                    _gridWidthAnim.Sharpness = sharpness;
+                    _gridWidthAnim.Frequency = frequency;
+
                     this.Close();
                 }
                 catch (Exception exc)

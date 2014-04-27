@@ -6,9 +6,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Animation;
 using System.Windows.Controls;
+using System.Runtime.Serialization;
 namespace MusicBucket
 {
-    public class GridWidthAnimation : AnimationTimeline
+    [Serializable]
+    public class GridWidthAnimation : AnimationTimeline,ISerializable
     {
 
         double _sharpness,_bouncyness;
@@ -18,6 +20,9 @@ namespace MusicBucket
         public GridWidthAnimation()
         {
             this.FillBehavior = FillBehavior.Stop;
+            this.Sharpness = 0.3;
+            this.Frequency = 1;
+            this.Bouncyness = 0.3;
         }
 
         public GridLength From
@@ -223,6 +228,29 @@ namespace MusicBucket
                 }
 
             }
+            return res;
+        }
+
+        public GridWidthAnimation(SerializationInfo info, StreamingContext context)
+        {
+            _bouncyness = info.GetDouble("Bouncyness");
+            _frequency = info.GetInt32("Frequency");
+            _sharpness = info.GetDouble("Sharpness");
+        }
+
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("Bouncyness", _bouncyness);
+            info.AddValue("Frequency", _frequency);
+            info.AddValue("Sharpness",_sharpness);
+        }
+
+        public GridWidthAnimation Clone()
+        {
+            GridWidthAnimation res = new GridWidthAnimation();
+            res.Bouncyness = this.Bouncyness;
+            res.Frequency = this.Frequency;
+            res.Sharpness = this.Sharpness;
             return res;
         }
     }

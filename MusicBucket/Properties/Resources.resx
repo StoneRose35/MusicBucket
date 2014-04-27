@@ -129,16 +129,16 @@
     <value>Bucket Organization</value>
     <comment>The value displayed in the minimized version of the buckets column</comment>
   </data>
-  <data name="BucketListNotOpened" xml:space="preserve">
-    <value>Bucket List couldn't not be read or created. Make sure that the harddrive of the computer is not full.</value>
-    <comment>Message to display when something fails during deserialization of Buckets.</comment>
+  <data name="UserSettingsNotOpened" xml:space="preserve">
+    <value>Settings couldn't not be read or created. Make sure that the harddrive of the computer is not full.</value>
+    <comment>Message to display when something fails during deserialization of UserSettings.</comment>
   </data>
-  <data name="BucketListNotSaved" xml:space="preserve">
-    <value>Bucket List couldn't not be saved. Make sure that the harddrive of the computer is not full. Do you still want to exit?</value>
-    <comment>Message to display when something fails during serialization of Buckets.</comment>
+  <data name="UserSettingsNotSaved" xml:space="preserve">
+    <value>Settings couldn't not be saved. Make sure that the harddrive of the computer is not full. Do you still want to exit?</value>
+    <comment>Message to display when something fails during serialization of UserSettings.</comment>
   </data>
-  <data name="BucketListNotSavedMsgBoxTitle" xml:space="preserve">
-    <value>Bucket List saving error</value>
+  <data name="SettingsNotSavedMsgBoxTitle" xml:space="preserve">
+    <value>Settings saving error</value>
     <comment>Caption of the messagebox which is displayed when saving failed on closing.</comment>
   </data>
   <data name="CDDBEntryChooserTitle" xml:space="preserve">
@@ -422,5 +422,9 @@ Bouncyness</value>
   <data name="ImportSettingsDialogTitle" xml:space="preserve">
     <value>Import Settings</value>
     <comment>Title of the import settings dialog</comment>
+  </data>
+  <data name="ImportSettingsDialogInvalidBitrate" xml:space="preserve">
+    <value>Invalid Bitrate Chosen</value>
+    <comment>Exception text for the exception thrown when on tries to set an invalid bitrate int the import settings.</comment>
   </data>
 </root>

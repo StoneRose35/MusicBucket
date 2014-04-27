@@ -1,23 +1,21 @@
-﻿<Window x:Class="MusicBucket.UserControls.ImportSettingsDialog"
+﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:myprops="clr-namespace:MusicBucket.Properties"
-        Title="{x:Static myprops:Resources.ImportSettingsDialogTitle}" Height="153" Width="300">
+        xmlns:System="clr-namespace:System;assembly=mscorlib" x:Class="MusicBucket.UserControls.ImportSettingsDialog"
+        Title="{x:Static myprops:Resources.ImportSettingsDialogTitle}" Height="153" Width="300" Closing="Window_Closing">
     <Grid>
         <Grid HorizontalAlignment="Left" Height="59" Margin="163,30,0,0" VerticalAlignment="Top" Width="103">
-            <RadioButton x:Name="writeID3v22" Content="{x:Static myprops:Resources.ImportSettingsDialogRBID3v22}" HorizontalAlignment="Left" Height="23" Margin="10,10,0,0" VerticalAlignment="Top" Width="97"/>
-            <RadioButton x:Name="writeID3v23" Content="{x:Static myprops:Resources.ImportSettingsDialogRBID3v23}" HorizontalAlignment="Left" Margin="10,33,0,0" VerticalAlignment="Top" Height="18"/>
+            <RadioButton x:Name="writeID3v22" Content="{x:Static myprops:Resources.ImportSettingsDialogRBID3v22}" HorizontalAlignment="Left" Height="23" Margin="10,10,0,0" VerticalAlignment="Top" Width="97" IsChecked="{Binding WriteID3v22}"/>
+            <RadioButton x:Name="writeID3v23" Content="{x:Static myprops:Resources.ImportSettingsDialogRBID3v23}" HorizontalAlignment="Left" Margin="10,33,0,0" VerticalAlignment="Top" Height="18" IsChecked="{Binding WriteID3v23}"/>
         </Grid>
-        <CheckBox x:Name="writeID3v2tags" Content="{x:Static myprops:Resources.ImportSettingsDialogCheckBoxV2}" HorizontalAlignment="Left" Margin="172,10,0,0" VerticalAlignment="Top"/>
-        <CheckBox x:Name="writeID3v1" Content="{x:Static myprops:Resources.ImportSettingsDialogCheckBoxV1}" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+        <CheckBox x:Name="writeID3v2tags" Content="{x:Static myprops:Resources.ImportSettingsDialogCheckBoxV2}" HorizontalAlignment="Left" Margin="172,10,0,0" VerticalAlignment="Top" IsChecked="{Binding WriteID3v2}"/>
+        <CheckBox x:Name="writeID3v1" Content="{x:Static myprops:Resources.ImportSettingsDialogCheckBoxV1}" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" IsChecked="{Binding WriteID3v1}"/>
         <TextBlock x:Name="txtbxEncodingQuality" HorizontalAlignment="Left" Height="21" Margin="10,30,0,0" TextWrapping="Wrap" Text="{x:Static myprops:Resources.ImportSettingsDialogImportQuality}" VerticalAlignment="Top" Width="102"/>
-        <ComboBox HorizontalAlignment="Left" Height="24" Margin="10,56,0,0" VerticalAlignment="Top" Width="127">
-            <ComboBoxItem Content="128 kbps"/>
-            <ComboBoxItem Content="160 kbps" />
-            <ComboBoxItem Content="192 kbps" />
+        <ComboBox x:Name="cmbBitRates" HorizontalAlignment="Left" Height="24" Margin="10,56,0,0" VerticalAlignment="Top" Width="127" SelectedItem="{Binding BitRate}">
         </ComboBox>
-        <Button x:Name="buttonOK" Content="{x:Static myprops:Resources.OK}" HorizontalAlignment="Left" Height="23" Margin="10,89,0,0" VerticalAlignment="Top" Width="85"/>
-        <Button x:Name="buttonCancel" Content="{x:Static myprops:Resources.Cancel}" HorizontalAlignment="Left" Height="23" Margin="114,89,0,0" VerticalAlignment="Top" Width="89"/>
+        <Button x:Name="buttonOK" Content="{x:Static myprops:Resources.OK}" HorizontalAlignment="Left" Height="23" Margin="10,89,0,0" VerticalAlignment="Top" Width="85" Click="buttonOK_Click"/>
+        <Button x:Name="buttonCancel" Content="{x:Static myprops:Resources.Cancel}" HorizontalAlignment="Left" Height="23" Margin="114,89,0,0" VerticalAlignment="Top" Width="89" Click="buttonCancel_Click"/>
 
     </Grid>
 </Window>

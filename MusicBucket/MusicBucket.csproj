@@ -76,6 +76,8 @@
     </ApplicationDefinition>
     <Compile Include="Converters\BucketTitleConverter.cs" />
     <Compile Include="Objects\ImportProgressInfo.cs" />
+    <Compile Include="Objects\MusicBucketImportSettings.cs" />
+    <Compile Include="Objects\UserSettings.cs" />
     <Compile Include="UserControls\AboutDialog.xaml.cs">
       <DependentUpon>AboutDialog.xaml</DependentUpon>
     </Compile>
@@ -193,11 +195,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -206,10 +203,6 @@
     <None Include="Images\ButtonBucket.xcf" />
     <None Include="Images\ButtonImport.xcf" />
     <None Include="Images\ButtonPlay.xcf" />
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
