@@ -342,7 +342,18 @@ namespace MusicBucket
                 {
                     (tag as ID3v23).FrontCover = _copyImg;
                 }
-                (tag as ID3v23).Write(outStream as FileStream);
+                if (_userSettings.ImportSettings.WriteID3v23)
+                {
+                    (tag as ID3v23).Write(outStream);
+                }
+                if(_userSettings.ImportSettings.WriteID3v22)
+                {
+                    ((ID3v22)(tag as ID3v23)).Write(outStream);
+                }
+                if (_userSettings.ImportSettings.WriteID3v1)
+                {
+                    ((ID3v1)(tag as ID3v23)).Write(outStream);
+                }
                 outStream.Close();
 
                 foreach (Bucket b in _selectedBucketsForImport)

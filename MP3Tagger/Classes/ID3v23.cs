@@ -581,7 +581,72 @@ namespace MP3Tagger.Classes
             get { return (_headerflags & 32) != 0; }
         }
 
+        /// <summary>
+        /// Converts to ID3v1, truncates the fields if necessary
+        /// </summary>
+        /// <param name="toconvert"></param>
+        /// <returns></returns>
+        public static explicit operator ID3v1(ID3v23 toconvert)
+        {
+            ID3v1 res = new ID3v1();
+            if (toconvert.Album.Length > 30)
+            {
+                res.Album = toconvert.Album.Substring(0, 30);
+            }
+            else
+            {
+                res.Album = toconvert.Album;
+            }
 
+            if (toconvert.Artist.Length > 30)
+            {
+                res.Artist = toconvert.Artist.Substring(0, 30);
+            }
+            else
+            {
+                res.Artist = toconvert.Artist;
+            }
+
+            if (toconvert.Title.Length > 30)
+            {
+                res.Title = toconvert.Title.Substring(0, 30);
+            }
+            else
+            {
+                res.Title = toconvert.Title;
+            }
+            res.Year = toconvert.Year;
+            if (toconvert.Comments.Length > 28)
+            {
+                res.Comments = toconvert.Comments.Substring(0, 28);
+            }
+            else
+            {
+                res.Comments = toconvert.Comments;
+            }
+            res.Genre = toconvert.Genre; // gets converted to other of the genre doesn't match
+            res.TrackNumber = toconvert.TrackNumber;
+            return res;
+        }
+
+        /// <summary>
+        /// Converts to ID3v22, only converts the "known" tags
+        /// </summary>
+        /// <param name="toconvert"></param>
+        /// <returns></returns>
+        public static explicit operator ID3v22(ID3v23 toconvert)
+        {
+            ID3v22 res = new ID3v22();
+            res.Album = toconvert.Album;
+            res.Artist = toconvert.Artist;
+            res.Comments = toconvert.Comments;
+            res.Genre = toconvert.Genre;
+            res.Title = toconvert.Title;
+            res.TrackNumber = toconvert.TrackNumber;
+            res.Year = toconvert.Year;
+            res.FrontCover = toconvert.FrontCover;
+            return res;
+        }
 
         #region private members
 
