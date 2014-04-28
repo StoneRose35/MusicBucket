@@ -196,6 +196,64 @@ namespace PTCAccess
             return res;
         }
 
+        public static void GetMp3FileNames(PTCFolder parentFolder, ref List<PTCFile> filelist, bool scansubfolders)
+        {
+            GetMp3FileNames(parentFolder.Id, parentFolder.DeviceID, ref filelist, scansubfolders);
+        }
+
+        public static void GetMp3FileNames(string folderID, string deviceID, ref List<PTCFile> filelist,bool scansubfolder)
+        {
+            IPortableDevice dev;
+            IPortableDeviceContent content;
+            IPortableDeviceResources resources;
+            IPortableDeviceProperties props;
+            IPortableDeviceKeyCollection keyColl;
+            IPortableDeviceValues vals;
+            IEnumPortableDeviceObjectIDs oids;
+            Guid contentType;
+            string filename;
+            string[] bfr;
+            uint fetched = NUMBER_OBJECTS;
+            if (filelist == null)
+            {
+                filelist = new List<PTCFile>();
+            }
+            keyColl=(new PortableDeviceTypesLib.PortableDeviceKeyCollection()) as IPortableDeviceKeyCollection;
+            bfr = new string[NUMBER_OBJECTS];
+            dev = OpenDevice(deviceID);
+            dev.Content(out content);
+            content.Properties(out props);
+            keyColl.Add(GetApiPropertyKey("WPD_OBJECT_ORIGINAL_FILE_NAME"));
+            keyColl.Add(GetApiPropertyKey("WPD_OBJECT_CONTENT_TYPE"));
+            keyColl.Add(GetApiPropertyKey("WPD_OBJECT_NAME"));
+            content.EnumObjects(0, folderID, null, out oids);
+            content.Transfer(out resources);
+            while (fetched == NUMBER_OBJECTS)
+            {
+                oids.Next(NUMBER_OBJECTS, bfr, ref fetched);
+                for (int K = 0; K < fetched; K++)
+                {
+                    props.GetValues(bfr[K], keyColl, out vals);
+                    vals.GetStringValue(GetApiPropertyKey("WPD_OBJECT_ORIGINAL_FILE_NAME"), out filename);
+                    vals.GetGuidValue(GetApiPropertyKey("WPD_OBJECT_CONTENT_TYPE"), out contentType);
+                    if (contentType == GetContentTypeGuid("WPD_CONTENT_TYPE_AUDIO"))
+                    {
+                        if(filename.EndsWith(".mp3"))
+                        {
+                            filelist.Add(new PTCFile() { Name=filename,Id=bfr[K], DeviceID=deviceID});
+                        }
+                    }
+                    if (scansubfolder)
+                    {
+                        if (contentType == GetContentTypeGuid("WPD_CONTENT_TYPE_FOLDER"))
+                        {
+                            GetMp3FileNames(bfr[K], deviceID,ref filelist, true);
+                        }
+                    }
+                }
+            }
+        }
+
         public static void CopyMp3File(string pathToFile,string finalname,PTCFolder parentFolder)
         {
             uint optimalbuffersize=0;

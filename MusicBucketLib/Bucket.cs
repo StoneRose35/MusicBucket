@@ -241,7 +241,7 @@ namespace MusicBucketLib
                 if (PathIsPortableDevice(_bucketPath))
                 {
                     PTCFolder fld;
-                    List<PTCFile> mp3s;
+                    List<PTCFile> mp3s = null;
                     PTCWrapper.Exists(_bucketPath, out fld);
                     if (worker != null)
                     {
@@ -251,7 +251,7 @@ namespace MusicBucketLib
                             return res;
                         }
                     }
-                    mp3s = PTCWrapper.GetMp3FileNames(fld);
+                    PTCWrapper.GetMp3FileNames(fld,ref mp3s,IncludeSubFolders);
                     if (worker != null)
                     {
                         if (worker.CancellationPending)
