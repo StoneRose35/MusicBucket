@@ -566,17 +566,17 @@ namespace MP3Tagger.Classes
                 return _frames;
             }
         }
-        bool IID3v23.UnsynchronizationUsed
+        bool UnsynchronizationUsed
         {
             get { return (_headerflags & 128) != 0; }
         }
 
-        bool IID3v23.ExtendedHeaderPresent
+        bool ExtendedHeaderPresent
         {
             get { return (_headerflags & 64) != 0; }
         }
 
-        bool IID3v23.Experimental
+        bool Experimental
         {
             get { return (_headerflags & 32) != 0; }
         }

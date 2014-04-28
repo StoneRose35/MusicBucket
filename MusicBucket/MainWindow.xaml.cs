@@ -1225,6 +1225,8 @@ namespace MusicBucket
 
     }
 
+    #region Pointer To System.Windows.Forms
+
     class OldWindow : System.Windows.Forms.IWin32Window
     {
         private readonly System.IntPtr _handle;
@@ -1233,11 +1235,12 @@ namespace MusicBucket
             _handle = handle;
         }
 
-        #region IWin32Window Members
+
         System.IntPtr System.Windows.Forms.IWin32Window.Handle
         {
             get { return _handle; }
         }
-        #endregion
+
     }
+    #endregion
 }
