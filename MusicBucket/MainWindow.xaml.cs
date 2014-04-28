@@ -1141,7 +1141,7 @@ namespace MusicBucket
         private void buttonPlayerPlay_Click(object sender, RoutedEventArgs e)
         {
             MediaPlayer player=(MediaPlayer)Resources["MPlayer"];
-
+            
             if (PlayerQueue.Count > 0 && !_playerIsPlaying && !_playerIsPaused)
             {
                 string path = PlayerQueue.Last().FullPath;

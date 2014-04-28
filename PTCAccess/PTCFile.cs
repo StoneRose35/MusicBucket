@@ -8,7 +8,7 @@ namespace PTCAccess
 {
     public class PTCFile
     {
-        private string _name, _id, _deviceName, _deviceID;
+        private string _name, _id, _uid, _deviceName, _deviceID;
         private PTCFolder _parent;
 
         public string Name
@@ -32,6 +32,18 @@ namespace PTCAccess
             set
             {
                 _id = value;
+            }
+        }
+
+        public string Uid
+        {
+            get 
+            {
+                return _uid;
+            }
+            set
+            {
+                _uid = value;
             }
         }
 

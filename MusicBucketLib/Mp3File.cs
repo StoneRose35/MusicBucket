@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MP3Tagger.Classes;
-
+using PTCAccess;
 namespace MusicBucketLib
 {
     public class Mp3File
@@ -12,7 +12,7 @@ namespace MusicBucketLib
         private List<ID3Tag> _tags;
         private string _fullpath;
         private string _filename;
-
+        private PTCFile _mdfile;
         public List<ID3Tag> Tags
         {
             get
@@ -78,6 +78,18 @@ namespace MusicBucketLib
             set
             {
                 _fullpath = value;
+            }
+        }
+
+        public PTCFile MobileDeviceFile
+        {
+            get
+            {
+                return _mdfile;
+            }
+            set
+            {
+                _mdfile = value;
             }
         }
     }

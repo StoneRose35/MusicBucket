@@ -87,10 +87,12 @@ namespace MusicBucketLib
                     if (PathIsPortableDevice(_bucketPath))
                     {
                         PTCFolder fld;
+                        List<PTCFile> flist=null;
                         this.IsAttached = PTCWrapper.Exists(_bucketPath,out fld);
                         if (this.IsAttached)
                         {
-                            _nfiles = PTCWrapper.GetMp3FileNames(fld).Count;
+                            PTCWrapper.GetMp3FileNames(fld, ref flist, IncludeSubFolders);
+                            _nfiles = flist.Count;
                             try
                             {
                                 PropertyChanged(this, new PropertyChangedEventArgs("NumberFiles"));
@@ -264,6 +266,7 @@ namespace MusicBucketLib
                     {
                         mp3 = new Mp3File();
                         mp3.Tags = new List<MP3Tagger.Classes.ID3Tag>();
+                        mp3.MobileDeviceFile = file;
                         try
                         {
                             fstream = PTCWrapper.GetMp3Stream(file);

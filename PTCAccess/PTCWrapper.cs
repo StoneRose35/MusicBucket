@@ -140,62 +140,6 @@ namespace PTCAccess
             return res;
         }
 
-        public static List<PTCFile> GetMp3FileNames(PTCFolder fld)
-        {
-            if (fld != null)
-            {
-                return GetMp3FileNames(fld.Id, fld.DeviceID);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        public static List<PTCFile> GetMp3FileNames(string folderID, string deviceID)
-        {
-            IPortableDevice dev;
-            IPortableDeviceContent content;
-            IPortableDeviceResources resources;
-            IPortableDeviceProperties props;
-            IPortableDeviceKeyCollection keyColl;
-            IPortableDeviceValues vals;
-            IEnumPortableDeviceObjectIDs oids;
-            Guid contentType;
-            string filename;
-
-            string[] bfr;
-            uint fetched = NUMBER_OBJECTS;
-            keyColl=(new PortableDeviceTypesLib.PortableDeviceKeyCollection()) as IPortableDeviceKeyCollection;
-            bfr = new string[NUMBER_OBJECTS];
-            List<PTCFile> res = new List<PTCFile>();
-            dev = OpenDevice(deviceID);
-            dev.Content(out content);
-            content.Properties(out props);
-            keyColl.Add(GetApiPropertyKey("WPD_OBJECT_ORIGINAL_FILE_NAME"));
-            keyColl.Add(GetApiPropertyKey("WPD_OBJECT_CONTENT_TYPE"));
-            content.EnumObjects(0, folderID, null, out oids);
-            content.Transfer(out resources);
-            while (fetched == NUMBER_OBJECTS)
-            {
-                oids.Next(NUMBER_OBJECTS, bfr, ref fetched);
-                for (int K = 0; K < fetched; K++)
-                {
-                    props.GetValues(bfr[K], keyColl, out vals);
-                    vals.GetStringValue(GetApiPropertyKey("WPD_OBJECT_ORIGINAL_FILE_NAME"), out filename);
-                    vals.GetGuidValue(GetApiPropertyKey("WPD_OBJECT_CONTENT_TYPE"), out contentType);
-                    if (contentType == GetContentTypeGuid("WPD_CONTENT_TYPE_AUDIO"))
-                    {
-                        if(filename.EndsWith(".mp3"))
-                        {
-                            res.Add(new PTCFile() { Name=filename,Id=bfr[K], DeviceID=deviceID});
-                        }
-                    }
-                }
-            }
-            return res;
-        }
-
         public static void GetMp3FileNames(PTCFolder parentFolder, ref List<PTCFile> filelist, bool scansubfolders)
         {
             GetMp3FileNames(parentFolder.Id, parentFolder.DeviceID, ref filelist, scansubfolders);
@@ -211,7 +155,7 @@ namespace PTCAccess
             IPortableDeviceValues vals;
             IEnumPortableDeviceObjectIDs oids;
             Guid contentType;
-            string filename;
+            string filename,fuid;
             string[] bfr;
             uint fetched = NUMBER_OBJECTS;
             if (filelist == null)
@@ -226,6 +170,7 @@ namespace PTCAccess
             keyColl.Add(GetApiPropertyKey("WPD_OBJECT_ORIGINAL_FILE_NAME"));
             keyColl.Add(GetApiPropertyKey("WPD_OBJECT_CONTENT_TYPE"));
             keyColl.Add(GetApiPropertyKey("WPD_OBJECT_NAME"));
+            keyColl.Add(GetApiPropertyKey("WPD_OBJECT_PERSISTENT_UNIQUE_ID"));
             content.EnumObjects(0, folderID, null, out oids);
             content.Transfer(out resources);
             while (fetched == NUMBER_OBJECTS)
@@ -236,11 +181,12 @@ namespace PTCAccess
                     props.GetValues(bfr[K], keyColl, out vals);
                     vals.GetStringValue(GetApiPropertyKey("WPD_OBJECT_ORIGINAL_FILE_NAME"), out filename);
                     vals.GetGuidValue(GetApiPropertyKey("WPD_OBJECT_CONTENT_TYPE"), out contentType);
+                    vals.GetStringValue(GetApiPropertyKey("WPD_OBJECT_PERSISTENT_UNIQUE_ID"), out fuid);
                     if (contentType == GetContentTypeGuid("WPD_CONTENT_TYPE_AUDIO"))
                     {
                         if(filename.EndsWith(".mp3"))
                         {
-                            filelist.Add(new PTCFile() { Name=filename,Id=bfr[K], DeviceID=deviceID});
+                            filelist.Add(new PTCFile() { Name=filename,Id=bfr[K], DeviceID=deviceID, Uid=fuid});
                         }
                     }
                     if (scansubfolder)

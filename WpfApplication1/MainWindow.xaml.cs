@@ -106,7 +106,8 @@ namespace WpfApplication1
             PTCWrapper wrp = new PTCWrapper();
             if (fbrowser.SelectedElement is PTCFolder)
             {
-                PTCWrapper.GetMp3FileNames((fbrowser.SelectedElement as PTCFolder).Id,(fbrowser.SelectedElement as PTCFolder).DeviceID);
+                List<PTCFile> flist = null;
+                PTCWrapper.GetMp3FileNames((fbrowser.SelectedElement as PTCFolder),ref flist,false);
             }
         }
     }
