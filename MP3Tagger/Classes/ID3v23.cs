@@ -566,20 +566,21 @@ namespace MP3Tagger.Classes
                 return _frames;
             }
         }
-        bool UnsynchronizationUsed
+        public bool UnsynchronizationUsed
         {
             get { return (_headerflags & 128) != 0; }
         }
 
-        bool ExtendedHeaderPresent
+        public bool ExtendedHeaderPresent
         {
             get { return (_headerflags & 64) != 0; }
         }
 
-        bool Experimental
+        public bool Experimental
         {
             get { return (_headerflags & 32) != 0; }
         }
+
 
 
         #region private members
