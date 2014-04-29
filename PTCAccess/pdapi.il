@@ -447,7 +447,8 @@
   .field public uint8 wReserved1
   .field public uint8 wReserved2
   .field public uint32 wReserved3
-  .field public valuetype PortableDeviceApiLib.__MIDL___MIDL_itf_PortableDeviceApi_0001_0000_0001 __MIDL____MIDL_itf_PortableDeviceApi_0001_00000001
+  .field public int32 wVal
+  //.field public valuetype PortableDeviceApiLib.__MIDL___MIDL_itf_PortableDeviceApi_0001_0000_0001 __MIDL____MIDL_itf_PortableDeviceApi_0001_00000001
 } // end of class PortableDeviceApiLib.tag_inner_PROPVARIANT
 
 .class public explicit ansi sealed PortableDeviceApiLib.__MIDL___MIDL_itf_PortableDeviceApi_0001_0000_0001
