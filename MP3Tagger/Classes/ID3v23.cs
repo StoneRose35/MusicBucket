@@ -490,69 +490,70 @@ namespace MP3Tagger.Classes
             // READ FRAMES
             while (stream.Position < _tagsize + 10 && !lastframe)
             {
-                frame = new TagFrameV23();
-                frame.Read(stream);
-                framename = IsTagKnown(frame.FrameHeader);
-                if (!((frame.Flags[1] & 128) != 0 || (frame.Flags[1] & 64) != 0))//((frameflags[1] & 128) != 0 || (frameflags[1] & 64) != 0) // frame is compressed or encrypted, no treating these cases yet
-                {
-                    switch (framename)
+                    frame = new TagFrameV23();
+                    frame.Read(stream);
+                    framename = IsTagKnown(frame.FrameHeader);
+                    if (!((frame.Flags[1] & 128) != 0 || (frame.Flags[1] & 64) != 0))//((frameflags[1] & 128) != 0 || (frameflags[1] & 64) != 0) // frame is compressed or encrypted, no treating these cases yet
                     {
-                        case "":
-                            break;
-                        case ARTIST:
-                            enc = GetEncoding(frame.Content);
-                            _artistIndex = framecnt;
-                            _artist = enc.GetString(frame.Content.Skip(1).ToArray());
-                            break;
-                        case ALBUM:
-                            enc = GetEncoding(frame.Content);
-                            _albumIndex = framecnt;
-                            _album = enc.GetString(frame.Content.Skip(1).ToArray());
-                            break;
-                        case TITLE:
-                            enc = GetEncoding(frame.Content);
-                            _titleIndex = framecnt;
-                            _title = enc.GetString(frame.Content.Skip(1).ToArray());
-                            break;
-                        case YEAR:
-                            enc = GetEncoding(frame.Content);
-                            _yearIndex = framecnt;
-                            int.TryParse( enc.GetString(frame.Content.Skip(1).ToArray()),out _year);
-                            break;
-                        case TRACK:
-                            enc = GetEncoding(frame.Content);
-                            _tracknumberIndex = framecnt;
-                            int.TryParse(enc.GetString(frame.Content.Skip(1).ToArray()).Split('/')[0],out _tracknumber);
-                            break;
-                        case GENRE:
-                            enc = GetEncoding(frame.Content);
-                            _genreIndex = framecnt;
-                            _genre = DecodeGenre( enc.GetString(frame.Content.Skip(1).ToArray()));
-                            break;
-                        case COVER:
-                            ImageTagFrameV23 imgtf = new ImageTagFrameV23(frame);
-                            _frontcoverIndex = framecnt;
-                            _frontcover = imgtf.CoverImage;
-                            frame = imgtf;
-                            break;
-                        case COMMENTS:
-                            CommentTagFrameV23 cmtTF = new CommentTagFrameV23(frame);
-                            _commmentsIndex = framecnt;
-                            _comments = cmtTF.MainComment;
-                            frame = cmtTF;
-                            break;
+                        switch (framename)
+                        {
+                            case "":
+                                break;
+                            case ARTIST:
+                                enc = GetEncoding(frame.Content);
+                                _artistIndex = framecnt;
+                                _artist = enc.GetString(frame.Content.Skip(1).ToArray());
+                                break;
+                            case ALBUM:
+                                enc = GetEncoding(frame.Content);
+                                _albumIndex = framecnt;
+                                _album = enc.GetString(frame.Content.Skip(1).ToArray());
+                                break;
+                            case TITLE:
+                                enc = GetEncoding(frame.Content);
+                                _titleIndex = framecnt;
+                                _title = enc.GetString(frame.Content.Skip(1).ToArray());
+                                break;
+                            case YEAR:
+                                enc = GetEncoding(frame.Content);
+                                _yearIndex = framecnt;
+                                int.TryParse(enc.GetString(frame.Content.Skip(1).ToArray()), out _year);
+                                break;
+                            case TRACK:
+                                enc = GetEncoding(frame.Content);
+                                _tracknumberIndex = framecnt;
+                                int.TryParse(enc.GetString(frame.Content.Skip(1).ToArray()).Split('/')[0], out _tracknumber);
+                                break;
+                            case GENRE:
+                                enc = GetEncoding(frame.Content);
+                                _genreIndex = framecnt;
+                                _genre = DecodeGenre(enc.GetString(frame.Content.Skip(1).ToArray()));
+                                break;
+                            case COVER:
+                                ImageTagFrameV23 imgtf = new ImageTagFrameV23(frame);
+                                _frontcoverIndex = framecnt;
+                                _frontcover = imgtf.CoverImage;
+                                frame = imgtf;
+                                break;
+                            case COMMENTS:
+                                CommentTagFrameV23 cmtTF = new CommentTagFrameV23(frame);
+                                _commmentsIndex = framecnt;
+                                _comments = cmtTF.MainComment;
+                                frame = cmtTF;
+                                break;
+                        }
                     }
-                }
 
-                if (frame.FrameSize == 0)
-                {
-                    lastframe = true;
-                }
-                else
-                {
-                    _frames.Add(frame);
-                    framecnt++;
-                }
+                    if (frame.FrameSize == 0)
+                    {
+                        lastframe = true;
+                    }
+                    else
+                    {
+                        _frames.Add(frame);
+                        framecnt++;
+                    }
+
             }
             stream.Seek(streampos, System.IO.SeekOrigin.Begin);
             return res;

@@ -139,12 +139,12 @@ namespace MP3Tagger.Classes
             bytesread += 3; 
 
             mimetypebyte = new List<byte>();
-            while (current != 0)
+            /*while (current != 0)
             {
                 mimetypebyte.Add(current);
                 current = tf.Content[bytesread];
                 bytesread++;
-            }
+            }*/
             this.ImageFormat = System.Text.Encoding.ASCII.GetString(Content.Skip(1).Take(3).ToArray()); //mime type encoding is always ascii
             this.PictureType = tf.Content[bytesread];
             bytesread++;
