@@ -51,7 +51,7 @@
                         </RadialGradientBrush>
                     </Border.BorderBrush>
                     <Grid Margin="0">
-                        <TextBlock Margin="0" Text="{Binding Path=ContentAsString}" FontFamily="Lucida Console"></TextBlock>
+                        <TextBlock Margin="0" Text="{Binding Path=ContentAsString}" FontFamily="Lucida Console" TextWrapping="Wrap"></TextBlock>
                     </Grid>
                 </Border>
                 <TextBlock x:Name="contentLabel" HorizontalAlignment="Left" Height="20" Margin="10,101,0,0" TextWrapping="Wrap" Text="{x:Static myProps:Resources.frameContent}" VerticalAlignment="Top" Width="67"/>
