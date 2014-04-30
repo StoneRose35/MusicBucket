@@ -52,16 +52,23 @@ namespace CDRipperLib
             int outsize = Marshal.SizeOf(typeof(CDROM_TOC));
             IntPtr outbfr = Marshal.AllocHGlobal(outsize);
             bool result;
-            result = DeviceIoControl(_deviceHandler, CDROMControlCodes.IOCTL_CDROM_READ_TOC, IntPtr.Zero, 0, outbfr, outsize, IntPtr.Zero, IntPtr.Zero);
-            Marshal.PtrToStructure(outbfr, toc);
-            Marshal.FreeHGlobal(outbfr);
-            if (toc.GetDiscID() == "0") // no cd inserted
+            try
+            {
+                result = DeviceIoControl(_deviceHandler, CDROMControlCodes.IOCTL_CDROM_READ_TOC, IntPtr.Zero, 0, outbfr, outsize, IntPtr.Zero, IntPtr.Zero);
+                Marshal.PtrToStructure(outbfr, toc);
+                Marshal.FreeHGlobal(outbfr);
+                if (toc.GetDiscID() == "0") // no cd inserted
+                {
+                    return null;
+                }
+                else
+                {
+                    return toc;
+                }
+            }
+            catch
             {
                 return null;
-            }
-            else
-            {
-                return toc;
             }
         }
 

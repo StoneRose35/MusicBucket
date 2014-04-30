@@ -206,6 +206,8 @@ namespace MusicBucket
             _timer.Interval = TimeSpan.FromSeconds(1);
             _timer.Tick += _timer_Tick;
             _timer.Start();
+
+            msgDisp.DisplayErrorMessage("Welcome to MusicBucket. I think i see the errors of my way (Wishbone Ash)", true);
         }
 
         #region read buckets
@@ -478,7 +480,6 @@ namespace MusicBucket
                     {
                         msgDisp.DisplayWarningMessage(Properties.Resources.NoCDInserted);
                     }
-                    dl = cddbconn.QueryCD(toc);
                 }
                 else
                 {
