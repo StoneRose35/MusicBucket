@@ -47,7 +47,7 @@ namespace CDDBAccess
             string[] splitted;
             if (Connect() == 200)
             {
-                cmdres = SendCommand("cddb read " + entry.Category + " " + entry.DiscID);
+                cmdres = SendCommand("cddb read " + entry.Category + " " + entry.DiscID,false);
                 if (cmdres.Substring(0, 3) == "210")
                 {
                     res = new CDDBEntry();
@@ -180,7 +180,7 @@ namespace CDDBAccess
                     querystring += " " + (toc.GetTrackData(k).StartSector + 150).ToString();
                 }
                 querystring += " " + ((toc.GetTrackData(toc.LastTrack).StartSector - toc.GetTrackData(0).StartSector) / 75);
-                res = SendCommand(querystring);
+                res = SendCommand(querystring,false);
                 if (res.Substring(0, 3) == "200")
                 {
                     splitted = res.Split(' ');
@@ -234,7 +234,7 @@ namespace CDDBAccess
                     _client.Connect(_hostname, _port);
                     _netstream = _client.GetStream();
                     int bytesread = _netstream.Read(initres, 0, 512);
-                    res = SendCommand(handshakestring);
+                    res = SendCommand(handshakestring,true);
                     return Convert.ToInt32(res.Substring(0, 3));
                 }
                 catch
@@ -253,22 +253,31 @@ namespace CDDBAccess
             string res = "";
             if (Connect() == 200)
             {
-                res = SendCommand(cmd);
+                res = SendCommand(cmd,false);
             }
             return res;
         }
 
-        private string SendCommand(string cmd)
+        private string SendCommand(string cmd,bool onelineresp)
         {
             List<byte> result = new List<byte>();
-            byte currbyte = 10,prevbyte=10;
+            byte currbyte = 0,prevbyte=0;
             bool commented = false;
-            _netstream.Write(Encoding.ASCII.GetBytes(cmd + "\r\n"), 0, Encoding.ASCII.GetByteCount(cmd + "\r\n"));
-            while (!(currbyte == 46 && prevbyte!=96) || commented) // while not endsign unescaped
+            _netstream.Write(Encoding.GetEncoding("ISO-8859-1").GetBytes(cmd + "\r\n"), 0, Encoding.GetEncoding("ISO-8859-1").GetByteCount(cmd + "\r\n"));
+            while (!(currbyte == 46 && prevbyte == 10) || commented) // while not endsign unescaped
             {
 
                 prevbyte = currbyte;
                 currbyte = (byte)_netstream.ReadByte();
+                if (onelineresp)
+                {
+                    if (currbyte == 10 || currbyte==13)
+                    {
+                        currbyte = 46;
+                        prevbyte = 10;
+                        _netstream.ReadByte();
+                    }
+                }
                 if (prevbyte == 10)
                 {
                     if (currbyte == 35) // comment line encountered
@@ -282,9 +291,12 @@ namespace CDDBAccess
                 }
                 result.Add(currbyte);
             }
-            _netstream.ReadByte(); // read carriage return and newline
-            _netstream.ReadByte();
-            return Encoding.ASCII.GetString(result.ToArray());
+            if (!onelineresp)
+            {
+                _netstream.ReadByte(); // read carriage return and newline
+                _netstream.ReadByte();
+            }
+            return Encoding.GetEncoding("ISO-8859-1").GetString(result.ToArray());
         }
     }
 }

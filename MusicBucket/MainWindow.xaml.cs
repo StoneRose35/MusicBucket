@@ -956,7 +956,8 @@ namespace MusicBucket
             if (dgImport.Items.Count > 0)
             {
                 DataGridColumnHeader headerClicked = e.OriginalSource as DataGridColumnHeader;
-
+                if(headerClicked!=null)
+                { 
                 if (headerClicked.Column == dg_tracknr)
                 {
 
@@ -992,8 +993,8 @@ namespace MusicBucket
                 colSelector.Top = pt.Y - colSelector.Height;
                 colSelector.Left = pt.X;
                 colSelector.ShowDialog();
-                if(colSelector.SelectedValue.Length>0)
-                { 
+                if (colSelector.SelectedValue.Length > 0)
+                {
                     foreach (object item in dgImport.Items)
                     {
                         tag = item as ID3Tag;
@@ -1027,8 +1028,9 @@ namespace MusicBucket
                         dgImport.Items.Refresh();
                     }
                     catch
-                    { 
+                    {
                     }
+                }
                 }
                  
             }
