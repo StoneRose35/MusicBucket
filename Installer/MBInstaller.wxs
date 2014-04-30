@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
+  <Product Name='MusicBucket' 
+           Id='{8AB66875-23F0-4F84-ABBD-539834429906}' 
+           Language='1033' 
+           Version='0.4' 
+           Codepage='1252' 
+           Manufacturer='StoneRose35' 
+           UpgradeCode='{C3F99515-DB03-4A15-9395-5CCB059714FF}'>
+    <Package Id='*' 
+             Comments='MusicBucket is great' 
+             Manufacturer='StoneRose35' 
+             Keywords='Installer' 
+             InstallerVersion='100'
+             Languages='1033'
+             Compressed='yes' 
+             Description='Installer for MusicBucket' 
+             SummaryCodepage='1252' />
+    <Media Id='1' Cabinet='MusicBucket.cab' EmbedCab='yes' />
+    <Feature Id='MainFeature'>
+      <ComponentRef Id='MainProgram'/>
+    </Feature>
+    <Directory Id='TARGETDIR' Name='SourceDir'>
+      <Directory Id='ProgramFilesFolder' Name='PFiles'>
+        <Directory Id='StoneRose35' Name='StoneRose35'>
+          <Directory Id='INSTALLDIR' Name='MusicBucket'>
+            
+            <Component Id='MainProgram' Guid='{5CD3719D-1435-4E57-BEC3-BCDEEE5490E4}'>
+              <File Id='MusicBucketEXE' Name='MusicBucket.exe' DiskId='1' Source='MusicBucket.exe' KeyPath='yes'></File>
+            </Component> 
+          </Directory>
+        </Directory>
+      </Directory>
+    </Directory>
+  </Product>
+</Wix>
