@@ -20,13 +20,16 @@
                 <DoubleAnimation From="1.0" To="0.0" Duration="0:0:0.2" Storyboard.TargetProperty="Opacity" FillBehavior="Stop"></DoubleAnimation>                
             </ParallelTimeline>
         </Storyboard>
+        <Storyboard x:Key="WobblingStoryBoard" RepeatBehavior ="Forever">
+            <DoubleAnimation From="4.0" To="0.0" Duration="0:0:3.4" Storyboard.TargetProperty="Effect.Radius" ></DoubleAnimation>
+            <DoubleAnimation BeginTime="0:0:3.4" From="0.0" To="4.0" Duration="0:0:3.4" Storyboard.TargetProperty="Effect.Radius" ></DoubleAnimation>
+        </Storyboard>
     </UserControl.Resources>
     <Grid>
-        <Label x:Name="labelDisplay" Content="Label" Margin="0" Foreground="#FF17A800" Opacity="1.0" FontSize="18">
-            <Label.Effect>
-                <BlurEffect Radius="0"></BlurEffect>
-            </Label.Effect>
-        </Label>
-
+        <TextBlock x:Name="labelDisplay" Text="Label" Margin="0" Foreground="#FF17A800" Opacity="1.0" FontSize="18" TextWrapping="Wrap">
+            <TextBlock.Effect>
+                <BlurEffect Radius="0" />
+            </TextBlock.Effect>
+        </TextBlock>
     </Grid>
 </UserControl>

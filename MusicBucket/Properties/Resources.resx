@@ -351,7 +351,7 @@
   <data name="AboutDialogText" xml:space="preserve">
     <value>This is MusicBucket
 Version: {0}, Built: {1}
-I believe that music should be placed in buckets and that the world would be a better place if everyone has free decision on where she or he want to live. So please support organizations such as http://www.bleiberecht.ch</value>
+What would be the world be like if people could move around as openly as this piece of software can? Think about it!</value>
     <comment>About text, please add some ethic or political content. First argument is the versison, second is the build date.</comment>
   </data>
   <data name="HelpAbout" xml:space="preserve">

@@ -25,7 +25,7 @@ namespace MusicBucket
         public MessageDisplay()
         {
             InitializeComponent();
-            this.labelDisplay.Content = null;
+            this.labelDisplay.Text = null;
         }
 
         public void DisplayErrorMessage(string msg,bool noAnim=false)
@@ -51,23 +51,28 @@ namespace MusicBucket
         private void DisplayMessage(string msg,bool noAnim=false)
         {
 
-            Storyboard stbd = (Storyboard)this.FindResource("AnimStoryBoard");
-            stbd.Completed += stbd_Completed;
-            this.labelDisplay.Content = msg;
+            Storyboard stbd;
+            this.labelDisplay.Text = msg;
             if (!noAnim)
             {
+                stbd = (Storyboard)this.FindResource("AnimStoryBoard");
+                stbd.Completed += stbd_Completed;
                 this.labelDisplay.BeginStoryboard(stbd);
             }
             else
             {
-                labelDisplay.Opacity = 1.0;
-                (labelDisplay.Effect as System.Windows.Media.Effects.BlurEffect).Radius = 0.0;
+                stbd = (Storyboard)this.FindResource("WobblingStoryBoard");
+                this.labelDisplay.BeginStoryboard(stbd);
+                //labelDisplay.Opacity = 1.0;
+                //(labelDisplay.Effect as System.Windows.Media.Effects.BlurEffect).Radius = 0.0;
             }
         }
 
         void stbd_Completed(object sender, EventArgs e)
         {
-            labelDisplay.Content = "";
+            labelDisplay.Text = "";
+            Storyboard stbd = (Storyboard)this.FindResource("AnimStoryBoard");
+            stbd.Completed -= stbd_Completed;
         }
     }
 }
