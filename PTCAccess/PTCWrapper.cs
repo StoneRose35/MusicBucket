@@ -53,6 +53,7 @@ namespace PTCAccess
                 mgr.GetDevices(devicesStr, ref ndevices);
                 foreach (string dev in devicesStr) // get clear text name of each device
                 {
+                    nbytes = 0;
                     mgr.GetDeviceFriendlyName(dev, null, ref nbytes);
                     friendlyName = new string((char)0, (int)(nbytes-1));
                     mgr.GetDeviceFriendlyName(dev, friendlyName, ref nbytes);
@@ -277,6 +278,11 @@ namespace PTCAccess
 
         }
 
+        /// <summary>
+        /// Gets a memory stream containing the mp3 file
+        /// </summary>
+        /// <param name="mp3file">The file to read</param>
+        /// <returns>the memory stream holding the entire mp3 file</returns>
         public static Stream GetMp3Stream(PTCFile mp3file)
         {
             Stream res = null;
@@ -284,17 +290,35 @@ namespace PTCAccess
             IPortableDeviceContent content;
             IPortableDeviceResources resources;
             IPortableDeviceProperties props;
-
-            IntPtr bread;
+            IPortableDevicePropVariantCollection variantColl,variantCollOut;
+            tag_inner_PROPVARIANT propvariant,propvarout;
+            IntPtr bread,uidfield,uidfieldout;
             IStream stream;
             uint optimalbuffersize = 0;
             byte[] bytearray;
             uint bytesread;
-
+            byte[] barray;
             dev = OpenDevice(mp3file.DeviceID);
             dev.Content(out content);
             content.Properties(out props);
             content.Transfer(out resources);
+
+            variantColl=(IPortableDevicePropVariantCollection)(new PortableDeviceTypesLib.PortableDevicePropVariantCollection());
+            propvariant=new tag_inner_PROPVARIANT();
+            propvariant.vt=31;
+            barray=UnicodeEncoding.Unicode.GetBytes(mp3file.Uid);
+            barray = barray.Concat(new byte[]{0,0}).ToArray();
+            uidfield = Marshal.AllocHGlobal(barray.Length);
+            Marshal.Copy(barray, 0, uidfield, barray.Length);
+            propvariant.wVal = uidfield.ToInt32();
+            variantColl.Add(propvariant);
+            content.GetObjectIDsFromPersistentUniqueIDs(variantColl, out variantCollOut);
+            propvarout = new tag_inner_PROPVARIANT();
+            variantCollOut.GetAt(0, ref propvarout);
+            uidfieldout = new IntPtr(propvarout.wVal);
+            mp3file.Id = Marshal.PtrToStringUni(uidfieldout);
+            Marshal.FreeHGlobal(uidfield);
+            Marshal.FreeHGlobal(uidfieldout);
 
             resources.GetStream(mp3file.Id, GetApiPropertyKey("WPD_RESOURCE_DEFAULT"), (uint)STGM_READ, ref optimalbuffersize, out stream);
             bytearray = new byte[optimalbuffersize];
@@ -311,6 +335,65 @@ namespace PTCAccess
             res.Write(bytearray, 0, (int)bytesread);
             Marshal.ReleaseComObject(stream);
             return res;
+        }
+
+        /// <summary>
+        /// Copies the mp3 file from the mobile device to the file system
+        /// </summary>
+        /// <param name="mp3file">the file to copy</param>
+        /// <param name="outpath">the copy destination, must not exist already!</param>
+        public static void CopyFromMobileDevice(PTCFile mp3file, string outpath)
+        {
+            Stream res = null;
+            IPortableDevice dev;
+            IPortableDeviceContent content;
+            IPortableDeviceResources resources;
+            IPortableDeviceProperties props;
+            IPortableDevicePropVariantCollection variantColl, variantCollOut;
+            tag_inner_PROPVARIANT propvariant, propvarout;
+            IntPtr bread, uidfield, uidfieldout;
+            IStream stream;
+            uint optimalbuffersize = 0;
+            byte[] bytearray;
+            uint bytesread;
+            byte[] barray;
+            dev = OpenDevice(mp3file.DeviceID);
+            dev.Content(out content);
+            content.Properties(out props);
+            content.Transfer(out resources);
+
+            variantColl = (IPortableDevicePropVariantCollection)(new PortableDeviceTypesLib.PortableDevicePropVariantCollection());
+            propvariant = new tag_inner_PROPVARIANT();
+            propvariant.vt = 31;
+            barray = UnicodeEncoding.Unicode.GetBytes(mp3file.Uid);
+            barray = barray.Concat(new byte[] { 0, 0 }).ToArray();
+            uidfield = Marshal.AllocHGlobal(barray.Length);
+            Marshal.Copy(barray, 0, uidfield, barray.Length);
+            propvariant.wVal = uidfield.ToInt32();
+            variantColl.Add(propvariant);
+            content.GetObjectIDsFromPersistentUniqueIDs(variantColl, out variantCollOut);
+            propvarout = new tag_inner_PROPVARIANT();
+            variantCollOut.GetAt(0, ref propvarout);
+            uidfieldout = new IntPtr(propvarout.wVal);
+            mp3file.Id = Marshal.PtrToStringUni(uidfieldout);
+            Marshal.FreeHGlobal(uidfield);
+            Marshal.FreeHGlobal(uidfieldout);
+
+            resources.GetStream(mp3file.Id, GetApiPropertyKey("WPD_RESOURCE_DEFAULT"), (uint)STGM_READ, ref optimalbuffersize, out stream);
+            bytearray = new byte[optimalbuffersize];
+            bytesread = optimalbuffersize;
+            res = new FileStream(outpath, FileMode.CreateNew);
+            bread = Marshal.AllocHGlobal(sizeof(ulong));
+            while (bytesread == optimalbuffersize)
+            {
+                ((System.Runtime.InteropServices.ComTypes.IStream)stream).Read(bytearray, (int)optimalbuffersize, bread);
+                bytesread = (uint)Marshal.ReadInt64(bread);
+                res.Write(bytearray, 0, (int)bytesread);
+            }
+            Marshal.FreeHGlobal(bread);
+            res.Write(bytearray, 0, (int)bytesread);
+            res.Close();
+            Marshal.ReleaseComObject(stream);
         }
 
         /// <summary>

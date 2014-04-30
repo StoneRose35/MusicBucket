@@ -43,6 +43,7 @@ namespace MusicBucket
         private const string _STORAGEFILE = "Settings.lst";
         private const string _TEMPWAVENAME = "Obsidian.wav";
         private const string _TEMPMP3NAME = "WhiteWash.mp3";
+        private const string _TEMPMP3PLAYNAME = "Jambi.mp3";
         private const string _MP3CONFIGFILE = "LameConfig.bin";
         private const string _FILENAMETEMPLATE = "{0} - {1}.mp3";
         private const string _DRAGCONTENTTYPE = "MusicBucketPlayerList";
@@ -1142,12 +1143,19 @@ namespace MusicBucket
         private void buttonPlayerPlay_Click(object sender, RoutedEventArgs e)
         {
             MediaPlayer player=(MediaPlayer)Resources["MPlayer"];
-            
             if (PlayerQueue.Count > 0 && !_playerIsPlaying && !_playerIsPaused)
             {
                 string path = PlayerQueue.Last().FullPath;
                 if(path.StartsWith("["))
                 {
+                    if (File.Exists(_STORAGEPATH + "\\" + _TEMPMP3PLAYNAME))
+                    {
+                        File.Delete(_STORAGEPATH + "\\" + _TEMPMP3PLAYNAME);
+                    }
+                    PTCAccess.PTCWrapper.CopyFromMobileDevice(PlayerQueue.Last().MobileDeviceFile, _STORAGEPATH + "\\" + _TEMPMP3PLAYNAME);
+                    player.Open(new Uri(_STORAGEPATH + "\\" + _TEMPMP3PLAYNAME));
+                    _playerIsPlaying = true;
+                    _playerIsPaused = false;
                 }
                 else
                 {
@@ -1203,6 +1211,14 @@ namespace MusicBucket
                 string path = PlayerQueue.Last().FullPath;
                 if (path.StartsWith("["))
                 {
+                    if (File.Exists(_STORAGEPATH + "\\" + _TEMPMP3PLAYNAME))
+                    {
+                        File.Delete(_STORAGEPATH + "\\" + _TEMPMP3PLAYNAME);
+                    }
+                    PTCAccess.PTCWrapper.CopyFromMobileDevice(PlayerQueue.Last().MobileDeviceFile, _STORAGEPATH + "\\" + _TEMPMP3PLAYNAME);
+                    player.Open(new Uri(_STORAGEPATH + "\\" + _TEMPMP3PLAYNAME));
+                    _playerIsPlaying = true;
+                    _playerIsPaused = false;
                 }
                 else
                 {

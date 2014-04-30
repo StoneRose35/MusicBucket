@@ -144,6 +144,7 @@ namespace PTCAccess
         private void GetAllRootFolders()
         {
             DriveInfo[] drives;
+            bool foundmobiledevindrives=false;
             List<PTCDevice> devices;
             // get all "normal" drives
             drives = DriveInfo.GetDrives();
@@ -156,7 +157,20 @@ namespace PTCAccess
             devices = PTCWrapper.GetDevices();
             foreach (PTCDevice dev in devices)
             {
-                lbFolders.Items.Add(dev);
+                foundmobiledevindrives = false;
+                foreach (object obj1 in lbFolders.Items)
+                {
+                    if(dev.ToString().Contains(obj1.ToString()))
+                    {
+                        foundmobiledevindrives = true;
+                        break;
+                    }
+                }
+                if(!foundmobiledevindrives)
+                {
+                    lbFolders.Items.Add(dev);
+                }
+                
             }
         }
 

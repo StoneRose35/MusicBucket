@@ -93,14 +93,14 @@ namespace MP3Tagger.Classes
                 cur1 = tf.Content[4 + cnt];
                 cur2 = tf.Content[5 + cnt];
                 bbfr.Clear();
-                while (cur1 != 0 && cur2 != 0 && cnt-4<tf.FrameSize)
+                while (cur1 != 0 && cur2 != 0 && cnt + 6 < tf.FrameSize)
                 {
                     bbfr.Add(cur1);
                     bbfr.Add(cur2);
                     cnt += 2;
                     cur1 = tf.Content[4 + cnt];
                     cur2 = tf.Content[5 + cnt];
-                }
+                } 
                 _content = enc.GetString(bbfr.ToArray(), 0, bbfr.Count);
             }
             else
@@ -116,12 +116,12 @@ namespace MP3Tagger.Classes
                 cnt++;
                 cur1 = tf.Content[4 + cnt];
                 bbfr.Clear();
-                while (cur1 != 0 && cnt - 4 < tf.FrameSize)
+                while (cur1 != 0 && cnt + 5 < tf.FrameSize) 
                 {
                     bbfr.Add(cur1);
                     cnt += 1;
                     cur1 = tf.Content[4 + cnt];
-                }
+                } 
                 _content = enc.GetString(bbfr.ToArray(), 0, bbfr.Count);
             }
         }

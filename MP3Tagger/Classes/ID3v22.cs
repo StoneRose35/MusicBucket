@@ -493,9 +493,10 @@ namespace MP3Tagger.Classes
             // READ FRAMES
             while (stream.Position < _tagsize + 10 && !lastframe)
             {
-                frame = new TagFrameV22();
-                frame.Read(stream);
-                framename = IsTagKnown(frame.FrameHeader);
+
+                    frame = new TagFrameV22();
+                    frame.Read(stream);
+                    framename = IsTagKnown(frame.FrameHeader);
 
                     switch (framename)
                     {
@@ -504,7 +505,7 @@ namespace MP3Tagger.Classes
                         case ARTIST:
                             enc = GetEncoding(frame.Content);
                             _artistIndex = framecnt;
-                            _artist = enc.GetString(frame.Content.Skip(1).ToArray()).TrimEnd(new char[]{(char)0});
+                            _artist = enc.GetString(frame.Content.Skip(1).ToArray()).TrimEnd(new char[] { (char)0 });
                             break;
                         case ALBUM:
                             enc = GetEncoding(frame.Content);
@@ -529,7 +530,7 @@ namespace MP3Tagger.Classes
                         case GENRE:
                             enc = GetEncoding(frame.Content);
                             _genreIndex = framecnt;
-                            _genre = DecodeGenre(enc.GetString(frame.Content.Skip(1).ToArray()).TrimEnd(new char[]{(char)0}));
+                            _genre = DecodeGenre(enc.GetString(frame.Content.Skip(1).ToArray()).TrimEnd(new char[] { (char)0 }));
                             break;
                         case COVER:
                             ImageTagFrameV22 imgtf = new ImageTagFrameV22(frame);
@@ -544,7 +545,8 @@ namespace MP3Tagger.Classes
                             frame = cmtTF;
                             break;
                     }
-                
+
+
 
                 if (frame.FrameSize == 0)
                 {
@@ -555,6 +557,7 @@ namespace MP3Tagger.Classes
                     _frames.Add(frame);
                     framecnt++;
                 }
+
             }
             stream.Seek(streampos, System.IO.SeekOrigin.Begin);
             return res;
