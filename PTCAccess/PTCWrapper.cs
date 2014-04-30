@@ -68,7 +68,14 @@ namespace PTCAccess
             PortableDeviceTypesLib._tagpropertykey test;
             PortableDeviceTypesLib.PortableDeviceValues vals;
             vals = new PortableDeviceTypesLib.PortableDeviceValues();
-            res = new PortableDeviceFTM();
+            try
+            {
+                res = new PortableDeviceFTM();
+            }
+            catch
+            {
+                res = new PortableDevice();
+            }
             test = GetPropertyKey("WPD_CLIENT_NAME");
             vals.SetStringValue(GetPropertyKey("WPD_CLIENT_NAME"), "MusicBucket");
             vals.SetUnsignedIntegerValue(GetPropertyKey("WPD_CLIENT_MAJOR_VERSION"), 0);

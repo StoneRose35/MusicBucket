@@ -99,7 +99,10 @@ namespace PTCAccess
                             txtbxPath.Text = "[" + (_selectedElement as PTCDevice).Name + "]:\\";
                         }
                     }
-                    catch { }
+                    catch (Exception exc1) 
+                    {
+                        string a = exc1.Message;
+                    }
                 }
                 else if (_selectedElement is PTCFolder)
                 {
