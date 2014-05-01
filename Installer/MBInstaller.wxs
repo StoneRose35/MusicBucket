@@ -17,20 +17,38 @@
              Description='Installer for MusicBucket' 
              SummaryCodepage='1252' />
     <Media Id='1' Cabinet='MusicBucket.cab' EmbedCab='yes' />
-    <Feature Id='MainFeature'>
+    <Feature Id='MainFeature' Title='MusicBucket' Description='Complete MusicBucket package (or bucket, if you like..)' Display='expand' Level='1' ConfigurableDirectory='INSTALLDIR'>
       <ComponentRef Id='MainProgram'/>
     </Feature>
     <Directory Id='TARGETDIR' Name='SourceDir'>
       <Directory Id='ProgramFilesFolder' Name='PFiles'>
-        <Directory Id='StoneRose35' Name='StoneRose35'>
+        <Directory Id='ProgramMenuDir' Name='StoneRose35'>
           <Directory Id='INSTALLDIR' Name='MusicBucket'>
             
             <Component Id='MainProgram' Guid='{5CD3719D-1435-4E57-BEC3-BCDEEE5490E4}'>
-              <File Id='MusicBucketEXE' Name='MusicBucket.exe' DiskId='1' Source='MusicBucket.exe' KeyPath='yes'></File>
+              <File Id='MusicBucketEXE' Name='MusicBucket.exe' DiskId='1' Source='..\MusicBucket\bin\Release\MusicBucket.exe' KeyPath='yes'>
+                <Shortcut Id="startmenuMusicBucket" Directory="ProgramMenuDir" Name="MusicBucket" WorkingDirectory='INSTALLDIR' Icon="MusicBucket.exe" IconIndex="0" Advertise="yes" />
+                <Shortcut Id="desktopMusicBucket" Directory="DesktopFolder" Name="MusicBucket" WorkingDirectory='INSTALLDIR' Icon="MusicBucket.exe" IconIndex="0" Advertise="yes" />
+              </File>
+			        <File Id='MusicBucketLibDLL' Name='MusicBucketLib.dll' DiskId='1' Source='..\MusicBucket\bin\Release\MusicBucketLib.dll' KeyPath='no'></File>
+			        <File Id='PTCAccessDLL' Name='PTCAccess.dll' DiskId='1' Source='..\MusicBucket\bin\Release\PTCAccess.dll' KeyPath='no'></File>
+              <File Id='CDDBAccessDLL' Name='CDDBAccess.dll' DiskId='1' Source='..\MusicBucket\bin\Release\CDDBAccess.dll' KeyPath='no'></File>
+              <File Id='CDRipperLibDLL' Name='CDRipperLib.dll' DiskId='1' Source='..\MusicBucket\bin\Release\CDRipperLib.dll' KeyPath='no'></File>
+              <File Id='MP3TaggerDLL' Name='MP3Tagger.dll' DiskId='1' Source='..\MusicBucket\bin\Release\MP3Tagger.dll' KeyPath='no'></File>
+              <File Id='YetiMmediaDLL' Name='yeti.mmedia.dll' DiskId='1' Source='..\MusicBucket\bin\Release\yeti.mmedia.dll' KeyPath='no'></File>
+              <File Id='YetiMp3DLL' Name='yeti.mp3.dll' DiskId='1' Source='..\MusicBucket\bin\Release\yeti.mp3.dll' KeyPath='no'></File>
+              <File Id='LameEncDLL' Name='lame_enc.dll' DiskId='1' Source='..\MusicBucket\bin\Release\lame_enc.dll' KeyPath='no'></File>
+              <File Id='MusicBucketExeCONFIG' Name='MusicBucket.exe.config' DiskId='1' Source='..\MusicBucket\bin\Release\MusicBucket.exe.config' KeyPath='no'></File>
+              <File Id='PortableDeviceH' Name='PortableDevice.h' DiskId='1' Source='..\MusicBucket\bin\Release\PortableDevice.h' KeyPath='no'></File>		  
             </Component> 
           </Directory>
         </Directory>
       </Directory>
+	  <Directory Id="DesktopFolder" Name="Desktop" />
     </Directory>
+    <Property Id='WIXUI_INSTALLDIR' Value='INSTALLDIR' />
+	  <UIRef Id="WixUI_InstallDir" />
+    <UIRef Id="WixUI_ErrorProgressText" />
+    <Icon Id="MusicBucket.exe" SourceFile="..\MusicBucket\bin\Release\MusicBucket.exe"/>
   </Product>
 </Wix>
