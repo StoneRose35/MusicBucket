@@ -48,7 +48,7 @@ namespace MusicBucket
         private const string _FILENAMETEMPLATE = "{0} - {1}.mp3";
         private const string _DRAGCONTENTTYPE = "MusicBucketPlayerList";
 
-        private List<ID3Tag> _tags;
+        private List<List<ID3Tag>> _tags;
         private ObservableCollection<ID3Tag> _otags;
 
         private UserSettings _userSettings;
@@ -71,7 +71,7 @@ namespace MusicBucket
         private bool _dragdropallowed,_dragdropplayerallowed;
         private bool _playerIsPlaying,_playerIsPaused;
         private DispatcherTimer _timer;
-
+        private int _tagsmatrixindex=0;
         #region bound public properties
 
         public ObservableCollection<Bucket> Buckets
@@ -391,8 +391,6 @@ namespace MusicBucket
         private void buttonStartImport_Click_1(object sender, RoutedEventArgs e)
         {
             CDDBEntry[] dl;
-            CDDBEntry chosenEntry;
-            CDDBEntryChoosingDialog entryChooser;
             string extdata;
             //CDDBEntry onesecond;
 
@@ -412,45 +410,30 @@ namespace MusicBucket
                             dl = cddbconn.QueryCD(toc);
                             if (dl != null)
                             {
-                                if (dl.Length > 1)
+                                _tags = new List<List<ID3Tag>>();
+                                for (int z = 0; z < dl.Length; z++)
                                 {
-                                    entryChooser = new CDDBEntryChoosingDialog();
-                                    entryChooser.SetData(dl.AsEnumerable<CDDBEntry>());
-                                    entryChooser.ShowDialog();
-                                    chosenEntry = entryChooser.SelectedEntry;
-                                    if (chosenEntry == null)
-                                    {
-                                        throw new MusicBucketException("CDDB Entry selection not made (was list empty?)");
-                                    }
+                                    _tags.Add(cddbconn.ReadCD(dl[z], MP3Tagger.TagTypeEnum.ID3v23, out extdata));
                                 }
-                                else
-                                {
-                                    chosenEntry = dl[0];
-                                }
-                                _tags = cddbconn.ReadCD(chosenEntry, MP3Tagger.TagTypeEnum.ID3v23, out extdata);
-                                _otags.Clear();
-                                foreach (ID3Tag tg in _tags)
-                                {
-                                    _otags.Add(tg);
-                                }
-                                dgImport.ItemsSource = _otags;
+                                _tagsmatrixindex = 0;
+                                CopyTagsToTableDisplay();
+                                tagsBack.IsEnabled = false;
+                                tagsForward.IsEnabled = true;
                                 _importStage = 1;
                                 buttonStartImport.Content = Properties.Resources.continueImportText;
                             }
                             else
                             {
                                 msgDisp.DisplayInfoMessage(Properties.Resources.NoCDDBEntriesFound);
-                                _tags = new List<ID3Tag>();
+                                _tags = new List<List<ID3Tag>>();
+                                _tags.Add(new List<ID3Tag>());
                                 for (int k = 0; k < toc.LastTrack; k++)
                                 {
-                                    _tags.Add(new ID3v23() { TrackNumber = k + 1 });
+                                    _tags[0].Add(new ID3v23() { TrackNumber = k + 1 });
                                 }
-                                _otags.Clear();
-                                foreach (ID3Tag tg in _tags)
-                                {
-                                    _otags.Add(tg);
-                                }
-                                dgImport.ItemsSource = _otags;
+                                CopyTagsToTableDisplay();
+                                tagsBack.IsEnabled = false;
+                                tagsForward.IsEnabled = false;
                                 _importStage = 1;
                                 buttonStartImport.Content = Properties.Resources.continueImportText;
                             }
@@ -458,17 +441,15 @@ namespace MusicBucket
                         catch (CDDBConnectionException exc) // connection to cddb failed
                         {
                             msgDisp.DisplayErrorMessage(exc.Message);
-                            _tags = new List<ID3Tag>();
+                            _tags = new List<List<ID3Tag>>();
+                            _tags.Add(new List<ID3Tag>());
                             for (int k = 0; k < toc.LastTrack; k++)
                             {
-                                _tags.Add(new ID3v23() { TrackNumber = k + 1 });
+                                _tags[0].Add(new ID3v23() { TrackNumber = k + 1 });
                             }
-                            _otags.Clear();
-                            foreach (ID3Tag tg in _tags)
-                            {
-                                _otags.Add(tg);
-                            }
-                            dgImport.ItemsSource = _otags;
+                            CopyTagsToTableDisplay();
+                            tagsBack.IsEnabled = false;
+                            tagsForward.IsEnabled = false;
                             _importStage = 1;
                             buttonStartImport.Content = Properties.Resources.continueImportText;
                         }
@@ -541,7 +522,67 @@ namespace MusicBucket
             
         }
 
-        void cdr_NotifyProgress(int tracknumber,int progress)
+        private void tagsBack_Click(object sender, RoutedEventArgs e)
+        {
+            if (_tagsmatrixindex > 0)
+            {
+                _tagsmatrixindex--;
+            }
+            if (_tagsmatrixindex == 0)
+            {
+                tagsBack.IsEnabled = false;
+            }
+            else
+            {
+                tagsBack.IsEnabled = true;
+            }
+            if (_tagsmatrixindex == _tags.Count - 1)
+            {
+                tagsForward.IsEnabled = false;
+            }
+            else
+            {
+                tagsForward.IsEnabled = true;
+            }
+            CopyTagsToTableDisplay();
+        }
+
+        private void tagsForward_Click(object sender, RoutedEventArgs e)
+        {
+            if (_tagsmatrixindex < _tags.Count-1)
+            {
+                _tagsmatrixindex++;
+            }
+            if (_tagsmatrixindex == _tags.Count - 1)
+            {
+                tagsForward.IsEnabled = false;
+            }
+            else
+            {
+                tagsForward.IsEnabled = true;
+            }
+            if (_tagsmatrixindex == 0)
+            {
+                tagsBack.IsEnabled = false;
+            }
+            else
+            {
+                tagsBack.IsEnabled = true;
+            }
+            CopyTagsToTableDisplay();
+        }
+
+        private void CopyTagsToTableDisplay()
+        {
+            _otags.Clear();
+            foreach (ID3Tag tg in _tags[_tagsmatrixindex])
+            {
+                _otags.Add(tg);
+            }
+            dgImport.ItemsSource = _otags;
+        }
+
+        private void cdr_NotifyProgress(int tracknumber,int progress)
         {
             _importWorker.ReportProgress(1, new Objects.ImportProgressInfo(progress, Properties.Resources.ProgressImport, tracknumber + 1));
         }
@@ -554,10 +595,17 @@ namespace MusicBucket
         {
             try
             {
-                FileStream fstream = new FileStream(_STORAGEPATH + "\\" + _STORAGEFILE, FileMode.OpenOrCreate, FileAccess.ReadWrite);
-                IFormatter fmtter = new BinaryFormatter();
-                _userSettings = (UserSettings)fmtter.Deserialize(fstream);
-                fstream.Close();
+                if (File.Exists(_STORAGEPATH + "\\" + _STORAGEFILE))
+                {
+                    FileStream fstream = new FileStream(_STORAGEPATH + "\\" + _STORAGEFILE, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                    IFormatter fmtter = new BinaryFormatter();
+                    _userSettings = (UserSettings)fmtter.Deserialize(fstream);
+                    fstream.Close();
+                }
+                else
+                {
+                    _userSettings = new UserSettings();
+                }
             }
             catch
             {
@@ -1251,6 +1299,8 @@ namespace MusicBucket
         }
 
         #endregion
+
+
 
 
     }
