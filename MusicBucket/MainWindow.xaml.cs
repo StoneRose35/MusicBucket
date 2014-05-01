@@ -554,10 +554,17 @@ namespace MusicBucket
         {
             try
             {
-                FileStream fstream = new FileStream(_STORAGEPATH + "\\" + _STORAGEFILE, FileMode.OpenOrCreate, FileAccess.ReadWrite);
-                IFormatter fmtter = new BinaryFormatter();
-                _userSettings = (UserSettings)fmtter.Deserialize(fstream);
-                fstream.Close();
+                if (File.Exists(_STORAGEPATH + "\\" + _STORAGEFILE))
+                {
+                    FileStream fstream = new FileStream(_STORAGEPATH + "\\" + _STORAGEFILE, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                    IFormatter fmtter = new BinaryFormatter();
+                    _userSettings = (UserSettings)fmtter.Deserialize(fstream);
+                    fstream.Close();
+                }
+                else
+                {
+                    _userSettings = new UserSettings();
+                }
             }
             catch
             {
