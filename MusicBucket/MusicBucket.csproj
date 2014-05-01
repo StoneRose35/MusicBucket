@@ -301,6 +301,8 @@
     <Resource Include="Images\ButtonStop.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Images\ButtonTagsBack.png" />
+    <Resource Include="Images\ButtonTagsForward.png" />
     <Content Include="lame_enc.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
