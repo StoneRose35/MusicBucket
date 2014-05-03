@@ -55,6 +55,8 @@ namespace MusicBucket
 
         private Bucket _currentBucket;
         private ObservableCollection<Mp3File> _mp3s;
+        private ICollectionView _mp3sview;
+        private string _searchString;
         private ObservableCollection<Mp3File> _playerQueue;
         private GridLength _iWidth, _bWidth, _pWidth;
         private Storyboard _stbd;
@@ -95,11 +97,6 @@ namespace MusicBucket
                     _mp3s = new ObservableCollection<Mp3File>();
                 }
                 return _mp3s;
-            }
-            set
-            {
-                _mp3s = value;
-                PropertyChanged(this, new PropertyChangedEventArgs("CurrentMp3s"));
             }
         }
 
@@ -159,6 +156,24 @@ namespace MusicBucket
                 return System.Windows.Clipboard.ContainsImage();
             }
         }
+
+        public string SearchString
+        {
+            get
+            {
+                return _searchString;
+            }
+            set
+            {
+                _searchString = value;
+                if (PropertyChanged != null)
+                {
+                    PropertyChanged(this, new PropertyChangedEventArgs("SearchString"));
+                    _mp3sview.Refresh();
+                }
+            }
+
+        }
         #endregion
 
         public MainWindow()
@@ -188,7 +203,9 @@ namespace MusicBucket
             this.maingrid.DataContext = this;
             _importStage = 0;
 
-            
+            _mp3s = new ObservableCollection<Mp3File>();
+            _mp3sview = CollectionViewSource.GetDefaultView(_mp3s);
+            _mp3sview.Filter = SearchFilter;
 
             _importWorker = new BackgroundWorker();
             _importWorker.WorkerReportsProgress = true;
@@ -211,6 +228,47 @@ namespace MusicBucket
             msgDisp.DisplayErrorMessage("Welcome to MusicBucket. I think i see the errors of my way (Wishbone Ash)", true);
         }
 
+        #region Searching / Filtering the main (middle) list
+
+        private bool SearchFilter(object objin)
+        {
+            bool res=false;
+            if (_searchString == null || _searchString.Length == 0)
+            {
+                res = true;
+            }
+            else
+            {
+                ID3Tag tag;
+                
+                Mp3File mp3file = (objin as Mp3File);
+                if (mp3file.Tags.Count > 0)
+                {
+                    tag = mp3file.Tags[0];
+                    if (tag.Album != null)
+                    {
+                        res = res || tag.Album.Contains(_searchString);
+                    }
+                    if (tag.Artist!= null)
+                    {
+                        res = res || tag.Artist.Contains(_searchString);
+                    }
+                    if (tag.Title != null)
+                    {
+                        res = res || tag.Title.Contains(_searchString);
+                    }
+                    res = res || mp3file.Filename.Contains(_searchString);
+                }
+                else
+                {
+                    res = mp3file.Filename.Contains(_searchString);
+                }
+            }
+            return res;
+        }
+
+        #endregion
+
         #region read buckets
 
         void _readBucketWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -219,7 +277,7 @@ namespace MusicBucket
             {
                 if (e.Cancelled)
                 {
-                    CurrentMp3s = null;
+                    CurrentMp3s.Clear();
                     if (_startImportAfterCancellingReadingBucketContent)
                     {
                         _importWorker.RunWorkerAsync();
@@ -845,7 +903,7 @@ namespace MusicBucket
                 }
                 else
                 {
-                    CurrentMp3s = null;
+                    CurrentMp3s.Clear();
                 }
                 
             }
@@ -897,7 +955,7 @@ namespace MusicBucket
         {
             if (lvFiles.SelectedItem != null)
             {
-                buttonShowFrameList.IsEnabled = false;
+                //TODO put that in context menu buttonShowFrameList.IsEnabled = false;
                 if ((lvFiles.SelectedItem as Mp3File).Tags != null)
                 {
                     List<ID3Tag> ts = (lvFiles.SelectedItem as Mp3File).Tags;
@@ -905,18 +963,18 @@ namespace MusicBucket
                     {
                         if(tg is ID3v23 || tg is ID3v22)
                         {
-                            buttonShowFrameList.IsEnabled = true;
+                            //buttonShowFrameList.IsEnabled = true;
                         }
                     }
                 }
                 else
                 {
-                    buttonShowFrameList.IsEnabled = false;
+                    //buttonShowFrameList.IsEnabled = false;
                 }
             }
             else
             {
-                buttonShowFrameList.IsEnabled = false;
+                //buttonShowFrameList.IsEnabled = false;
             }
         }
 

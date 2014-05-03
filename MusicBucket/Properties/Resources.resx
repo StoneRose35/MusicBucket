@@ -427,4 +427,8 @@ Bouncyness</value>
     <value>Invalid Bitrate Chosen</value>
     <comment>Exception text for the exception thrown when on tries to set an invalid bitrate int the import settings.</comment>
   </data>
+  <data name="SettingsMenuLanguage" xml:space="preserve">
+    <value>Select Language</value>
+    <comment>The menu item for selecting the language</comment>
+  </data>
 </root>
