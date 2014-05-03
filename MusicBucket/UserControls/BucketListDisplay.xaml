@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:mb="clr-namespace:MusicBucket.Converters"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" Width="200" Height="200" >
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" >
     <ListBox.Resources>
         <mb:BooleanColorCoverter x:Key="boolConv"/>
     </ListBox.Resources>
@@ -14,7 +14,7 @@
     </ItemsControl.Template>
     <ItemsControl.ItemsPanel>
         <ItemsPanelTemplate>
-            <WrapPanel />
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         </ItemsPanelTemplate>
     </ItemsControl.ItemsPanel>
     <ItemsControl.ItemTemplate>

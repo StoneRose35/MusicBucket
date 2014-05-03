@@ -418,7 +418,14 @@ namespace MusicBucket
                                 _tagsmatrixindex = 0;
                                 CopyTagsToTableDisplay();
                                 tagsBack.IsEnabled = false;
-                                tagsForward.IsEnabled = true;
+                                if (_tags.Count > 1)
+                                {
+                                    tagsForward.IsEnabled = true;
+                                }
+                                else
+                                {
+                                    tagsForward.IsEnabled = true;
+                                }
                                 _importStage = 1;
                                 buttonStartImport.Content = Properties.Resources.continueImportText;
                             }
@@ -585,6 +592,11 @@ namespace MusicBucket
         private void cdr_NotifyProgress(int tracknumber,int progress)
         {
             _importWorker.ReportProgress(1, new Objects.ImportProgressInfo(progress, Properties.Resources.ProgressImport, tracknumber + 1));
+        }
+
+        private void Window_SizeChanged_1(object sender, SizeChangedEventArgs e)
+        {
+            Window_ContentRendered_1(null, null);
         }
 
         #endregion
@@ -858,6 +870,9 @@ namespace MusicBucket
             imageframe.Tag = null;
             _otags.Clear();
             dgImport.ItemsSource = _otags;
+            _tags = null;
+            tagsBack.IsEnabled = false;
+            tagsForward.IsEnabled = false;
             imageframe.Source = (this.Resources["BlankImage"] as Image).Source;
             _importStage = 0;
             buttonStartImport.Content = Properties.Resources.startImportText;
@@ -1146,7 +1161,7 @@ namespace MusicBucket
                 IList insertList;
                 object dd = e.Data.GetData(typeof(object));
                 insertList = (IList)e.Data.GetData(_DRAGCONTENTTYPE);
-                for (int k = insertList.Count - 1; k > -1;k-- )
+                for (int k = 0; k < insertList.Count; k++) //for (int k = insertList.Count - 1; k > -1;k-- )
                 {
                         PlayerQueue.Insert(0, (Mp3File)insertList[k]);
                 }
@@ -1258,24 +1273,40 @@ namespace MusicBucket
             if (PlayerQueue.Count > 0)
             {
                 PlayerQueue.RemoveAt(PlayerQueue.Count - 1);
-                string path = PlayerQueue.Last().FullPath;
-                if (path.StartsWith("["))
+                if (PlayerQueue.Count > 0)
                 {
-                    if (File.Exists(_STORAGEPATH + "\\" + _TEMPMP3PLAYNAME))
+                    string path = PlayerQueue.Last().FullPath;
+                    if (path.StartsWith("["))
                     {
-                        File.Delete(_STORAGEPATH + "\\" + _TEMPMP3PLAYNAME);
+                        if (File.Exists(_STORAGEPATH + "\\" + _TEMPMP3PLAYNAME))
+                        {
+                            File.Delete(_STORAGEPATH + "\\" + _TEMPMP3PLAYNAME);
+                        }
+                        PTCAccess.PTCWrapper.CopyFromMobileDevice(PlayerQueue.Last().MobileDeviceFile, _STORAGEPATH + "\\" + _TEMPMP3PLAYNAME);
+                        player.Open(new Uri(_STORAGEPATH + "\\" + _TEMPMP3PLAYNAME));
+                        _playerIsPlaying = true;
+                        _playerIsPaused = false;
                     }
-                    PTCAccess.PTCWrapper.CopyFromMobileDevice(PlayerQueue.Last().MobileDeviceFile, _STORAGEPATH + "\\" + _TEMPMP3PLAYNAME);
-                    player.Open(new Uri(_STORAGEPATH + "\\" + _TEMPMP3PLAYNAME));
-                    _playerIsPlaying = true;
-                    _playerIsPaused = false;
+                    else
+                    {
+                        player.Open(new Uri(path));
+                        _playerIsPlaying = true;
+                        _playerIsPaused = false;
+                    }
                 }
                 else
                 {
-                    player.Open(new Uri(path));
-                    _playerIsPlaying = true;
+                    _playerIsPlaying = false;
                     _playerIsPaused = false;
                 }
+            }
+        }
+
+        private void buttonPlayerForward_Click(object sender, RoutedEventArgs e)
+        {
+            if (_playerIsPlaying)
+            {
+                mplayer_MediaEnded(null, null);
             }
         }
 
@@ -1299,6 +1330,10 @@ namespace MusicBucket
         }
 
         #endregion
+
+
+
+
 
 
 

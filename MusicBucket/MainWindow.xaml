@@ -6,7 +6,7 @@
         xmlns:mp3tag="clr-namespace:MP3Tagger.Interfaces;assembly=MP3Tagger"
         xmlns:media="clr-namespace:System.Windows.Media;assembly=PresentationCore"
         xmlns:System="clr-namespace:System;assembly=mscorlib" xmlns:local="clr-namespace:MusicBucket" x:Class="MusicBucket.MainWindow"
-        Title="MusicBucket" Height="507" Width="759" BorderThickness="3" BorderBrush="#FFAFE2FF" ContentRendered="Window_ContentRendered_1" Closing="Window_Closing">
+        Title="MusicBucket" Height="507" Width="759" BorderThickness="3" BorderBrush="#FFAFE2FF" ContentRendered="Window_ContentRendered_1" Closing="Window_Closing" SizeChanged="Window_SizeChanged_1">
     <Window.Resources>
         <Image Source="Images/ButtonImport.png" x:Key="ButtonImportImg" />
         <Image Source="Images/ButtonBucket.png" x:Key="ButtonBucketImg" />
@@ -17,6 +17,7 @@
         <Image Source="Images/ButtonStop.png" x:Key="ButtonPlayerStopImg" />
         <Image Source="Images/ButtonTagsBack.png" x:Key="ButtonTagsBack" />
         <Image Source="Images/ButtonTagsForward.png" x:Key="ButtonTagsForward" />
+        <Image Source="Images/ButtonForward.png" x:Key="ButtonPlayerForward" />
         <conv:BooleanColorCoverter x:Key="iconv"></conv:BooleanColorCoverter>
         <conv:BucketTitleConverter x:Key="bucketTitleConv" />
         <media:MediaPlayer x:Key="MPlayer" x:Name="mplayer" MediaOpened="mplayer_MediaOpened" MediaEnded="mplayer_MediaEnded" />
@@ -104,7 +105,7 @@
                     <DataGridTextColumn Binding="{Binding Genre}" ClipboardContentBinding="{x:Null}" Header="{x:Static myProps:Resources.ImportLVColumnGenre}" x:Name="dg_genre"/>
                 </DataGrid.Columns>
             </DataGrid>
-            <ListView x:Name="lvFiles" Grid.Column="1" Margin="33,130,4,4" ItemsSource="{Binding CurrentMp3s}" SelectionChanged="lvFiles_SelectionChanged" GridViewColumnHeader.Click="lvFiles_Click" MouseMove="lvFiles_MouseMove" PreviewMouseDown="lvFiles_MouseDown">
+            <ListView x:Name="lvFiles" Grid.Column="1" Margin="33,150,4,4" ItemsSource="{Binding CurrentMp3s}" SelectionChanged="lvFiles_SelectionChanged" GridViewColumnHeader.Click="lvFiles_Click" MouseMove="lvFiles_MouseMove" PreviewMouseDown="lvFiles_MouseDown">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="{x:Static myProps:Resources.FileName}" DisplayMemberBinding="{Binding Filename}"/>
@@ -116,15 +117,18 @@
                     </GridView>
                 </ListView.View>
             </ListView>
-            <local:BucketListDisplay x:Name="bucketDisp" Grid.Column="1" Margin="33,3,4,0" VerticalAlignment="Top" Height="59" Width="Auto" SelectionChanged="bucketDisp_SelectionChanged" SelectionMode="Multiple" BorderThickness="1">
-                <local:BucketListDisplay.BorderBrush>
-                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                        <GradientStop Color="Black" Offset="0"/>
-                        <GradientStop Color="White" Offset="1"/>
-                    </LinearGradientBrush>
-                </local:BucketListDisplay.BorderBrush>
-            </local:BucketListDisplay>
-            <Button x:Name="buttonAddBucket1" Content="{x:Static myProps:Resources.addBucketButtonText}" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="33,67,0,0" VerticalAlignment="Top" Width="41" Click="buttonAddBucket_Click" RenderTransformOrigin="1.732,0.478" Background="#FFE4FFBD"/>
+            <ScrollViewer  Grid.Column="1" Margin="36,0,1,0" VerticalAlignment="Top" Height="87" Width="Auto" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Disabled">
+                <local:BucketListDisplay x:Name="bucketDisp" SelectionChanged="bucketDisp_SelectionChanged" SelectionMode="Multiple" BorderThickness="1">
+                    <local:BucketListDisplay.BorderBrush>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="Black" Offset="0"/>
+                            <GradientStop Color="White" Offset="1"/>
+                        </LinearGradientBrush>
+                    </local:BucketListDisplay.BorderBrush>
+                </local:BucketListDisplay>
+            </ScrollViewer>
+
+            <Button x:Name="buttonAddBucket1" Content="{x:Static myProps:Resources.addBucketButtonText}" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="36,92,0,0" VerticalAlignment="Top" Width="41" Click="buttonAddBucket_Click" RenderTransformOrigin="1.732,0.478" Background="#FFE4FFBD"/>
             <Canvas x:Name="graphicCanvas" Margin="0" Grid.Column="2"/>
             <Canvas HorizontalAlignment="Left" Margin="4,0,0,0" Width="{Binding MINIMALWIDTH}" Background="#FF475FF7">
                 <TextBlock Text="{x:Static myProps:Resources.ImportColumnDisplay}" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.0,1.0" Margin="3,0,0,0">
@@ -172,9 +176,9 @@
 
             </Border>
             <Button x:Name="buttonCancel" Content="{x:Static myProps:Resources.Cancel}" HorizontalAlignment="Left" Height="26" Margin="130,0,0,10" VerticalAlignment="Bottom" Width="81" Click="buttonCancel_Click" Background="#FFE4FFBD"/>
-            <Button Content="{x:Static myProps:Resources.removeBucketButtonText}" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="79,67,0,0" VerticalAlignment="Top" Width="60" Background="#FFE4FFBD" Click="Button_Click"/>
-            <Button x:Name="buttonShowFrameList" Content="{x:Static myProps:Resources.showFrameList}" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="144,67,0,0" VerticalAlignment="Top" Width="66" Background="#FFE4FFBD" Click="buttonShowFrameList_Click" IsEnabled="False"/>
-            <TextBlock Grid.Column="1" Height="35" Margin="33,95,5,0" TextWrapping="Wrap" VerticalAlignment="Top" FontFamily="Vijaya" FontSize="18">
+            <Button Content="{x:Static myProps:Resources.removeBucketButtonText}" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="79,92,0,0" VerticalAlignment="Top" Width="60" Background="#FFE4FFBD" Click="Button_Click" IsEnabled="False"/>
+            <Button x:Name="buttonShowFrameList" Content="{x:Static myProps:Resources.showFrameList}" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="144,92,0,0" VerticalAlignment="Top" Width="66" Background="#FFE4FFBD" Click="buttonShowFrameList_Click" IsEnabled="False" RenderTransformOrigin="0.485,1.13"/>
+            <TextBlock Grid.Column="1" Height="35" Margin="36,115,2,0" TextWrapping="Wrap" VerticalAlignment="Top" FontFamily="Vijaya" FontSize="18">
                 <TextBlock.Text>
                     <Binding Path="CurrentBucket" Converter="{StaticResource bucketTitleConv}"></Binding>
                 </TextBlock.Text>
@@ -187,9 +191,9 @@
                     </LinearGradientBrush>
                 </ProgressBar.Foreground>
             </ProgressBar>
-            <Button x:Name="buttonPlayerPlay" Content="{Binding Source={StaticResource ButtonPlayerPlayImg}}" Grid.Column="2" HorizontalAlignment="Left" Height="55" Margin="44,0,0,0" VerticalAlignment="Bottom" Width="58" Background="{x:Null}" BorderBrush="{x:Null}" Click="buttonPlayerPlay_Click"/>
-            <Button x:Name="buttonPlayerPause" Content="{Binding Source={StaticResource ButtonPlayerPauseImg}}" Grid.Column="2" HorizontalAlignment="Left" Height="55" Margin="116,283,0,0" VerticalAlignment="Bottom" Width="58" Background="{x:Null}" BorderBrush="{x:Null}" Click="buttonPlayerPause_Click"/>
-            <Button x:Name="buttonPlayerStop" Content="{Binding Source={StaticResource ButtonPlayerStopImg}}" Grid.Column="2" HorizontalAlignment="Left" Height="55" Margin="181,283,0,0" VerticalAlignment="Bottom" Width="58" Background="{x:Null}" BorderBrush="{x:Null}" Click="buttonPlayerStop_Click"/>
+            <Button x:Name="buttonPlayerPlay" Content="{Binding Source={StaticResource ButtonPlayerPlayImg}}" Grid.Column="2" HorizontalAlignment="Left" Height="45" Margin="44,0,0,0" VerticalAlignment="Bottom" Width="45" Background="{x:Null}" BorderBrush="{x:Null}" Click="buttonPlayerPlay_Click"/>
+            <Button x:Name="buttonPlayerPause" Content="{Binding Source={StaticResource ButtonPlayerPauseImg}}" Grid.Column="2" HorizontalAlignment="Left" Height="45" Margin="144,0,0,0" VerticalAlignment="Bottom" Width="45" Background="{x:Null}" BorderBrush="{x:Null}" Click="buttonPlayerPause_Click"/>
+            <Button x:Name="buttonPlayerStop" Content="{Binding Source={StaticResource ButtonPlayerStopImg}}" Grid.Column="2" HorizontalAlignment="Left" Height="45" Margin="194,0,0,0" VerticalAlignment="Bottom" Width="45" Background="{x:Null}" BorderBrush="{x:Null}" Click="buttonPlayerStop_Click"/>
             <ListView x:Name="lvPlayer" ItemsSource="{Binding PlayerQueue}" Grid.Column="2" Margin="51,12,5,102" AllowDrop="True" Drop="lvPlayer_Drop" PreviewMouseDown="lvPlayer_PreviewMouseDown" MouseMove="lvPlayer_MouseMove">
                 <ListView.View>
                     <GridView>
@@ -201,8 +205,9 @@
                 </ListView.View>
             </ListView>
             <Slider x:Name="sliderPosition" Grid.Column="2" Margin="51,0,5,60" VerticalAlignment="Bottom" Maximum="1000" IsEnabled="False" Foreground="#FFA89B9B"/>
-            <Button x:Name="tagsBack" Content="{Binding Source={StaticResource ButtonTagsBack}}" HorizontalAlignment="Left" Height="21" Margin="167,0,0,68" VerticalAlignment="Bottom" Width="33" Background="#FFE4FFBD" Click="tagsBack_Click"/>
-            <Button x:Name="tagsForward" Content="{Binding Source={StaticResource ButtonTagsForward}}" HorizontalAlignment="Left" Margin="205,0,0,68" Width="33" Background="#FFE4FFBD" Click="tagsForward_Click" Height="21" VerticalAlignment="Bottom"/>
+            <Button x:Name="tagsBack" Content="{Binding Source={StaticResource ButtonTagsBack}}" HorizontalAlignment="Left" Height="21" Margin="167,0,0,68" VerticalAlignment="Bottom" Width="33" Background="#FFE4FFBD" Click="tagsBack_Click" IsEnabled="False"/>
+            <Button x:Name="tagsForward" Content="{Binding Source={StaticResource ButtonTagsForward}}" HorizontalAlignment="Left" Margin="205,0,0,68" Width="33" Background="#FFE4FFBD" Click="tagsForward_Click" Height="21" VerticalAlignment="Bottom" IsEnabled="False"/>
+            <Button x:Name="buttonPlayerForward" Content="{Binding Source={StaticResource ButtonPlayerForward}}" Grid.Column="2" HorizontalAlignment="Left" Height="45" Margin="94,0,0,0" VerticalAlignment="Bottom" Width="45" Background="{x:Null}" Click="buttonPlayerForward_Click" BorderBrush="{x:Null}"/>
         </Grid>
 
         <local:MessageDisplay x:Name="msgDisp" Height="87" Margin="340,24,120,0" VerticalAlignment="Top" BorderBrush="#FFFFA70E" BorderThickness="2"/>
