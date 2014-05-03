@@ -118,11 +118,11 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AppTitle" xml:space="preserve">
-    <value>MusicBucket</value>
+    <value>MusicBucket (Musikkübel)</value>
     <comment>Title of the main dialog</comment>
   </data>
   <data name="BouncynessValueOutOfRange" xml:space="preserve">
-    <value>The Bouncyness value (currenty {0}) must be within 0 and 0.5</value>
+    <value>Der Hüpfwert (aktuell {0}) muss zwischen 0 und 0.5 sein</value>
     <comment>Message to shown when the bouncyness value of the grid with animation exceeds the range, must be within [0;0.5]</comment>
   </data>
   <data name="BucketColumnDisplay" xml:space="preserve">
@@ -230,7 +230,7 @@
     <comment>Text being displayed if not tries to make and import without having buckets selecte</comment>
   </data>
   <data name="addBucketButtonText" xml:space="preserve">
-    <value>Add</value>
+    <value>Hinzu</value>
     <comment>Text on the add bucket button</comment>
   </data>
   <data name="Cancel" xml:space="preserve">
@@ -349,9 +349,9 @@
     <comment>Import Listview Title of the "Album" column</comment>
   </data>
   <data name="AboutDialogText" xml:space="preserve">
-    <value>This is MusicBucket
-Version: {0}, Built: {1}
-What would be the world be like if people could move around as openly as this piece of software can? Think about it!</value>
+    <value>Die s ist MusicBucket
+Version: {0}, Erstellt: {1}
+Wie wäre die Welt wenn Menschen gleich einfach sich auf der Welt bewegen könnten wie dieses Programm. Denken Sie darüber nach!</value>
     <comment>About text, please add some ethic or political content. First argument is the versison, second is the build date.</comment>
   </data>
   <data name="HelpAbout" xml:space="preserve">
@@ -430,9 +430,5 @@ Bouncyness</value>
   <data name="SettingsMenuLanguage" xml:space="preserve">
     <value>Select Language</value>
     <comment>The menu item for selecting the language</comment>
-  </data>
-  <data name="languageSelectionMessage" xml:space="preserve">
-    <value>The language will be changed at the restart of the application</value>
-    <comment>Message to display when the language has changed</comment>
   </data>
 </root>

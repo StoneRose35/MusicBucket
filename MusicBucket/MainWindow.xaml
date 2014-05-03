@@ -6,7 +6,7 @@
         xmlns:mp3tag="clr-namespace:MP3Tagger.Interfaces;assembly=MP3Tagger"
         xmlns:media="clr-namespace:System.Windows.Media;assembly=PresentationCore"
         xmlns:System="clr-namespace:System;assembly=mscorlib" xmlns:local="clr-namespace:MusicBucket" x:Class="MusicBucket.MainWindow"
-        Title="MusicBucket" Height="507" Width="759" BorderThickness="3" BorderBrush="#FFAFE2FF" ContentRendered="Window_ContentRendered_1" Closing="Window_Closing" SizeChanged="Window_SizeChanged_1">
+        Title="{x:Static myProps:Resources.AppTitle}" Height="507" Width="759" BorderThickness="3" BorderBrush="#FFAFE2FF" ContentRendered="Window_ContentRendered_1" Closing="Window_Closing" SizeChanged="Window_SizeChanged_1" IsVisibleChanged="Window_IsVisibleChanged">
     <Window.Resources>
         <Image Source="Images/ButtonImport.png" x:Key="ButtonImportImg" />
         <Image Source="Images/ButtonBucket.png" x:Key="ButtonBucketImg" />
@@ -38,9 +38,10 @@
             <MenuItem Header="{x:Static myProps:Resources.SettingsMenuText}">
                 <MenuItem x:Name="visualssettings"  Header="{x:Static myProps:Resources.SettingsMenuVisuals}" Click="visualssettings_Click"></MenuItem>
                 <MenuItem x:Name="importSettings" Header="{x:Static myProps:Resources.SettingsMenuImportSettings}" Click="importSettings_Click"></MenuItem>
-                <MenuItem Header="{x:Static myProps:Resources.SettingsMenuLanguage}">
-                    <RadioButton Content="English (Default)"></RadioButton>
-                    <RadioButton Content="German"></RadioButton>
+                <MenuItem x:Name="languageSettings"  Header="{x:Static myProps:Resources.SettingsMenuLanguage}">
+                    <RadioButton Content="English (Default)" Tag="en-US"></RadioButton>
+                    <RadioButton Content="German" Tag="de-CH"></RadioButton>
+                    <RadioButton Content="French" Tag="fr-CH"></RadioButton>
                 </MenuItem>
             </MenuItem>
             <MenuItem Header="{x:Static myProps:Resources.HelpMenuTitle}">

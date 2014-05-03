@@ -16,7 +16,7 @@ namespace MusicBucket.Objects
         private ObservableCollection<Bucket> _buckets;
         private MusicBucketImportSettings _importSettings;
         private GridWidthAnimation _visuals;
-
+        private string _locale;
         public UserSettings()
         {
             _buckets = new ObservableCollection<Bucket>();
@@ -45,6 +45,21 @@ namespace MusicBucket.Objects
             set
             {
                 _visuals = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets the application locale currently set, must me a locale-compatible string, such as for example fr-FR
+        /// </summary>
+        public string ApplicationLocale
+        {
+            get
+            {
+                return _locale;
+            }
+            set
+            {
+                _locale = value;
             }
         }
     }

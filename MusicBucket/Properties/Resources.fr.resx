@@ -431,8 +431,4 @@ Bouncyness</value>
     <value>Select Language</value>
     <comment>The menu item for selecting the language</comment>
   </data>
-  <data name="languageSelectionMessage" xml:space="preserve">
-    <value>The language will be changed at the restart of the application</value>
-    <comment>Message to display when the language has changed</comment>
-  </data>
 </root>

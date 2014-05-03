@@ -486,6 +486,15 @@ namespace MusicBucket.Properties {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The language will be changed at the restart of the application ähnelt.
+        /// </summary>
+        public static string languageSelectionMessage {
+            get {
+                return ResourceManager.GetString("languageSelectionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Commit new Bucket ähnelt.
         /// </summary>
         public static string NewBucketDialogButtonOK {

@@ -11,7 +11,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
-using System.Windows.Forms;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -19,6 +18,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Media.Animation;
+using System.Globalization;
+using System.Threading;
 using Microsoft.Win32;
 using MP3Tagger.Classes;
 using CDRipperLib;
@@ -179,6 +180,7 @@ namespace MusicBucket
         public MainWindow()
         {
             DriveInfo[] drives;
+            LoadBuckets();
             InitializeComponent();
             drives = DriveInfo.GetDrives();
             for(int z=0;z<drives.Length;z++)
@@ -197,7 +199,7 @@ namespace MusicBucket
             {
                 buttonStartImport.IsEnabled = false;
             }
-            LoadBuckets();
+
             bucketDisp.ItemsSource = _userSettings.Buckets;
             _otags = new ObservableCollection<ID3Tag>();
             this.maingrid.DataContext = this;
@@ -226,6 +228,16 @@ namespace MusicBucket
             _timer.Start();
 
             msgDisp.DisplayErrorMessage("Welcome to MusicBucket. I think i see the errors of my way (Wishbone Ash)", true);
+        }
+
+        private void Switch_Language(object sender, RoutedEventArgs e)
+        {
+
+            if ((sender as RadioButton).IsChecked.HasValue && (sender as RadioButton).IsChecked.Value)
+            {
+                _userSettings.ApplicationLocale = (sender as System.Windows.Controls.RadioButton).Tag.ToString();
+                msgDisp.DisplayInfoMessage(Properties.Resources.languageSelectionMessage);
+            }
         }
 
         #region Searching / Filtering the main (middle) list
@@ -670,6 +682,8 @@ namespace MusicBucket
                     FileStream fstream = new FileStream(_STORAGEPATH + "\\" + _STORAGEFILE, FileMode.OpenOrCreate, FileAccess.ReadWrite);
                     IFormatter fmtter = new BinaryFormatter();
                     _userSettings = (UserSettings)fmtter.Deserialize(fstream);
+                    Thread.CurrentThread.CurrentCulture = new CultureInfo(_userSettings.ApplicationLocale);
+                    Thread.CurrentThread.CurrentUICulture = new CultureInfo(_userSettings.ApplicationLocale);
                     fstream.Close();
                 }
                 else
@@ -680,7 +694,7 @@ namespace MusicBucket
             catch
             {
                 _userSettings = new UserSettings();
-                msgDisp.DisplayErrorMessage(Properties.Resources.UserSettingsNotOpened);
+                 MessageBox.Show(Properties.Resources.UserSettingsNotOpened);
             }
         }
 
@@ -789,6 +803,16 @@ namespace MusicBucket
         #endregion
 
         #region gui handlers
+
+        private void Window_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            foreach (RadioButton rb in languageSettings.Items)
+            {
+                rb.IsChecked = rb.Tag.ToString() == _userSettings.ApplicationLocale;
+                rb.Checked += Switch_Language;
+            }
+            
+        }
 
         private void MenuItem_Click_1(object sender, RoutedEventArgs e)
         {
@@ -1388,6 +1412,8 @@ namespace MusicBucket
         }
 
         #endregion
+
+
 
 
 
