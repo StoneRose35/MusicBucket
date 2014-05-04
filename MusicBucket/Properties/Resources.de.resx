@@ -126,55 +126,55 @@
     <comment>Message to shown when the bouncyness value of the grid with animation exceeds the range, must be within [0;0.5]</comment>
   </data>
   <data name="BucketColumnDisplay" xml:space="preserve">
-    <value>Bucket Organization</value>
+    <value>Kübelorganisation</value>
     <comment>The value displayed in the minimized version of the buckets column</comment>
   </data>
   <data name="UserSettingsNotOpened" xml:space="preserve">
-    <value>Settings couldn't not be read or created. Make sure that the harddrive of the computer is not full.</value>
+    <value>Einstellungsdatei konnte nicht angelegt werden. Bitte stellen sie sicher dass die Festplatte des Computers nicht voll ist.</value>
     <comment>Message to display when something fails during deserialization of UserSettings.</comment>
   </data>
   <data name="UserSettingsNotSaved" xml:space="preserve">
-    <value>Settings couldn't not be saved. Make sure that the harddrive of the computer is not full. Do you still want to exit?</value>
+    <value>Die Einstellungen konnten nicht abgespeichert werden, vielleicht ist die Festplatte voll. Trotzdem schliessen?</value>
     <comment>Message to display when something fails during serialization of UserSettings.</comment>
   </data>
   <data name="SettingsNotSavedMsgBoxTitle" xml:space="preserve">
-    <value>Settings saving error</value>
+    <value>Speicherfehler der Einstellungen</value>
     <comment>Caption of the messagebox which is displayed when saving failed on closing.</comment>
   </data>
   <data name="CDDBEntryChooserTitle" xml:space="preserve">
-    <value>Choose CDDB Entry</value>
+    <value>wähle CDDB-Eintrag</value>
     <comment>Title of the CDDB Chooser Dialog</comment>
   </data>
   <data name="CDDriveLabel" xml:space="preserve">
-    <value>Drives</value>
+    <value>Laufw.</value>
     <comment>Label text for label left of the cd drives combobox</comment>
   </data>
   <data name="continueImportText" xml:space="preserve">
-    <value>continue</value>
+    <value>weiter</value>
     <comment>Text appearing on the start import button after a import has started</comment>
   </data>
   <data name="FileMenuClose" xml:space="preserve">
-    <value>Close</value>
+    <value>Schliessen</value>
     <comment>Title of the "Close" entry in the file menu</comment>
   </data>
   <data name="FileMenuAddBucket" xml:space="preserve">
-    <value>Add Bucket</value>
+    <value>Kübel hinzu</value>
     <comment>Title of the "Add Bucket" entry in the file menu</comment>
   </data>
   <data name="FileMenuOpenBucket" xml:space="preserve">
-    <value>Open Bucket</value>
+    <value>Kübel öffnen</value>
     <comment>Title of the "Open Bucket" entry in the file menu</comment>
   </data>
   <data name="FileMenuTitle" xml:space="preserve">
-    <value>File</value>
+    <value>Datei</value>
     <comment>Title of the file menu</comment>
   </data>
   <data name="FrequencyOutOfRange" xml:space="preserve">
-    <value>The frequency of the animation bounce must be within 1 and 2134</value>
+    <value>Die Frequenz der Hüpfanimation muss zwischen 1 und 2134 liegen</value>
     <comment>Message to show when the bounce animation frequency is out of range.</comment>
   </data>
   <data name="HelpMenuTitle" xml:space="preserve">
-    <value>Help</value>
+    <value>Hilfe</value>
     <comment>Title of the "Help" menu</comment>
   </data>
   <data name="ImportColumnDisplay" xml:space="preserve">
@@ -182,7 +182,7 @@
     <comment>The value displayed in the minimized version of the import column</comment>
   </data>
   <data name="ImportLVColumnArtist" xml:space="preserve">
-    <value>Artist</value>
+    <value>Künstler</value>
     <comment>Import Listview Title of "Artist" Column</comment>
   </data>
   <data name="ImportLVColumnGenre" xml:space="preserve">
@@ -190,35 +190,35 @@
     <comment>Import Listview Title of the "Genre" Colums</comment>
   </data>
   <data name="ImportLVColumnTrackNr" xml:space="preserve">
-    <value>Track Nr</value>
+    <value>Lied Nr.</value>
     <comment>Import Listview Title of "Track number" Column</comment>
   </data>
   <data name="ImportLVColumnTrackTitle" xml:space="preserve">
-    <value>Track Title</value>
+    <value>Liedtitel</value>
     <comment>Import Listview Title of "Track Title" column</comment>
   </data>
   <data name="ImportLVColumnYear" xml:space="preserve">
-    <value>Year</value>
+    <value>Jahr</value>
     <comment>Import Listview Title of the "Year" column</comment>
   </data>
   <data name="NoCDDBEntriesFound" xml:space="preserve">
-    <value>No Entry on CDDB database found</value>
+    <value>keinen Eintrag in der CDDB-Datenbank gefunden</value>
     <comment>Message saying that the inserted cd doesn't contain a cddb entry ( yet)</comment>
   </data>
   <data name="NoCDDriveSelected" xml:space="preserve">
-    <value>Please select a CD drive</value>
+    <value>Bitte CD-Laufwerk wählen</value>
     <comment>Message to display when a cd drive is selected</comment>
   </data>
   <data name="NoCDInserted" xml:space="preserve">
-    <value>No CD has been inserted or cd is not readable</value>
+    <value>Es befindet sich keine oder eine unlesbare CD im Laufwerk</value>
     <comment>Message to display when the CD TOC couldn't be read</comment>
   </data>
   <data name="PlayerColumnDisplay" xml:space="preserve">
-    <value>Player</value>
+    <value>Spieler</value>
     <comment>The minimized value of the player column.</comment>
   </data>
   <data name="SharpnessValueOutOfRange" xml:space="preserve">
-    <value>The sharpness value (currently {0}) must be within 0 and 1 (1 excluded)</value>
+    <value>Der Schärfewert (aktuell {0}) muss zwischen 0 und 1  (ohne 1) liegen</value>
     <comment>Message to shown when sharpness values of the grid with animation exceeds the range, must be within [0;1[</comment>
   </data>
   <data name="startImportText" xml:space="preserve">
@@ -226,7 +226,7 @@
     <comment>Text appearing on the start import button</comment>
   </data>
   <data name="noBucketSelectedText" xml:space="preserve">
-    <value>Music should always be placed in buckets, please select at least one</value>
+    <value>Music sollte immer in Kübel plaziert werden, bitte wählen Sie mindestens einen aus</value>
     <comment>Text being displayed if not tries to make and import without having buckets selecte</comment>
   </data>
   <data name="addBucketButtonText" xml:space="preserve">
@@ -234,114 +234,114 @@
     <comment>Text on the add bucket button</comment>
   </data>
   <data name="Cancel" xml:space="preserve">
-    <value>Cancel</value>
+    <value>Abbrechen</value>
     <comment>this is rather self-explanatory, isn't it?</comment>
   </data>
   <data name="copyToBucketError" xml:space="preserve">
-    <value>something bad happened during copying of mp3 to bucket located at {}, is the bucket writeable?</value>
+    <value>Während den Kopiervorgang von mp3 zum Kübel in {} is etwas Dummes passiert, is der Kübel befüllbar?</value>
     <comment>Text to display when copying the file to the bucket fails during import, argument is the bucket location</comment>
   </data>
   <data name="importTerminated" xml:space="preserve">
-    <value>Import terminated</value>
+    <value>Import beendet</value>
     <comment>import terminated message</comment>
   </data>
   <data name="NewBucketDialogButtonOK" xml:space="preserve">
-    <value>Commit new Bucket</value>
+    <value>neuen Kübel bestätigen</value>
     <comment>ok button text, this should be a little alternative, not something like "yes", or "ok"</comment>
   </data>
   <data name="NewBucketDialogIncludeSubfolders" xml:space="preserve">
-    <value>Include Subfolder</value>
+    <value>mit Unterordner</value>
     <comment>Checkbox text on NewBucketDialog</comment>
   </data>
   <data name="NewBucketDialogSelectFolder" xml:space="preserve">
-    <value>Select..</value>
+    <value>Wähle..</value>
     <comment>The select folder button text on NewBucketDialog</comment>
   </data>
   <data name="NewBucketDialogTitle" xml:space="preserve">
-    <value>New Bucket</value>
+    <value>Neuer Kübel</value>
     <comment>The title of the new bucket dialog</comment>
   </data>
   <data name="NewBucketDialogTitleTitle" xml:space="preserve">
-    <value>Title of Bucket</value>
+    <value>Kübeltitel</value>
     <comment>TextBlock text above the title textbox</comment>
   </data>
   <data name="removeBucketButtonText" xml:space="preserve">
-    <value>Remove</value>
+    <value>Entfernen</value>
     <comment>Text on the remove bucket button</comment>
   </data>
   <data name="BucketDescriptionExcludingSubfolders" xml:space="preserve">
-    <value>excluding subfolders</value>
+    <value>ohne Unterverzeichnisse</value>
     <comment>appears after the path in de bucket description display</comment>
   </data>
   <data name="BucketDescriptionIncludingSubfolders" xml:space="preserve">
-    <value>including subfolders</value>
+    <value>mit Unterverzeichnisse</value>
     <comment>appears after the path in de bucket description display</comment>
   </data>
   <data name="BucketDescriptionPathPrefix" xml:space="preserve">
-    <value>Path</value>
+    <value>Pfad</value>
     <comment>appears before the path in the bucket description display</comment>
   </data>
   <data name="BucketDescriptionTitlePrefix" xml:space="preserve">
-    <value>Title</value>
+    <value>Titel</value>
     <comment>appears before the bucket title in the bucket description display</comment>
   </data>
   <data name="ReallyRemoveBucket" xml:space="preserve">
-    <value>Do you really want to remove the selected bucket?</value>
+    <value>Möchten sie den Kübel wirklich entfernen!?</value>
     <comment>Question dialog content for removing Buckets</comment>
   </data>
   <data name="ReallyRemoveBucketTitle" xml:space="preserve">
-    <value>Remove Bucket!?</value>
+    <value>Kübel entfernen!?</value>
     <comment>Question dialog title for removin buckets</comment>
   </data>
   <data name="importProcessRunning" xml:space="preserve">
-    <value>An import is already on the way, wait for it to finish before starting a new one</value>
+    <value>Es wird schon ein Import durchgeführt, warten Sie bis dieser abgeschlossen ist</value>
   </data>
   <data name="ProgressConversion" xml:space="preserve">
-    <value>Conversion of track </value>
+    <value>Konversion von Spur</value>
     <comment>Progress display message for conversion</comment>
   </data>
   <data name="ProgressImport" xml:space="preserve">
-    <value>Ripping of track </value>
+    <value>Abkupfern von Spur</value>
     <comment>Progress display message for import</comment>
   </data>
   <data name="frameContent" xml:space="preserve">
-    <value>Content of Frame</value>
+    <value>Rahmeninhalt</value>
     <comment>frame content description text of frame list entry</comment>
   </data>
   <data name="iscompressed" xml:space="preserve">
-    <value>Is Compressed</value>
+    <value>Ist komprimiert</value>
     <comment>frame list flag description, see TagFrame class description</comment>
   </data>
   <data name="isencrypted" xml:space="preserve">
-    <value>Is Encrypted</value>
+    <value>Ist verschlüsselt</value>
     <comment>frame list flag description, see TagFrame class description</comment>
   </data>
   <data name="isGrouped" xml:space="preserve">
-    <value>Is Grouped</value>
+    <value>Ist gruppiert</value>
     <comment>frame list flag description, see TagFrame class description</comment>
   </data>
   <data name="preserveWhenFileAlters" xml:space="preserve">
-    <value>pres. if file alters</value>
+    <value>pers. bei Dateiänderung</value>
     <comment>frame list flag description, see TagFrame class description</comment>
   </data>
   <data name="preserveWhenTagAlters" xml:space="preserve">
-    <value>pres. if tag alters</value>
+    <value>pers. bei Tagänderung</value>
     <comment>frame list flag description, see TagFrame class description</comment>
   </data>
   <data name="readOnly" xml:space="preserve">
-    <value>readOnly</value>
+    <value>schreibgeschützt</value>
     <comment>frame list flag description, see TagFrame class description</comment>
   </data>
   <data name="showFrameList" xml:space="preserve">
-    <value>Frame List</value>
+    <value>Rahmenliste</value>
     <comment>show frame list button text</comment>
   </data>
   <data name="frameListDialogTitle" xml:space="preserve">
-    <value>Frame List of ID3v23 Tag</value>
+    <value>Rahmenliste vom ID3v23 Tag</value>
     <comment>Frame List Dialog Title for ID3v23 tag</comment>
   </data>
   <data name="FileName" xml:space="preserve">
-    <value>File Name</value>
+    <value>Dateiname</value>
     <comment>The text "File Name" (name of file)</comment>
   </data>
   <data name="ImportLVColumnAlbum" xml:space="preserve">
@@ -351,11 +351,11 @@
   <data name="AboutDialogText" xml:space="preserve">
     <value>Die s ist MusicBucket
 Version: {0}, Erstellt: {1}
-Wie wäre die Welt wenn Menschen gleich einfach sich auf der Welt bewegen könnten wie dieses Programm. Denken Sie darüber nach!</value>
+Wie wäre die Welt wenn Menschen sich gleich einfach auf der Welt bewegen könnten wie dieses Programm. Denken Sie darüber nach!</value>
     <comment>About text, please add some ethic or political content. First argument is the versison, second is the build date.</comment>
   </data>
   <data name="HelpAbout" xml:space="preserve">
-    <value>About...</value>
+    <value>Über...</value>
     <comment>About menu item</comment>
   </data>
   <data name="SettingsMenuImportSettings" xml:space="preserve">
@@ -363,11 +363,11 @@ Wie wäre die Welt wenn Menschen gleich einfach sich auf der Welt bewegen könnt
     <comment>Settings Menu, item "import", opens dialog for settings import options</comment>
   </data>
   <data name="SettingsMenuText" xml:space="preserve">
-    <value>Settings</value>
+    <value>Einstellungen</value>
     <comment>Menu entry text for settings</comment>
   </data>
   <data name="SettingsMenuVisuals" xml:space="preserve">
-    <value>Visuals</value>
+    <value>Graphik</value>
     <comment>Settings Menu, item "visuals", open dialog for settings visuals parameters</comment>
   </data>
   <data name="OK" xml:space="preserve">
@@ -375,43 +375,43 @@ Wie wäre die Welt wenn Menschen gleich einfach sich auf der Welt bewegen könnt
     <comment>this is also rather self-explanatory</comment>
   </data>
   <data name="VisualsSettingsDialogTitle" xml:space="preserve">
-    <value>Visuals settings</value>
+    <value>Graphikeinstellungen</value>
     <comment>Visual settings dialog title</comment>
   </data>
   <data name="VisualsSettingsLabels" xml:space="preserve">
-    <value>Sharpness
-Frequency
-Bouncyness</value>
+    <value>Schärfe
+Frequenz
+Hüpfigkeit</value>
     <comment>the labels for the visuals settings dialog</comment>
   </data>
   <data name="VisualsSettingsNumbersNotParsed" xml:space="preserve">
-    <value>Number could not be read, make sure to use the correct comma separator (',' in german)</value>
+    <value>Die Zahl konnte nicht gelesen werden, stellen Sie sicher dass der richtige Separator ({0}) verwendet wurde.</value>
     <comment>message to display of the number could not be parsed in the visuals settings dialog</comment>
   </data>
   <data name="FolderBrowserDialogTitle" xml:space="preserve">
-    <value>Select Folder</value>
+    <value>Ordner wählen</value>
     <comment>Dialog Title for the Select Folder Dialog</comment>
   </data>
   <data name="frameListDialogTitleV22" xml:space="preserve">
-    <value>Frame List of ID3v22 Tag</value>
+    <value>Rahmenliste vom ID3v22 Tag</value>
     <comment>Frame List Dialog Title for IDv22 tag</comment>
   </data>
   <data name="BucketLVTagTypes" xml:space="preserve">
-    <value>Tag Types</value>
+    <value>Tagtypen</value>
     <comment>Colum for tags types of the middle listview</comment>
   </data>
   <data name="importRunning" xml:space="preserve">
-    <value>A CD is currently imported, MusicBucket cannot be closed</value>
+    <value>Es wird gerade eine CD importiert, MusicBucket kann nicht geschlossen werden</value>
     <comment>Message to display when the user wants to close musicbucket while an import is running</comment>
   </data>
   <data name="ImportSettingsDialogCheckBoxV1" xml:space="preserve">
-    <value>write ID3v1 Tags</value>
+    <value>schreibe ID3v1 Tags</value>
   </data>
   <data name="ImportSettingsDialogCheckBoxV2" xml:space="preserve">
-    <value>write ID3v2 Tags</value>
+    <value>schreibe ID3v2 Tags</value>
   </data>
   <data name="ImportSettingsDialogImportQuality" xml:space="preserve">
-    <value>Import Quality</value>
+    <value>Importqualität</value>
   </data>
   <data name="ImportSettingsDialogRBID3v22" xml:space="preserve">
     <value>ID3v22</value>
@@ -420,15 +420,35 @@ Bouncyness</value>
     <value>ID3v23</value>
   </data>
   <data name="ImportSettingsDialogTitle" xml:space="preserve">
-    <value>Import Settings</value>
+    <value>Importeinstellungen</value>
     <comment>Title of the import settings dialog</comment>
   </data>
   <data name="ImportSettingsDialogInvalidBitrate" xml:space="preserve">
-    <value>Invalid Bitrate Chosen</value>
+    <value>Ungültige Bitrate gewählt</value>
     <comment>Exception text for the exception thrown when on tries to set an invalid bitrate int the import settings.</comment>
   </data>
   <data name="SettingsMenuLanguage" xml:space="preserve">
-    <value>Select Language</value>
+    <value>Sprache wählen</value>
     <comment>The menu item for selecting the language</comment>
+  </data>
+  <data name="contextDropImage" xml:space="preserve">
+    <value>Bild plazieren</value>
+    <comment>context menu item of the drop image menu</comment>
+  </data>
+  <data name="langDeCH" xml:space="preserve">
+    <value>Deutsch</value>
+    <comment>the language german</comment>
+  </data>
+  <data name="langEnUS" xml:space="preserve">
+    <value>Englisch</value>
+    <comment>the language english</comment>
+  </data>
+  <data name="langFrCH" xml:space="preserve">
+    <value>Französisch</value>
+    <comment>the language french</comment>
+  </data>
+  <data name="languageSelectionMessage" xml:space="preserve">
+    <value>die Sprache wird bei nächsten Neustart geändert</value>
+    <comment>Message to display when the language has changed</comment>
   </data>
 </root>

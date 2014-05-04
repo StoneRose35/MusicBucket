@@ -979,7 +979,7 @@ namespace MusicBucket
         {
             if (lvFiles.SelectedItem != null)
             {
-                //TODO put that in context menu buttonShowFrameList.IsEnabled = false;
+                contextFrameList.IsEnabled = false;
                 if ((lvFiles.SelectedItem as Mp3File).Tags != null)
                 {
                     List<ID3Tag> ts = (lvFiles.SelectedItem as Mp3File).Tags;
@@ -987,18 +987,18 @@ namespace MusicBucket
                     {
                         if(tg is ID3v23 || tg is ID3v22)
                         {
-                            //buttonShowFrameList.IsEnabled = true;
+                            contextFrameList.IsEnabled = true;
                         }
                     }
                 }
                 else
                 {
-                    //buttonShowFrameList.IsEnabled = false;
+                    contextFrameList.IsEnabled = false;
                 }
             }
             else
             {
-                //buttonShowFrameList.IsEnabled = false;
+                contextFrameList.IsEnabled = false;
             }
         }
 

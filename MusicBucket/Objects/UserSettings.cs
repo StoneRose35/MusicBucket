@@ -22,6 +22,7 @@ namespace MusicBucket.Objects
             _buckets = new ObservableCollection<Bucket>();
             _importSettings = new MusicBucketImportSettings();
             _visuals = new GridWidthAnimation();
+            _locale = "en-US";
         }
 
         public ObservableCollection<Bucket> Buckets

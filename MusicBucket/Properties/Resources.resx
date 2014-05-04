@@ -385,7 +385,7 @@ Bouncyness</value>
     <comment>the labels for the visuals settings dialog</comment>
   </data>
   <data name="VisualsSettingsNumbersNotParsed" xml:space="preserve">
-    <value>Number could not be read, make sure to use the correct comma separator (',' in german)</value>
+    <value>Number could not be read, make sure to use the correct comma separator ({0})</value>
     <comment>message to display of the number could not be parsed in the visuals settings dialog</comment>
   </data>
   <data name="FolderBrowserDialogTitle" xml:space="preserve">
@@ -434,5 +434,21 @@ Bouncyness</value>
   <data name="languageSelectionMessage" xml:space="preserve">
     <value>The language will be changed at the restart of the application</value>
     <comment>Message to display when the language has changed</comment>
+  </data>
+  <data name="contextDropImage" xml:space="preserve">
+    <value>Drop Image</value>
+    <comment>context menu item of the drop image menu</comment>
+  </data>
+  <data name="langDeCH" xml:space="preserve">
+    <value>German</value>
+    <comment>the language german</comment>
+  </data>
+  <data name="langEnUS" xml:space="preserve">
+    <value>English</value>
+    <comment>the language english</comment>
+  </data>
+  <data name="langFrCH" xml:space="preserve">
+    <value>French</value>
+    <comment>the language french</comment>
   </data>
 </root>

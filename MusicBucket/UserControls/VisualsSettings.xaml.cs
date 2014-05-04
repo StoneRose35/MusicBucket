@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Threading;
 
 namespace MusicBucket.UserControls
 {
@@ -150,7 +151,7 @@ namespace MusicBucket.UserControls
             }
             else
             {
-                mdisp.DisplayErrorMessage(Properties.Resources.VisualsSettingsNumbersNotParsed);
+                mdisp.DisplayErrorMessage(String.Format(Properties.Resources.VisualsSettingsNumbersNotParsed,Thread.CurrentThread.CurrentCulture.NumberFormat.NumberDecimalSeparator));
             }
         }
 

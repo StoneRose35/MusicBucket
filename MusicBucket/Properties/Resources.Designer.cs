@@ -180,6 +180,15 @@ namespace MusicBucket.Properties {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Drop Image ähnelt.
+        /// </summary>
+        public static string contextDropImage {
+            get {
+                return ResourceManager.GetString("contextDropImage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die continue ähnelt.
         /// </summary>
         public static string continueImportText {
@@ -486,6 +495,33 @@ namespace MusicBucket.Properties {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die German ähnelt.
+        /// </summary>
+        public static string langDeCH {
+            get {
+                return ResourceManager.GetString("langDeCH", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die English ähnelt.
+        /// </summary>
+        public static string langEnUS {
+            get {
+                return ResourceManager.GetString("langEnUS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die French ähnelt.
+        /// </summary>
+        public static string langFrCH {
+            get {
+                return ResourceManager.GetString("langFrCH", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die The language will be changed at the restart of the application ähnelt.
         /// </summary>
         public static string languageSelectionMessage {
@@ -776,7 +812,7 @@ namespace MusicBucket.Properties {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Number could not be read, make sure to use the correct comma separator (&apos;,&apos; in german) ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Number could not be read, make sure to use the correct comma separator ({0}) ähnelt.
         /// </summary>
         public static string VisualsSettingsNumbersNotParsed {
             get {

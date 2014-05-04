@@ -21,7 +21,9 @@
         <conv:BooleanColorCoverter x:Key="iconv"></conv:BooleanColorCoverter>
         <conv:BucketTitleConverter x:Key="bucketTitleConv" />
         <media:MediaPlayer x:Key="MPlayer" x:Name="mplayer" MediaOpened="mplayer_MediaOpened" MediaEnded="mplayer_MediaEnded" />
-
+        <ContextMenu x:Key="mainMenuContext">
+            <MenuItem></MenuItem>
+        </ContextMenu>
     </Window.Resources>
     <Window.Background>
         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
@@ -121,6 +123,11 @@
                         <GridViewColumn Header="{x:Static myProps:Resources.BucketLVTagTypes}" DisplayMemberBinding="{Binding TagsAsString}"/>
                     </GridView>
                 </ListView.View>
+                <ListView.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem x:Name="contextFrameList" Header="{x:Static myProps:Resources.showFrameList}" Click="buttonShowFrameList_Click"></MenuItem>
+                    </ContextMenu>
+                </ListView.ContextMenu>
             </ListView>
             <ScrollViewer  Grid.Column="1" Margin="36,0,1,0" VerticalAlignment="Top" Height="87" Width="Auto" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Disabled">
                 <local:BucketListDisplay x:Name="bucketDisp" SelectionChanged="bucketDisp_SelectionChanged" SelectionMode="Multiple" BorderThickness="1">
@@ -174,7 +181,7 @@
                 <Image Canvas.Left="10" Canvas.Top="10" x:Name="imageframe" ContextMenuOpening="Canvas_ContextMenuOpening" Source="Images/blank.png">
                     <Image.ContextMenu>
                         <ContextMenu>
-                            <MenuItem x:Name="dropimage"  Header="Drop Image" Click="MenuItem_Click"></MenuItem>
+                            <MenuItem x:Name="dropimage"  Header="{x:Static myProps:Resources.contextDropImage}" Click="MenuItem_Click"></MenuItem>
                         </ContextMenu>
                     </Image.ContextMenu>
                 </Image>
