@@ -158,7 +158,7 @@
     <comment>Title of the "Close" entry in the file menu</comment>
   </data>
   <data name="FileMenuAddBucket" xml:space="preserve">
-    <value>Quelque chose de mal s'est passée lord de l'écriture dans le bidon situé a {0}, est-ce que le bidon peut être remplit?</value>
+    <value>ajouter bidon</value>
     <comment>Title of the "Add Bucket" entry in the file menu</comment>
   </data>
   <data name="FileMenuOpenBucket" xml:space="preserve">
@@ -238,7 +238,7 @@
     <comment>this is rather self-explanatory, isn't it?</comment>
   </data>
   <data name="copyToBucketError" xml:space="preserve">
-    <value>something bad happened during copying of mp3 to bucket located at {}, is the bucket writeable?</value>
+    <value>Quelque chose de mal s'est passée lord de l'écriture dans le bidon situé a {0}, est-ce que le bidon peut être remplit?</value>
     <comment>Text to display when copying the file to the bucket fails during import, argument is the bucket location</comment>
   </data>
   <data name="importTerminated" xml:space="preserve">
@@ -321,11 +321,11 @@
     <comment>frame list flag description, see TagFrame class description</comment>
   </data>
   <data name="preserveWhenFileAlters" xml:space="preserve">
-    <value>garder sous change de fichier</value>
+    <value>garder qd. fichier change</value>
     <comment>frame list flag description, see TagFrame class description</comment>
   </data>
   <data name="preserveWhenTagAlters" xml:space="preserve">
-    <value>garder sour change de tag</value>
+    <value>garder qd. tag change</value>
     <comment>frame list flag description, see TagFrame class description</comment>
   </data>
   <data name="readOnly" xml:space="preserve">

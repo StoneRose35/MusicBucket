@@ -17,7 +17,7 @@
         <Button x:Name="buttonOk" Content="{x:Static myProps:Resources.OK}" HorizontalAlignment="Right" Height="22" Margin="0,10,10,0" VerticalAlignment="Top" Width="97" Click="buttonOk_Click"/>
         <Button x:Name="buttonCancel" Content="{x:Static myProps:Resources.Cancel}" HorizontalAlignment="Right" Height="22" Margin="0,37,10,0" VerticalAlignment="Top" Width="97" Click="buttonCancel_Click"/>
 
-        <MusicBucket:MessageDisplay x:Name="mdisp" Height="53" Margin="130,64,10,0" BorderBrush="#FFFFA70E" BorderThickness="2" VerticalAlignment="Top"/>
+        <MusicBucket:MessageDisplay x:Name="mdisp" Height="53" Margin="130,64,10,0" BorderBrush="#FFFFA70E" BorderThickness="2" VerticalAlignment="Top" FontSize="10"/>
 
     </Grid>
 </Window>

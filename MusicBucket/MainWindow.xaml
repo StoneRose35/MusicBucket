@@ -41,9 +41,9 @@
                 <MenuItem x:Name="visualssettings"  Header="{x:Static myProps:Resources.SettingsMenuVisuals}" Click="visualssettings_Click"></MenuItem>
                 <MenuItem x:Name="importSettings" Header="{x:Static myProps:Resources.SettingsMenuImportSettings}" Click="importSettings_Click"></MenuItem>
                 <MenuItem x:Name="languageSettings"  Header="{x:Static myProps:Resources.SettingsMenuLanguage}">
-                    <RadioButton Content="English (Default)" Tag="en-US"></RadioButton>
-                    <RadioButton Content="German" Tag="de-CH"></RadioButton>
-                    <RadioButton Content="French" Tag="fr-CH"></RadioButton>
+                    <RadioButton Content="{x:Static myProps:Resources.langEnUS}" Tag="en-US"></RadioButton>
+                    <RadioButton Content="{x:Static myProps:Resources.langDeCH}" Tag="de-CH"></RadioButton>
+                    <RadioButton Content="{x:Static myProps:Resources.langFrCH}" Tag="fr-CH"></RadioButton>
                 </MenuItem>
             </MenuItem>
             <MenuItem Header="{x:Static myProps:Resources.HelpMenuTitle}">
