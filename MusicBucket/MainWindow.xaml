@@ -50,9 +50,9 @@
                 <MenuItem Header="{x:Static myProps:Resources.HelpAbout}" Click="MenuItem_Click_2"></MenuItem>
             </MenuItem>
         </Menu>
-        <Button x:Name="ButtonImport" Content="{Binding Source={StaticResource ButtonImportImg}}" HorizontalAlignment="Left" Margin="10,24,0,0" VerticalAlignment="Top" Width="120" RenderTransformOrigin="-0.662,-0.083" Height="51" Click="ButtonImport_Click_1"/>
-        <Button x:Name="ButtonBucket" Content="{Binding Source={StaticResource ButtonBucketImg}}" HorizontalAlignment="Left" Margin="135,24,0,0" VerticalAlignment="Top" Width="68" RenderTransformOrigin="-0.662,-0.083" Height="76" Click="ButtonBucket_Click_1"/>
-        <Button x:Name="ButtonPlayer" Content="{Binding Source={StaticResource ButtonPlayImg}}" HorizontalAlignment="Left" Margin="208,24,0,0" VerticalAlignment="Top" Width="107" RenderTransformOrigin="-0.662,-0.083" Height="76" Click="ButtonPlayer_Click_1"/>
+        <Button x:Name="ButtonImport" Content="{Binding Source={StaticResource ButtonImportImg}}" HorizontalAlignment="Left" Margin="10,24,0,0" VerticalAlignment="Top" Width="120" RenderTransformOrigin="-0.662,-0.083" Height="51" Click="ButtonImport_Click_1" Background="{x:Null}"/>
+        <Button x:Name="ButtonBucket" Content="{Binding Source={StaticResource ButtonBucketImg}}" HorizontalAlignment="Left" Margin="135,24,0,0" VerticalAlignment="Top" Width="68" RenderTransformOrigin="-0.662,-0.083" Height="76" Click="ButtonBucket_Click_1" Background="{x:Null}"/>
+        <Button x:Name="ButtonPlayer" Content="{Binding Source={StaticResource ButtonPlayImg}}" HorizontalAlignment="Left" Margin="208,24,0,0" VerticalAlignment="Top" Width="107" RenderTransformOrigin="-0.662,-0.083" Height="76" Click="ButtonPlayer_Click_1" Background="{x:Null}"/>
         <Grid x:Name="maingrid" RenderTransformOrigin="0.5,0.5" Margin="-4,122,4,0" Background="#FF6EE2B8">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition x:Name="colImport" MinWidth="{Binding MINIMALWIDTHEXT}"/>
