@@ -267,8 +267,7 @@ namespace CDDBAccess
             while (!(currbyte == 46 && prevbyte == 10) || commented) // while not endsign unescaped
             {
 
-                prevbyte = currbyte;
-                currbyte = (byte)_netstream.ReadByte();
+
                 if (onelineresp)
                 {
                     if (currbyte == 10 || currbyte==13)
@@ -276,8 +275,21 @@ namespace CDDBAccess
                         currbyte = 46;
                         prevbyte = 10;
                         _netstream.ReadByte();
+                        break;
                     }
                 }
+                else if (Encoding.GetEncoding("ISO-8859-1").GetString(result.ToArray()).StartsWith("202"))
+                {
+                    if (currbyte == 10 || currbyte == 13)
+                    {
+                        currbyte = 46;
+                        prevbyte = 10;
+                        _netstream.ReadByte();
+                        break;
+                    } 
+                }
+                prevbyte = currbyte;
+                currbyte = (byte)_netstream.ReadByte();
                 if (prevbyte == 10)
                 {
                     if (currbyte == 35) // comment line encountered
@@ -289,9 +301,10 @@ namespace CDDBAccess
                         commented = false;
                     }
                 }
+
                 result.Add(currbyte);
             }
-            if (!onelineresp)
+            if (!onelineresp && !Encoding.GetEncoding("ISO-8859-1").GetString(result.ToArray()).StartsWith("202"))
             {
                 _netstream.ReadByte(); // read carriage return and newline
                 _netstream.ReadByte();

@@ -294,9 +294,9 @@ namespace MusicBucket
                     {
                         _importWorker.RunWorkerAsync();
                     }
-                    msgDisp.DisplayInfoMessage("");
                 }
                 CurrentBucket.Mp3FileRead -= b_Mp3FileRead;
+                msgDisp.DisplayInfoMessage("");
             }
             catch { }
         }
@@ -463,16 +463,22 @@ namespace MusicBucket
             CDDBEntry[] dl;
             string extdata;
             //CDDBEntry onesecond;
-
-            CDROM_TOC toc;
+            CDDBConnection cddbconn=null;
+            CDROM_TOC toc=null;
             if (_importStage == 0)
             {
                 if (cmbCDDrives.SelectedItem != null)
                 {
-                    CDRipper cdr = new CDRipper(cmbCDDrives.SelectedItem.ToString().Substring(0, 1).ToLower());
-                    CDDBConnection cddbconn;
-                    cddbconn = new CDDBConnection();
-                    toc = cdr.READ_TOC();
+                    try
+                    {
+                        CDRipper cdr = new CDRipper(cmbCDDrives.SelectedItem.ToString().Substring(0, 1).ToLower());
+                        cddbconn = new CDDBConnection();
+                        toc = cdr.READ_TOC();
+                    }
+                    catch (Exception exc1)
+                    {
+                        MessageBox.Show(exc1.Message + "\r\n\r\n" + exc1.StackTrace);
+                    }
                     if (toc != null)
                     {
                         try
