@@ -233,7 +233,7 @@ namespace PTCAccess
                 // set required values
                 vals.SetStringValue(GetPropertyKey("WPD_OBJECT_PARENT_ID"), parentFolder.Id);
                 vals.SetStringValue(GetPropertyKey("WPD_OBJECT_NAME"), finalname);
-                vals.SetStringValue(GetPropertyKey("WPD_OBJECT_ORIGINAL_FILE_NAME"), finalname);
+                vals.SetStringValue(GetPropertyKey("WPD_OBJECT_ORIGINAL_FILE_NAME"), finalname.Replace("?",""));
                 vals.SetGuidValue(GetPropertyKey("WPD_OBJECT_FORMAT"), GetContentTypeGuid("WPD_OBJECT_FORMAT_MP3"));
                 vals.SetGuidValue(GetPropertyKey("WPD_OBJECT_CONTENT_TYPE"), GetContentTypeGuid("WPD_CONTENT_TYPE_AUDIO"));
                 vals.SetBoolValue(GetPropertyKey("WPD_OBJECT_CAN_DELETE"), 1);
