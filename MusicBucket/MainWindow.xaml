@@ -188,7 +188,7 @@
 
             </Border>
             <Button x:Name="buttonCancel" Content="{x:Static myProps:Resources.Cancel}" HorizontalAlignment="Left" Height="26" Margin="130,0,0,10" VerticalAlignment="Bottom" Width="81" Click="buttonCancel_Click" Background="#FFE4FFBD"/>
-            <Button Content="{x:Static myProps:Resources.removeBucketButtonText}" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="79,92,0,0" VerticalAlignment="Top" Width="60" Background="#FFE4FFBD" Click="Button_Click" IsEnabled="False"/>
+            <Button x:Name="buttonRemoveBucket"  Content="{x:Static myProps:Resources.removeBucketButtonText}" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="79,92,0,0" VerticalAlignment="Top" Width="60" Background="#FFE4FFBD" Click="Button_Click" IsEnabled="False"/>
             <!-- <Button x:Name="buttonShowFrameList" Content="{x:Static myProps:Resources.showFrameList}" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="144,92,0,0" VerticalAlignment="Top" Width="66" Background="#FFE4FFBD" Click="buttonShowFrameList_Click" IsEnabled="False" RenderTransformOrigin="0.485,1.13"/>-->
             <TextBlock Grid.Column="1" Height="35" Margin="36,115,2,0" TextWrapping="Wrap" VerticalAlignment="Top" FontFamily="Vijaya" FontSize="18">
                 <TextBlock.Text>

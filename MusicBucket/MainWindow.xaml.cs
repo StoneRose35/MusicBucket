@@ -924,6 +924,7 @@ namespace MusicBucket
                 {
                     _readBucketWorker.RunWorkerAsync();
                 }
+                buttonRemoveBucket.IsEnabled = true;
             }
             else
             {
@@ -935,7 +936,7 @@ namespace MusicBucket
                 {
                     CurrentMp3s.Clear();
                 }
-                
+                buttonRemoveBucket.IsEnabled = false;
             }
         }
 
