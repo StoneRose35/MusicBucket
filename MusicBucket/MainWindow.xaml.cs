@@ -357,6 +357,7 @@ namespace MusicBucket
                 _importStage = 0;
                 buttonStartImport.Content = Properties.Resources.startImportText;
                 progressImport.Value = 0;
+                _startImportAfterCancellingReadingBucketContent = false;
             }
             catch { }
         }
@@ -445,8 +446,9 @@ namespace MusicBucket
                         }
                         
                     }
-                    catch 
+                    catch (Exception e2)
                     {
+                        string errormsg = e2.Message;
                         _importWorker.ReportProgress(2, String.Format(Properties.Resources.copyToBucketError, b.Path));
                     }
                 }

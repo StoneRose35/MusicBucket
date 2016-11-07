@@ -268,7 +268,7 @@ namespace CDDBAccess
             {
 
 
-                if (onelineresp)
+                if (onelineresp || Encoding.GetEncoding("ISO-8859-1").GetString(result.ToArray()).StartsWith("200"))
                 {
                     if (currbyte == 10 || currbyte==13)
                     {
@@ -304,7 +304,7 @@ namespace CDDBAccess
 
                 result.Add(currbyte);
             }
-            if (!onelineresp && !Encoding.GetEncoding("ISO-8859-1").GetString(result.ToArray()).StartsWith("202"))
+            if (!onelineresp && !Encoding.GetEncoding("ISO-8859-1").GetString(result.ToArray()).StartsWith("202") && !Encoding.GetEncoding("ISO-8859-1").GetString(result.ToArray()).StartsWith("200"))
             {
                 _netstream.ReadByte(); // read carriage return and newline
                 _netstream.ReadByte();

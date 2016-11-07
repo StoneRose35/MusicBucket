@@ -62,7 +62,7 @@ namespace CDRipperLib
                 checksum += GetSumOfDigits((GetTrackData(k).StartSector+150) / 75);
             }
             byte0 = (byte)(checksum % 255);
-            total = (uint)(byte0 << 24 | tlbytes[0] << 16 | tlbytes[1] << 8 | byte3);
+            total = (uint)(byte0 << 24 | tlbytes[1] << 16 | tlbytes[0] << 8 | byte3);
             return total.ToString("X");
         }
 
