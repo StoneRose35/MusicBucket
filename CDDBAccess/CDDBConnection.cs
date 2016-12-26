@@ -137,7 +137,7 @@ namespace CDDBAccess
                                 else 
                                 {
                                     m = Regex.Matches(bfr, "\\s/\\s");
-                                    if (m.Count == 1)
+                                    if (m.Count >= 1)
                                     {
                                         foundTag.Title += bfr.Substring(0, m[0].Index).Trim();
                                         foundTag.Artist = bfr.Substring(m[0].Index + 2).Trim();
@@ -157,7 +157,7 @@ namespace CDDBAccess
 
                                 bfr = bfr.Substring(bfr.IndexOf('=') + 1);
                                 m = Regex.Matches(bfr, "\\s/\\s");
-                                if (m.Count == 1)
+                                if (m.Count >= 1)
                                 {
                                     tag.Artist = bfr.Substring(0, m[0].Index).Trim();
                                     tag.Title = bfr.Substring(m[0].Index + 2).Trim();

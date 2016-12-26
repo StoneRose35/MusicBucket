@@ -399,6 +399,7 @@ namespace MusicBucket
                 {
                     filename = String.Format("mp3_of_{0}_{1}_{2}_{3}_{4}-{5}.mp3", DateTime.Now.Day, DateTime.Now.Month, DateTime.Now.Year, DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
                 }
+                filename = stripIllegalFilenameCharacters(filename);
                 outStream = File.Open(_STORAGEPATH + "\\" + _TEMPMP3NAME, FileMode.CreateNew);
                 mp3writer = new Mp3Writer(outStream, new Mp3WriterConfig(new WaveLib.WaveFormat(44100, 16, 2), new Yeti.Lame.BE_CONFIG(new WaveLib.WaveFormat(44100, 16, 2), (uint)_userSettings.ImportSettings.BitRate)));
                 copybfr = new byte[mp3writer.OptimalBufferSize];
@@ -457,7 +458,21 @@ namespace MusicBucket
         }
 
 
+        private string stripIllegalFilenameCharacters(string input)
+        {
+            string res = input;
 
+            res = res.Replace("/", "");
+            res = res.Replace("\\","");
+            res = res.Replace("<","");
+            res = res.Replace(">", "");
+            res = res.Replace(":", "");
+            res = res.Replace("\"", "");
+            res = res.Replace("|", "");
+            res = res.Replace("?", "");
+            res = res.Replace("*", "");
+            return res;
+        }
 
 
         private void buttonStartImport_Click_1(object sender, RoutedEventArgs e)
