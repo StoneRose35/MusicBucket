@@ -111,6 +111,7 @@ namespace CDDBAccess
                         }
                         else if (splitted[z].StartsWith("TTITLE"))
                         {
+                            MatchCollection m;
                             if (tagtype == MP3Tagger.TagTypeEnum.ID3v1)
                             {
                                 tag = new MP3Tagger.Classes.ID3v1();
@@ -119,21 +120,54 @@ namespace CDDBAccess
                             {
                                 tag = new MP3Tagger.Classes.ID3v23();
                             }
-                            MatchCollection m;
                             bfr = bfr.Replace("TTITLE", "");
                             tag.TrackNumber = Convert.ToInt32(bfr.Substring(0, bfr.IndexOf('='))) + 1;
-                            bfr = bfr.Substring(bfr.IndexOf('=')+1);
-                            m = Regex.Matches(bfr, "\\s/\\s");
-                            if (m.Count == 1)
+                            ID3Tag foundTag=null;
+                            if ((foundTag = res.Find(delegate(ID3Tag tgg)
+                                        {
+                                            return tgg.TrackNumber == tag.TrackNumber;
+                                        }
+                                ))!=null)
                             {
-                                tag.Artist = bfr.Substring(0, m[0].Index).Trim();
-                                tag.Title = bfr.Substring(m[0].Index + 2).Trim();
+                                bfr = bfr.Substring(bfr.IndexOf('=') + 1);
+                                if (foundTag.Artist != null)
+                                {
+                                    foundTag.Title += bfr.Trim();
+                                }
+                                else 
+                                {
+                                    m = Regex.Matches(bfr, "\\s/\\s");
+                                    if (m.Count == 1)
+                                    {
+                                        foundTag.Title += bfr.Substring(0, m[0].Index).Trim();
+                                        foundTag.Artist = bfr.Substring(m[0].Index + 2).Trim();
+                                        string strbfr1;
+                                        strbfr1 = foundTag.Artist;
+                                        foundTag.Artist = foundTag.Title;
+                                        foundTag.Title = strbfr1;
+                                    }
+                                    else
+                                    {
+                                        foundTag.Title += bfr.Trim();
+                                    }
+                                }
                             }
                             else
                             {
-                                tag.Title = bfr.Trim();
+
+                                bfr = bfr.Substring(bfr.IndexOf('=') + 1);
+                                m = Regex.Matches(bfr, "\\s/\\s");
+                                if (m.Count == 1)
+                                {
+                                    tag.Artist = bfr.Substring(0, m[0].Index).Trim();
+                                    tag.Title = bfr.Substring(m[0].Index + 2).Trim();
+                                }
+                                else
+                                {
+                                    tag.Title = bfr.Trim();
+                                }
+                                res.Add(tag);
                             }
-                            res.Add(tag);
                         }
                         else if (splitted[z].StartsWith("EXTD"))
                         {
@@ -147,9 +181,20 @@ namespace CDDBAccess
                     {
                         tg.Album = globalbum;
                     }
-                    if (globartist != null && tg.Artist == null)
+                    if (globartist != null)
                     {
-                        tg.Artist = globartist;
+                        if (tg.Artist == null)
+                        {
+                            tg.Artist = globartist;
+                        }
+                        else if (tg.Artist != null && tg.Artist != globartist)
+                        {
+                            if (tg is IID3v23)
+                            {
+                                IID3v23 id3v23tag = tg as IID3v23;
+                                id3v23tag.AlbumArtist = globartist;
+                            }
+                        }
                     }
                     if (globyear > 0)
                     {

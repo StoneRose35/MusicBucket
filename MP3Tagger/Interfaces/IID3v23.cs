@@ -27,5 +27,7 @@ namespace MP3Tagger.Interfaces
        /// True if the tag has the experimental flag set, false otherwise
        /// </summary>
        bool Experimental { get; }
+
+       string AlbumArtist { get; set; } 
     }
 }

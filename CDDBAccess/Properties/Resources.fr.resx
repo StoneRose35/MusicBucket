@@ -118,11 +118,11 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="CDDBConnectionExceptionMessage" xml:space="preserve">
-    <value>Connection to CDDB database failed. Make sure you have access to the internet. Also check if a firewall is blocking port 8880. If so, allow access from "MusicBucket" to this port. If course it could also be that cddb is down :-(</value>
+    <value>Malheureusement la connexion sur CDD n'a pas pu être mis en place. Verifiez que l'ordinateur est connecté aver Internet et que des connexions sortant sur port 8880 sont permis (pare-feu). Peut-être CDDD n'est plus existant :-(.</value>
     <comment>Text to display in the exception which is thrown when the connection to CDDB fails</comment>
   </data>
   <data name="CDDBTitleReadingException" xml:space="preserve">
-    <value>The CDDB title could no be read correctly. Check the song or artist name for unescaped slashes. Gun's-n-roses records should read correctly.</value>
+    <value>Le titre n'a pas pu être lu depuis CDDB. Verifiez qu'il na pas de "slashes" das le titre ou le nom des artist. Des Titres des Gun's - n-roses peuvent être importés, bien sûr.</value>
     <comment>Text to display when more than one slash appears in a title Description</comment>
   </data>
 </root>

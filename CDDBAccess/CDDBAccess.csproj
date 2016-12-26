@@ -44,6 +44,7 @@
     <Compile Include="CDDBConnection.cs" />
     <Compile Include="CDDBConnectionException.cs" />
     <Compile Include="CDDBEntry.cs" />
+    <Compile Include="CDDBTitleReadingException.cs" />
     <Compile Include="IllegalCategoryException.cs" />
     <Compile Include="IllegalDiscIDException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -64,6 +65,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.de.resx" />
+    <EmbeddedResource Include="Properties\Resources.fr.resx" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

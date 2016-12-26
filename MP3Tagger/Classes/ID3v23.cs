@@ -17,7 +17,7 @@ namespace MP3Tagger.Classes
     /// </summary>
     public class ID3v23 : ID3Tag,IID3v23
     {
-        private string _artist, _album, _title, _comments;
+        private string _artist, _album, _title, _comments, _albumArtist;
         private int _year;
         private int _tracknumber;
         private string _genre;
@@ -28,8 +28,8 @@ namespace MP3Tagger.Classes
         private uint _tagsize=0;
         private int _extendedheadersize=-1;
         private int _artistIndex = -1,_artist2Index = -1, _albumIndex = -1, _titleIndex = -1, _commmentsIndex = -1, _yearIndex = -1, _tracknumberIndex = -1, _genreIndex = -1, _frontcoverIndex = -1;
-        private const string ARTIST = "TCOM";
-        private const string ARTIST2 = "TPE2";
+        private const string ARTIST = "TPE2";
+        private const string ARTIST2 = "TPE1";
         private const string ALBUM = "TALB";
         private const string TITLE = "TIT2";
         private const string YEAR = "TYER";
@@ -53,9 +53,9 @@ namespace MP3Tagger.Classes
                 TagFrameV23 frame;
                 Encoding enc;
                 byte[] _content;
-                if (_artistIndex >= 0)
+                if (_artist2Index >= 0)
                 {
-                    frame = _frames[_artistIndex];
+                    frame = _frames[_artist2Index];
                     enc=GetEncoding(frame.Content);
                     _content = enc.GetBytes(value);
                     _content = (frame.Content.Take(1)).Concat(_content).ToArray(); // take encoding defined previously
@@ -68,14 +68,30 @@ namespace MP3Tagger.Classes
                     enc = new UnicodeBOM();
                     _content = enc.GetBytes(value);
                     _content = (new byte[] { 1 }).Concat(_content).ToArray(); // encode in unicode for new text tags
-                    _artistIndex = _frames.Count;
+                    _artist2Index = _frames.Count;
                     _frames.Add(frame);
                 }
                 frame.Content = _content;
 
-                if (_artist2Index >= 0)
+                _artist = value;
+            }
+        }
+
+
+        public string AlbumArtist
+        {
+            get
+            {
+                return _albumArtist;
+            }
+            set
+            {
+                TagFrameV23 frame;
+                Encoding enc;
+                byte[] _content;
+                if (_artistIndex >= 0)
                 {
-                    frame = _frames[_artist2Index];
+                    frame = _frames[_artistIndex];
                     enc = GetEncoding(frame.Content);
                     _content = enc.GetBytes(value);
                     _content = (frame.Content.Take(1)).Concat(_content).ToArray(); // take encoding defined previously
@@ -88,12 +104,12 @@ namespace MP3Tagger.Classes
                     enc = new UnicodeBOM();
                     _content = enc.GetBytes(value);
                     _content = (new byte[] { 1 }).Concat(_content).ToArray(); // encode in unicode for new text tags
-                    _artist2Index = _frames.Count;
+                    _artistIndex = _frames.Count;
                     _frames.Add(frame);
                 }
-
                 frame.Content = _content;
-                _artist = value;
+
+                _albumArtist = value;
             }
         }
 
@@ -751,7 +767,6 @@ namespace MP3Tagger.Classes
         }
 
         #endregion
-
 
     }
 }
