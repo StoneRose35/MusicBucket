@@ -36,7 +36,7 @@ namespace MP3Tagger.Classes
         private const string TRACK = "TRCK";
         private const string GENRE = "TCON";
         private const string COVER = "APIC";
-        private const string COMMENTS = "COMM";
+        public const string COMMENTS = "COMM";
 
         public ID3v23()
         {
@@ -245,20 +245,17 @@ namespace MP3Tagger.Classes
                     enc = GetEncoding(frame.Content);
                     _content = enc.GetBytes(value);
                     _content = (frame.Content.Take(1)).Concat(_content).ToArray(); // take encoding defined previously
+                    frame.Content = _content;
                 }
                 else
                 {
-                    frame = new TagFrameV23();
-                    frame.FrameHeader = COMMENTS;
-                    frame.Flags = new byte[] { 0, 0 };
-                    enc = new UnicodeBOM();
-                    _content = enc.GetBytes(value);
-                    _content = (new byte[] { 1 }).Concat(_content).ToArray(); // encode in unicode for new text tags
+                    frame = new CommentTagFrameV23();
+                    (frame as CommentTagFrameV23).MainComment = value;
                     _commmentsIndex = _frames.Count;
                     _frames.Add(frame);
                 }
 
-                frame.Content = _content;
+
                 _comments = value;
             }
         }
@@ -474,6 +471,7 @@ namespace MP3Tagger.Classes
                 {
                     throw new TagNotFoundException();
                 }
+                return res;
             }
             bbfr = new byte[2];
             stream.Read(bbfr, 0, 2);
@@ -484,6 +482,7 @@ namespace MP3Tagger.Classes
                 {
                     throw new TagWrongVersionException();
                 }
+                return res;
             }
             _headerflags = (byte)stream.ReadByte();
             extendedheaderpresent = (_headerflags & 64) != 0;

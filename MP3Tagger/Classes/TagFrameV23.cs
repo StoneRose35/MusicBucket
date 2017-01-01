@@ -18,7 +18,7 @@ namespace MP3Tagger.Classes
         private byte[] _flags;
         private byte[] _content;
 
-        public uint FrameSize
+        public virtual uint FrameSize
         {
             get 
             { 

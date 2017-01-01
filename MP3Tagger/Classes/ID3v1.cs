@@ -185,7 +185,10 @@ namespace MP3Tagger.Classes
                 _album = Encoding.ASCII.GetString(readbfr, 0, 30).TrimEnd((char)0);
                 readbfr = new byte[4];
                 stream.Read(readbfr, 0, 4);
-                _year = int.Parse(Encoding.ASCII.GetString(readbfr, 0, 4));
+                if (!int.TryParse(Encoding.ASCII.GetString(readbfr, 0, 4), out _year))
+                {
+                    _year = 0;
+                }
                 readbfr = new byte[30];
                 stream.Read(readbfr, 0, 30);
                 if (readbfr[28] == 0 && readbfr[29] != 0) // track number present as last bit of comment
@@ -265,6 +268,19 @@ namespace MP3Tagger.Classes
                     _tracknumber = value;
                 }
             }
+        }
+
+        public static explicit operator ID3v23(ID3v1 tagv1)
+        {
+            ID3v23 res = new ID3v23();
+            res.Album = tagv1.Album;
+            res.Artist = tagv1.Artist;
+            res.Genre = tagv1.Genre;
+            res.Title = tagv1.Title;
+            res.TrackNumber = tagv1.TrackNumber;
+            res.Year = tagv1.Year;
+            res.Comments = tagv1.Comments;
+            return res;
         }
     }
 }
