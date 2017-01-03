@@ -503,7 +503,7 @@ namespace MP3Tagger.Classes
             }
 
             // READ FRAMES
-            while (stream.Position < _tagsize + 10 && !lastframe)
+            while (stream.Position < _tagsize + 9 && !lastframe)
             {
                     frame = new TagFrameV23();
                     frame.Read(stream);

@@ -10,7 +10,7 @@ namespace Mp3TaggerTest
     [TestClass]
     public class UnitTest1
     {
-        string basepath = @"C:\Users\fuerh_000\Desktop\mp3_examples";//@"Z:\backup_magnolia_27_9_15\Musik";
+        string basepath = @"Z:\backup_magnolia_27_9_15\Musik";
         string logfilepath = @"C:\Users\fuerh_000\Documents";  
         IEnumerator<string> filelist;
         FileStream log_no_imgs;

@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using System.Threading.Tasks;
 using System.Drawing;
+
 namespace MP3Tagger.Classes
 {
     public class ImageTagFrameV23 : TagFrameV23
@@ -172,7 +173,7 @@ namespace MP3Tagger.Classes
                 current2 = tf.Content[bytesread];
                 _enc[2] = current2;
                 bytesread++;
-                while (current != 0 && current2 != 0)
+                while (current != 0 || current2 != 0)
                 {
                     descriptionbyte.Add(current);
                     descriptionbyte.Add(current2);

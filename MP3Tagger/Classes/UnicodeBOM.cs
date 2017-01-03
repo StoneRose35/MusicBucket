@@ -22,15 +22,26 @@ namespace MP3Tagger.Classes
         public override byte[] GetBytes(string s)
         {
             List<byte> blist;
-            //remove existing bom occurences
-            if (s[0] == (char)65534 || s[0] == (char)65279)
+            if (s == null)
             {
-                s = s.Substring(1);
+                return null;
             }
-            blist = new List<byte>();
-            blist.AddRange(base.GetPreamble());
-            blist.AddRange(base.GetBytes(s));
-            return blist.ToArray();
+            else if (s.Length == 0)
+            {
+                return new byte[0];
+            }
+            else
+            {
+                //remove existing bom occurences
+                if (s[0] == (char)65534 || s[0] == (char)65279)
+                {
+                    s = s.Substring(1);
+                }
+                blist = new List<byte>();
+                blist.AddRange(base.GetPreamble());
+                blist.AddRange(base.GetBytes(s));
+                return blist.ToArray();
+            }
         }
 
         public override string GetString(byte[] bytes)
